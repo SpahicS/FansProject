@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
+    android:background="@color/main_color_light"
+    android:paddingTop="15dp"
+    android:orientation="vertical"
+    >
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="horizontal"
+      >
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
+        android:src="@drawable/avatar"
+        app:civ_border_color="@color/light_gray_ultra"
+        app:civ_border_width="2dp"
+        />
+    <LinearLayout
+        android:id="@+id/name_time"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginRight="15dp"
+        android:layout_toRightOf="@+id/avatar"
+        android:orientation="vertical"
+        >
+      <TextView
+          android:id="@+id/username"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="10dp"
+          android:layout_toRightOf="@+id/avatar"
+          android:layout_weight="1"
+          android:gravity="center_vertical"
+          android:text="Haris Muharemovic"
+          android:textSize="16sp"
+          />
+      <TextView
+          android:id="@+id/time_published"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/username"
+          android:layout_marginLeft="10dp"
+          android:layout_marginTop="2dp"
+          android:layout_toRightOf="@+id/avatar"
+          android:text="4 hours ago"
+          android:textSize="9sp"
+          />
+    </LinearLayout>
+  </LinearLayout>
+
+  <TextView
+      android:id="@+id/message"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/avatar"
+      android:layout_marginLeft="15dp"
+      android:layout_marginRight="15dp"
+      android:layout_marginTop="15dp"
+      android:lineSpacingExtra="4sp"
+      android:text="Juventus Stadium, sometimes simply known in Italy as the Stadium, is an all-seater football stadium in the Vallette borough of Turin, Italy, and the home of Serie A club Juventus Football Club."
+      android:textSize="15sp"
+      />
+
+  <ImageView
+      android:id="@+id/image"
+      android:layout_width="match_parent"
+      android:layout_height="200dp"
+      android:layout_marginTop="15dp"
+      android:scaleType="centerCrop"
+      android:visibility="gone"
+      />
+  <LinearLayout
+      android:id="@+id/comment_likes_details"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_below="@+id/message"
+      android:layout_marginBottom="5dp"
+      android:layout_marginLeft="15dp"
+      android:layout_marginRight="15dp"
+      android:layout_marginTop="15dp"
+      android:gravity="center_vertical"
+      android:orientation="horizontal"
+      >
+
+    <TextView
+        android:id="@+id/likes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/username"
+        android:layout_toRightOf="@+id/avatar"
+        android:text="4 thumbs up"
+        android:textSize="10sp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/username"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@+id/avatar"
+        android:text="&#183;"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/unlikes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/username"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/avatar"
+        android:text="2 thumbs down"
+        android:textSize="10sp"
+        />
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/username"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@+id/avatar"
+        android:text="&#183;"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/username"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/avatar"
+        android:text="3 comments"
+        android:textSize="10sp"
+        />
+
+  </LinearLayout>
+  <LinearLayout
+      android:id="@+id/actions"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/message"
+      android:gravity="center_vertical"
+      android:orientation="horizontal"
+      >
+
+    <LinearLayout
+        android:id="@+id/like_cont"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginBottom="3dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        >
+
+      <ImageView
+          android:id="@+id/like_icon"
+          android:layout_width="13dp"
+          android:layout_height="13dp"
+          android:layout_marginLeft="3dp"
+          android:layout_marginTop="1dp"
+          android:tint="@color/light_gray_with_tr"
+          app:srcCompat="@drawable/ic_thumb_up"
+          />
+
+      <TextView
+          android:id="@+id/like"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/username"
+          android:layout_marginLeft="5dp"
+          android:layout_toRightOf="@+id/avatar"
+          android:gravity="center"
+          android:text="thumb up"
+          android:textColor="@color/main_color_dark"
+          android:textSize="13sp"
+          />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginBottom="3dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="4dp">
+
+      <ImageView
+          android:id="@+id/imageView5"
+          android:layout_width="13dp"
+          android:layout_height="13dp"
+          android:layout_marginLeft="3dp"
+          android:layout_marginTop="2dp"
+          android:tint="@color/light_gray_with_tr"
+          app:srcCompat="@drawable/ic_comment"/>
+
+      <TextView
+          android:id="@+id/comment"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/username"
+          android:layout_marginLeft="5dp"
+          android:layout_toRightOf="@+id/avatar"
+          android:gravity="center"
+          android:textColor="@color/main_color_dark"
+          android:text="comment"
+          android:textSize="13sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/unlike_cont"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginBottom="3dp"
+        android:layout_weight="1"
+        android:gravity="right|center_vertical"
+        android:orientation="horizontal"
+        android:paddingRight="17dp"
+        >
+      <ImageView
+          android:id="@+id/unlike_icon"
+          android:layout_width="13dp"
+          android:layout_height="13dp"
+          android:layout_marginLeft="3dp"
+          android:layout_marginTop="1dp"
+          android:rotation="180"
+          android:tint="@color/light_gray_with_tr"
+          app:srcCompat="@drawable/ic_thumb_up"
+          />
+      <TextView
+          android:id="@+id/unlike"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/username"
+          android:layout_marginLeft="5dp"
+          android:layout_toRightOf="@+id/avatar"
+          android:gravity="center"
+          android:text="thumb down"
+          android:textColor="@color/main_color_dark"
+          android:textSize="13sp"
+          />
+    </LinearLayout>
+
+  </LinearLayout>
+
+</LinearLayout>

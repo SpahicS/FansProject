@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "152225620210",
+    "firebase_url": "https://fansprojectdemo.firebaseio.com",
+    "project_id": "fansprojectdemo",
+    "storage_bucket": "fansprojectdemo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152225620210:android:dbdf020d53887205",
+        "android_client_info": {
+          "package_name": "digitalbath.fansproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "152225620210-ebiule1t4acj5ji2gk5l14ravlf91atp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "digitalbath.fansproject",
+            "certificate_hash": "fd4bf3754f8513ab928f647e4e2813507c4a0ac8"
+          }
+        },
+        {
+          "client_id": "152225620210-0ij6amlrfn8r2vc26aqqlqia5tlcghl2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJSBY6wYCN73ldVfUquR-j1n7u0dcPeTM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "152225620210-0ij6amlrfn8r2vc26aqqlqia5tlcghl2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
