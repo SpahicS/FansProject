@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import digitalbath.fansproject.R;
+import helpers.main.AppHelper;
 import helpers.main.GetMetaDataFromUrl;
 import listeners.OnArticleClickListener;
 import models.ResponseData;
@@ -60,10 +61,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
 
         Glide.with(mActivity)
                 .load(publisher + "/favicon.ico")
-                .placeholder(R.drawable.ic_rss_feed_black_24dp)
+                .placeholder(R.drawable.ic_rss_feed_24dp)
                 .into(holder.favIcon);
 
-        holder.pubDate.setText(mDataSet.getChannel().getNewsList().get(position).getPubDate());
+        holder.pubDate.setText(AppHelper.getTimeDifference(mDataSet.getChannel().getNewsList().get(position).getPubDate()));
 
         holder.newsTitle.setOnClickListener(new OnArticleClickListener(mActivity, url));
         holder.newsImage.setOnClickListener(new OnArticleClickListener(mActivity, url));

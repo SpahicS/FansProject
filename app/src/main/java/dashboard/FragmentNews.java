@@ -2,6 +2,7 @@ package dashboard;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,8 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import adapters.NewsAdapter;
 import digitalbath.fansproject.R;
+import models.Item;
 import models.ResponseData;
 import networking.NewsAPI;
 import retrofit2.Call;

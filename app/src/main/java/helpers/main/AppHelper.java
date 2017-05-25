@@ -9,7 +9,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import digitalbath.fansproject.R;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -70,13 +72,26 @@ public class AppHelper {
             if (diffDays > 0) {
                 if (diffHours > 11)
                     diffDays += 1;
-                newsTimeStamp = Long.toString(diffDays) + (" days ago");
+
+                if (diffDays == 1) {
+                    newsTimeStamp = Long.toString(diffDays) + (" day ago");
+                } else {
+                    newsTimeStamp = Long.toString(diffDays) + (" days ago");
+                }
             } else if (diffHours > 0) {
                 if (diffMinutes > 29)
                     diffHours += 1;
-                newsTimeStamp = Long.toString(diffHours) + (" hours ago");
-            } else
+
+                if (diffHours == 1) {
+                    newsTimeStamp = Long.toString(diffHours) + (" hour ago");
+                } else {
+                    newsTimeStamp = Long.toString(diffHours) + (" hours ago");
+                }
+            } else if (diffMinutes == 1) {
+                newsTimeStamp = Long.toString(diffMinutes).replace("-", "") + (" minute ago");
+            } else {
                 newsTimeStamp = Long.toString(diffMinutes).replace("-", "") + (" minutes ago");
+            }
 
         }
 
@@ -89,7 +104,7 @@ public class AppHelper {
             return;
 
         LayoutInflater inflater = (LayoutInflater)
-            context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.custom_toast, null);
 
         TextView textView = (TextView) layout.findViewById(R.id.textToShow);
