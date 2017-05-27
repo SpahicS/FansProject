@@ -1,9 +1,17 @@
 package adapters;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +20,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,18 +46,18 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int FEED_ITEM_TYPE = 0;
     private final int NEW_MESSAGE_TYPE = 1;
 
+    private boolean isPreviewCreated;
+
     private ArrayList<FeedItem> mDataSet;
     private Activity mActivity;
     private DatabaseReference mDatabase;
-    private RecyclerView mFeedRecycler;
 
-    public FeedAdapter(Activity activity, DatabaseReference database, RecyclerView recyclerView) {
+    public FeedAdapter(Activity activity, DatabaseReference database) {
 
         mDataSet = new ArrayList<>();
 
         mActivity = activity;
         mDatabase = database;
-        mFeedRecycler = recyclerView;
 
         this.mDatabase.addValueEventListener(new ValueEventListener() {
 
@@ -111,8 +122,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 break;
         }
     }
-
-
 
     @Override
     public int getItemCount() {
@@ -288,6 +297,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 comment.setDate(new Date().toString());
                 comment.setAvatar(AppController.getUser().getPhotoUrl().toString());
 
+                if (!TextUtils.isEmpty(item.getImageUrl()))
+                    comment.setImageUrl(item.getImageUrl());
+
                 mDatabase.push().setValue(comment);
 
                 holder.message.setText("");
@@ -303,6 +315,66 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 holder.avatar.animate().scaleX(1f).start();
             }
         });
+
+        holder.message.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override public void afterTextChanged(Editable s) {
+
+                if (isPreviewCreated)
+                    return;
+
+                String url = AppHelper.findUrl(s.toString());
+
+                if (!TextUtils.isEmpty(url)) {
+
+                    loadPreviewImage(url, holder);
+
+                    item.setImageUrl(url);
+
+                }
+            }
+        });
+    }
+
+    private void loadPreviewImage(String url, final NewMessageViewHolder holder) {
+
+        SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
+
+            @Override
+            public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
+
+                holder.image.setVisibility(View.VISIBLE);
+
+                TransitionDrawable td = new TransitionDrawable(new Drawable[] {
+                    new ColorDrawable(Color.TRANSPARENT),
+                    new BitmapDrawable(mActivity.getResources(), bitmap)
+                });
+
+                holder.image.setImageDrawable(td);
+
+                td.startTransition(300);
+
+                isPreviewCreated = true;
+            }
+
+            @Override
+            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                super.onLoadFailed(e, errorDrawable);
+
+
+
+            }
+        };
+
+        Glide.with(mActivity)
+            .load(url)
+            .asBitmap()
+            .into(target);
     }
 
     public static class FeedItemViewHolder extends RecyclerView.ViewHolder {

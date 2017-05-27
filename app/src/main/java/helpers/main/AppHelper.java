@@ -14,6 +14,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by unexpected_err on 20/05/2017.
@@ -101,6 +103,28 @@ public class AppHelper {
         toast.setView(layout);
         toast.show();
 
+    }
+
+    public static String findUrl(String string) {
+
+        String url = "";
+
+        Pattern urlPattern = Pattern.compile(
+            "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
+                + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
+                + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
+            Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+
+        Matcher matcher = urlPattern.matcher(string);
+
+        while (matcher.find()) {
+            int matchStart = matcher.start(1);
+            int matchEnd = matcher.end();
+
+            url = string.substring(matchStart, matchEnd);
+        }
+
+        return url;
     }
 
     public static Typeface getRobotoLight(Context context) {

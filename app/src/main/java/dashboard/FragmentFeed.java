@@ -56,8 +56,7 @@ public class FragmentFeed extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new FeedAdapter(getActivity(), mDatabase
-            .child("feed"), mRecyclerView);
+        mAdapter = new FeedAdapter(getActivity(), mDatabase.child("feed"));
 
         mRecyclerView.setAdapter(mAdapter);
 
