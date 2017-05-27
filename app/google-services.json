@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "152225620210-h3dorg5is1odptjf4jdp5mhu4o1um2hp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "digitalbath.fansproject",
+            "certificate_hash": "f340f197017b90f50b87b7c485bb7b2a3655e30f"
+          }
+        },
+        {
           "client_id": "152225620210-ebiule1t4acj5ji2gk5l14ravlf91atp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
