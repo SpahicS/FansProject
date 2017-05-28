@@ -17,6 +17,11 @@ public class FeedItem {
     private String imageUrl;
     private String date;
     private String avatar;
+    private String articleTitle;
+    private String articleImageUrl;
+    private String articlePublisher;
+    private String articleUrl;
+    private boolean articleItem;
     private HashMap<String, Boolean> likes = new HashMap<>();
     private HashMap<String, Boolean> unlikes = new HashMap<>();
 
@@ -90,5 +95,45 @@ public class FeedItem {
 
     public void setUnlikes(HashMap<String, Boolean> unlikes) {
         this.unlikes = unlikes;
+    }
+
+    public String getArticleTitle() {
+        return articleTitle;
+    }
+
+    public void setArticleTitle(String articleTitle) {
+        this.articleTitle = articleTitle;
+    }
+
+    public String getArticleImageUrl() {
+        return articleImageUrl;
+    }
+
+    public void setArticleImageUrl(String articleImageUrl) {
+        this.articleImageUrl = articleImageUrl;
+    }
+
+    public String getArticlePublisher() {
+        return articlePublisher;
+    }
+
+    public void setArticlePublisher(String articlePublisher) {
+        this.articlePublisher = articlePublisher;
+    }
+
+    public boolean isArticleItem() {
+        return articleItem;
+    }
+
+    public void setIsArticleItem(boolean isArticleItem) {
+        articleItem = isArticleItem;
+    }
+
+    public String getArticleUrl() {
+        return articleUrl;
+    }
+
+    public void setArticleUrl(String articleUrl) {
+        this.articleUrl = articleUrl;
     }
 }

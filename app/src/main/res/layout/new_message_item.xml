@@ -8,13 +8,13 @@
     android:animateLayoutChanges="true"
     android:background="@color/main_color_light"
     android:orientation="vertical"
-    android:paddingBottom="15dp"
-    android:paddingTop="15dp"
     >
 
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="40dp"
+      android:layout_marginBottom="15dp"
+      android:layout_marginTop="15dp"
       android:orientation="horizontal"
       >
     <de.hdodenhof.circleimageview.CircleImageView
@@ -38,21 +38,6 @@
         android:text="Write a new post :)"
         android:textSize="16sp"
         />
-    <TextView
-        android:id="@+id/post_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="5dp"
-        android:layout_toRightOf="@+id/avatar"
-        android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="15dp"
-        android:text="POST"
-        android:textColor="@color/tab_selected"
-        android:textSize="16sp"
-        android:visibility="gone"
-        />
   </LinearLayout>
 
   <EditText
@@ -62,7 +47,6 @@
       android:layout_below="@+id/avatar"
       android:layout_marginLeft="15dp"
       android:layout_marginRight="15dp"
-      android:layout_marginTop="15dp"
       android:background="@android:color/transparent"
       android:fontFamily="sans-serif"
       android:hint="Write a new post here :)"
@@ -80,5 +64,152 @@
       android:scaleType="centerCrop"
       android:visibility="gone"
       />
+
+  <RelativeLayout
+      android:id="@+id/preview_article"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="15dp"
+      android:orientation="horizontal"
+      android:visibility="gone"
+      >
+    <ImageView
+        android:id="@+id/article_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="15dp"
+        android:layout_weight="1"
+        android:scaleType="centerCrop"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignBaseline="@+id/article_image"
+        android:layout_alignBottom="@+id/article_image"
+        android:layout_alignTop="@+id/article_image"
+        android:alpha="0.8"
+        android:background="@drawable/image_overlay"
+        android:orientation="vertical"
+        >
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/article_image"
+        android:orientation="vertical"
+        android:padding="15dp"
+        >
+      <TextView
+          android:id="@+id/preview_title"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="5dp"
+          android:ellipsize="end"
+          android:maxLines="2"
+          android:text="Juve made history! Juve won 35th Seria A trophy nad made new record!"
+          android:textColor="@color/white"
+          android:textSize="16sp"
+          />
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:gravity="center_vertical"
+          android:orientation="horizontal"
+          android:padding="5dp"
+          >
+        <ImageView
+            android:id="@+id/preview_publisher_icon"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            app:srcCompat="@drawable/avatar"
+            />
+        <TextView
+            android:id="@+id/preview_publisher_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Juventus.com"
+            android:textColor="@color/light_gray_ultra"
+            android:textSize="11sp"
+            />
+      </LinearLayout>
+    </LinearLayout>
+  </RelativeLayout>
+  <LinearLayout
+      android:id="@+id/actions_cont"
+      android:layout_width="match_parent"
+      android:layout_height="45dp"
+      android:layout_marginTop="17dp"
+      android:background="#fcfcfc"
+      android:gravity="right"
+      android:orientation="horizontal"
+      android:visibility="gone"
+      >
+
+    <LinearLayout
+        android:id="@+id/discard_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        >
+      <ImageView
+          android:id="@+id/imageView2"
+          android:layout_width="17dp"
+          android:layout_height="17dp"
+          android:tint="@color/light_gray"
+          app:srcCompat="@drawable/ic_delete"
+          />
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_marginLeft="4dp"
+          android:layout_toRightOf="@+id/avatar"
+          android:gravity="center_vertical"
+          android:text="Discard"
+          android:textColor="@color/main_color_dark"
+          android:textSize="16sp"
+          android:visibility="visible"
+          />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/post_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="15dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        >
+      <ImageView
+          android:id="@+id/imageViesdw2"
+          android:layout_width="17dp"
+          android:layout_height="17dp"
+          android:layout_marginTop="1dp"
+          android:tint="@color/colorAccent"
+          app:srcCompat="@drawable/ic_public"
+          />
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_marginLeft="4dp"
+          android:layout_toRightOf="@+id/avatar"
+          android:gravity="center_vertical"
+          android:text="Post"
+          android:textColor="@color/colorAccent"
+          android:textSize="16sp"
+          android:visibility="visible"
+          />
+    </LinearLayout>
+
+  </LinearLayout>
 
 </LinearLayout>

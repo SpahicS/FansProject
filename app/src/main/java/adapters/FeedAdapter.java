@@ -18,11 +18,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +31,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import digitalbath.fansproject.R;
 import helpers.main.AppController;
 import helpers.main.AppHelper;
+import helpers.other.GetMetaDataFromUrl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -135,7 +136,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return FEED_ITEM_TYPE;
     }
 
-    private void bindFeedItem(FeedItemViewHolder holder, int position) {
+    private void bindFeedItem(final FeedItemViewHolder holder, int position) {
 
         final FeedItem item = mDataSet.get(position);
 
@@ -158,6 +159,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             Glide.with(mActivity)
                 .load(item.getImageUrl())
                 .into(holder.image);
+        } else {
+
+            holder.image.setVisibility(View.GONE);
+            holder.image.setBackground(null);
         }
 
         holder.numberOfLikes.setText(Integer.toString(item.getLikes().size()) + " thumbs up");
@@ -173,6 +178,39 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             holder.like.setTextColor(mActivity.getResources().getColor(R.color.main_color_dark));
             holder.likeIcon.setColorFilter(ContextCompat.getColor(mActivity, R.color.light_gray_with_tr));
+        }
+
+        if (item.isArticleItem()) {
+
+            holder.articleCont.setVisibility(View.VISIBLE);
+            holder.articleTitle.setText(item.getArticleTitle());
+
+            if (item.getArticleImageUrl() != null) {
+
+                Glide.with(mActivity)
+                    .load(item.getArticleImageUrl())
+                    .into(holder.articleImage);
+
+            }
+
+            if (item.getArticleUrl() != null) {
+
+                String domain = AppHelper.getDomainName(item.getArticleUrl());
+
+                holder.articlePublisher.setText(domain);
+
+                Glide.with(mActivity)
+                    .load("http://" + domain + "/favicon.ico")
+                    .asBitmap()
+                    .placeholder(R.drawable.ic_rss_feed)
+                    .into(holder.articlePublisherIcon);
+
+            }
+
+        } else {
+
+            holder.articleCont.setVisibility(View.GONE);
+
         }
 
         holder.likeCont.setOnClickListener(new View.OnClickListener() {
@@ -239,36 +277,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             .error(R.drawable.avatar)
             .into(holder.avatar);
 
-        //holder.username.setText(item.getUsername());
-        //holder.time.setText(AppHelper.getTimeDifference(item.getDate()));
-
-        //holder.message.setText(item.getMessage());
-
-        /*if (item.getImageUrl() != null && !TextUtils.isEmpty(item.getImageUrl())) {
-
-            holder.image.setVisibility(View.VISIBLE);
-
-            Glide.with(mActivity)
-                .load(item.getImageUrl())
-                .into(holder.image);
-        }*/
-
-        //holder.numberOfLikes.setText(Integer.toString(item.getLikes().size()) + " thumbs up");
-
-        /*if (AppController.getUser().getUid().equals(""))
-            holder.like.setVisibility(View.INVISIBLE);
-        else
-            holder.like.setVisibility(View.VISIBLE);
-
-        if (item.getLikes().get(AppController.getUser().getUid()) != null
-            && item.getLikes().get(AppController.getUser().getUid()) == true) {
-
-            holder.like.setText("Unlike");
-        } else {
-
-            holder.like.setText("Like");
-        }*/
-
         holder.title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -280,9 +288,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 holder.message.setTypeface(AppHelper.getRobotoLight(mActivity));
 
-                AppHelper.show(holder.post, mActivity);
-
-                AppHelper.show(holder.message, mActivity);
+                holder.actions.setVisibility(View.VISIBLE);
+                holder.message.setVisibility(View.VISIBLE);
 
             }
         });
@@ -290,17 +297,23 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         holder.post.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
 
-                FeedItem comment = new FeedItem();
-                comment.setUsername(AppController.getUser().getDisplayName());
-                comment.setUserId(AppController.getUser().getUid());
-                comment.setMessage(holder.message.getText().toString());
-                comment.setDate(new Date().toString());
-                comment.setAvatar(AppController.getUser().getPhotoUrl().toString());
+                FeedItem feedItemToPost = new FeedItem();
+                feedItemToPost.setUsername(AppController.getUser().getDisplayName());
+                feedItemToPost.setUserId(AppController.getUser().getUid());
+                feedItemToPost.setMessage(holder.message.getText().toString());
+                feedItemToPost.setDate(new Date().toString());
+                feedItemToPost.setAvatar(AppController.getUser().getPhotoUrl().toString());
+
+                feedItemToPost.setArticleTitle(item.getArticleTitle());
+                feedItemToPost.setArticleImageUrl(item.getArticleImageUrl());
+                feedItemToPost.setArticlePublisher(item.getArticlePublisher());
+                feedItemToPost.setIsArticleItem(item.isArticleItem());
+                feedItemToPost.setArticleUrl(item.getArticleUrl());
 
                 if (!TextUtils.isEmpty(item.getImageUrl()))
-                    comment.setImageUrl(item.getImageUrl());
+                    feedItemToPost.setImageUrl(item.getImageUrl());
 
-                mDatabase.push().setValue(comment);
+                mDatabase.push().setValue(feedItemToPost);
 
                 holder.message.setText("");
 
@@ -313,6 +326,20 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 holder.avatar.animate().scaleY(1f).start();
                 holder.avatar.animate().scaleX(1f).start();
+            }
+        });
+
+        holder.discard.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+
+                holder.title.setText("Write a new post :)");
+                holder.message.setText("");
+
+                holder.avatar.animate().scaleY(1f).start();
+                holder.avatar.animate().scaleX(1f).start();
+
+                holder.message.setVisibility(View.GONE);
+                holder.actions.setVisibility(View.GONE);
             }
         });
 
@@ -332,16 +359,15 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 if (!TextUtils.isEmpty(url)) {
 
-                    loadPreviewImage(url, holder);
-
-                    item.setImageUrl(url);
+                    loadPreviewImage(url, item, holder);
 
                 }
             }
         });
     }
 
-    private void loadPreviewImage(String url, final NewMessageViewHolder holder) {
+    private void loadPreviewImage(final String url, final FeedItem item,
+        final NewMessageViewHolder holder) {
 
         SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
 
@@ -349,6 +375,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
 
                 holder.image.setVisibility(View.VISIBLE);
+
+                item.setImageUrl(url);
 
                 TransitionDrawable td = new TransitionDrawable(new Drawable[] {
                     new ColorDrawable(Color.TRANSPARENT),
@@ -366,7 +394,11 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             public void onLoadFailed(Exception e, Drawable errorDrawable) {
                 super.onLoadFailed(e, errorDrawable);
 
+                isPreviewCreated = true;
 
+                GetMetaDataFromUrl worker = new GetMetaDataFromUrl(mActivity,
+                    holder, item, isPreviewCreated);
+                worker.execute(url);
 
             }
         };
@@ -392,6 +424,11 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public TextView unlike;
         public ImageView likeIcon;
         public ImageView unlikeIcon;
+        public RelativeLayout articleCont;
+        public TextView articleTitle;
+        public TextView articlePublisher;
+        public ImageView articlePublisherIcon;
+        public ImageView articleImage;
 
         FeedItemViewHolder(View itemView) {
             super(itemView);
@@ -414,6 +451,11 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             likeIcon = (ImageView) itemView.findViewById(R.id.like_icon);
             unlikeIcon = (ImageView) itemView.findViewById(R.id.unlike_icon);
 
+            articleCont = (RelativeLayout) itemView.findViewById(R.id.article_cont);
+            articleTitle = (TextView) itemView.findViewById(R.id.article_title);
+            articlePublisher = (TextView) itemView.findViewById(R.id.article_publisher_name);
+            articlePublisherIcon = (ImageView) itemView.findViewById(R.id.article_publisher_icon);
+            articleImage = (ImageView) itemView.findViewById(R.id.article_image);
         }
     }
 
@@ -423,7 +465,15 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public EditText message;
         public CircleImageView avatar;
         public ImageView image;
-        public TextView post;
+        public LinearLayout post;
+        public LinearLayout discard;
+        public LinearLayout actions;
+
+        public RelativeLayout articlePreview;
+        public TextView articleTitle;
+        public TextView articlePublisher;
+        public ImageView articlePublisherIcon;
+        public ImageView articleImage;
 
         NewMessageViewHolder(View itemView) {
             super(itemView);
@@ -432,7 +482,16 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             message = (EditText) itemView.findViewById(R.id.message);
             avatar = (CircleImageView) itemView.findViewById(R.id.avatar);
             image = (ImageView) itemView.findViewById(R.id.image);
-            post = (TextView) itemView.findViewById(R.id.post_btn);
+            post = (LinearLayout) itemView.findViewById(R.id.post_btn);
+            discard = (LinearLayout) itemView.findViewById(R.id.discard_btn);
+            actions = (LinearLayout) itemView.findViewById(R.id.actions_cont);
+
+            articlePreview = (RelativeLayout) itemView.findViewById(R.id.preview_article);
+            articleTitle = (TextView) itemView.findViewById(R.id.preview_title);
+            articlePublisher = (TextView) itemView.findViewById(R.id.preview_publisher_name);
+            articlePublisherIcon = (ImageView) itemView.findViewById(R.id.preview_publisher_icon);
+            articleImage = (ImageView) itemView.findViewById(R.id.article_image);
+
         }
     }
 }

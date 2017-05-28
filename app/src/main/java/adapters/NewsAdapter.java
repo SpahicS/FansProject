@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import digitalbath.fansproject.R;
 import helpers.main.AppHelper;
-import helpers.main.GetMetaDataFromUrl;
+import helpers.other.GetMetaDataFromUrl;
 import listeners.OnArticleClickListener;
 import models.ResponseData;
 import com.bumptech.glide.Glide;
@@ -18,7 +18,7 @@ import com.bumptech.glide.Glide;
  * Created by Spaja on 26-Apr-17.
  */
 
-public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> {
+public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ArticleViewHolder> {
 
     private ResponseData mDataSet;
     private Activity mActivity;
@@ -29,45 +29,35 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ArticleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.news_list_item, parent, false);
-        return new NewsAdapter.MyViewHolder(v);
+                .inflate(R.layout.article_item, parent, false);
+        return new ArticleViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(ArticleViewHolder holder, int position) {
 
-        holder.newsTitle.setText(mDataSet.getChannel().getNewsList().get(position).getTitle());
+        holder.title.setText(mDataSet.getChannel().getNewsList().get(position).getTitle());
 
         String url = mDataSet.getChannel().getNewsList().get(position).getLink().split("url=")[1];
-        GetMetaDataFromUrl worker = new GetMetaDataFromUrl(mActivity, holder.newsImage);
+        GetMetaDataFromUrl worker = new GetMetaDataFromUrl(mActivity, holder, null, false);
         worker.execute(url);
 
-        String publisher = url.split(".com/")[0] + ".com";
-        String helper = publisher.split("//")[1];
-        if (helper.contains("/") && helper.contains("www")) {
+        String domain = AppHelper.getDomainName(url);
 
-            holder.publisher.setText(helper.split("/")[0].substring(4));
-
-        } else if (helper.contains("/")) {
-
-            holder.publisher.setText(helper.split("/")[0]);
-
-        } else {
-
-            holder.publisher.setText(helper.substring(4));
-        }
+        holder.publisher.setText(domain);
 
         Glide.with(mActivity)
-                .load(publisher + "/favicon.ico")
-                .placeholder(R.drawable.ic_rss_feed_24dp)
+                .load("http://" + domain + "/favicon.ico")
+                .placeholder(R.drawable.ic_rss_feed)
                 .into(holder.favIcon);
 
-        holder.pubDate.setText(AppHelper.getTimeDifference(mDataSet.getChannel().getNewsList().get(position).getPubDate()));
+        holder.pubDate.setText(AppHelper.getTimeDifference(mDataSet.getChannel()
+            .getNewsList().get(position).getPubDate()));
 
-        holder.newsTitle.setOnClickListener(new OnArticleClickListener(mActivity, url));
-        holder.newsImage.setOnClickListener(new OnArticleClickListener(mActivity, url));
+        holder.title.setOnClickListener(new OnArticleClickListener(mActivity, url));
+        holder.image.setOnClickListener(new OnArticleClickListener(mActivity, url));
 
     }
 
@@ -81,15 +71,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
         return position;
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    public class ArticleViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView newsImage, favIcon;
-        TextView newsTitle, publisher, pubDate;
+        public ImageView image, favIcon;
+        public TextView title, publisher, pubDate;
 
-        MyViewHolder(View itemView) {
+        public ArticleViewHolder(View itemView) {
             super(itemView);
-            newsImage = (ImageView) itemView.findViewById(R.id.news_item_image);
-            newsTitle = (TextView) itemView.findViewById(R.id.news_item_title);
+            image = (ImageView) itemView.findViewById(R.id.news_item_image);
+            title = (TextView) itemView.findViewById(R.id.news_item_title);
             favIcon = (ImageView) itemView.findViewById(R.id.fav_icon);
             publisher = (TextView) itemView.findViewById(R.id.publisher);
             pubDate = (TextView) itemView.findViewById(R.id.pub_date);

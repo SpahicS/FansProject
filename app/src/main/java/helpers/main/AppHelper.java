@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import digitalbath.fansproject.R;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -98,6 +100,22 @@ public class AppHelper {
         }
 
         return newsTimeStamp;
+    }
+
+    public static String getDomainName(String url) {
+
+        String domain = "";
+
+        URI uri;
+
+        try {
+            uri = new URI(url);
+            domain = uri.getHost();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        return domain.startsWith("www.") ? domain.substring(4) : domain;
     }
 
     public static void showToast(Context context, String text) {
