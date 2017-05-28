@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import adapters.NewsAdapter;
 import digitalbath.fansproject.R;
@@ -65,7 +66,8 @@ public class FragmentNews extends Fragment {
 
     private void getNewsList(String query) {
 
-        NewsAPI.service.getNewsData(query, "rss").enqueue(new Callback<ResponseData>() {
+        String newsEdition = Locale.getDefault().getCountry();
+        NewsAPI.service.getNewsData(query, "rss", newsEdition.toLowerCase()).enqueue(new Callback<ResponseData>() {
             @Override
             public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
 

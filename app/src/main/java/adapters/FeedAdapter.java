@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
@@ -200,7 +201,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 holder.articlePublisher.setText(domain);
 
                 Glide.with(mActivity)
-                    .load("http://" + domain + "/favicon.ico")
+                    .load("http://www." + domain + "/favicon.ico")
                     .asBitmap()
                     .placeholder(R.drawable.ic_rss_feed)
                     .into(holder.articlePublisherIcon);
@@ -291,6 +292,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 holder.actions.setVisibility(View.VISIBLE);
                 holder.message.setVisibility(View.VISIBLE);
 
+
             }
         });
 
@@ -326,6 +328,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 holder.avatar.animate().scaleY(1f).start();
                 holder.avatar.animate().scaleX(1f).start();
+
+                isPreviewCreated = false;
             }
         });
 
@@ -340,6 +344,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 holder.message.setVisibility(View.GONE);
                 holder.actions.setVisibility(View.GONE);
+                holder.progressBar.setVisibility(View.GONE);
             }
         });
 
@@ -359,6 +364,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 if (!TextUtils.isEmpty(url)) {
 
+                    holder.progressBar.setVisibility(View.VISIBLE);
                     loadPreviewImage(url, item, holder);
 
                 }
@@ -387,14 +393,13 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 td.startTransition(300);
 
+                holder.progressBar.setVisibility(View.GONE);
                 isPreviewCreated = true;
             }
 
             @Override
             public void onLoadFailed(Exception e, Drawable errorDrawable) {
                 super.onLoadFailed(e, errorDrawable);
-
-                isPreviewCreated = true;
 
                 GetMetaDataFromUrl worker = new GetMetaDataFromUrl(mActivity,
                     holder, item, isPreviewCreated);
@@ -474,6 +479,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public TextView articlePublisher;
         public ImageView articlePublisherIcon;
         public ImageView articleImage;
+        public ProgressBar progressBar;
 
         NewMessageViewHolder(View itemView) {
             super(itemView);
@@ -491,6 +497,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             articlePublisher = (TextView) itemView.findViewById(R.id.preview_publisher_name);
             articlePublisherIcon = (ImageView) itemView.findViewById(R.id.preview_publisher_icon);
             articleImage = (ImageView) itemView.findViewById(R.id.article_image);
+
+            progressBar = (ProgressBar) itemView.findViewById(R.id.progress_bar);
 
         }
     }

@@ -20,7 +20,8 @@ public interface NewsAPI {
 
     //@Query scoring - sortiranje vijesti
     //@Query num - broj rezultata
-    Call<ResponseData> getNewsData(@Query("q") String query, @Query("output") String output);
+    //@Query ned - news edition
+    Call<ResponseData> getNewsData(@Query("q") String query, @Query("output") String output, @Query("ned") String edition);
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)
