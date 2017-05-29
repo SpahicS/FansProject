@@ -1,10 +1,12 @@
 package dashboard;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import java.util.Locale;
 
 import adapters.NewsAdapter;
 import digitalbath.fansproject.R;
+import helpers.main.AppHelper;
 import models.Item;
 import models.ResponseData;
 import networking.NewsAPI;
@@ -66,14 +69,14 @@ public class FragmentNews extends Fragment {
 
     private void getNewsList(String query) {
 
-        String newsEdition = Locale.getDefault().getCountry();
-        NewsAPI.service.getNewsData(query, "rss", newsEdition.toLowerCase()).enqueue(new Callback<ResponseData>() {
+        String edition = getNewsEditionCode();
+
+        NewsAPI.service.getNewsData(query, "rss", edition).enqueue(new Callback<ResponseData>() {
             @Override
             public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
 
                 newsAdapter = new NewsAdapter(getActivity(), response.body());
                 newsRecycler.setAdapter(newsAdapter);
-
             }
 
             @Override
@@ -81,5 +84,24 @@ public class FragmentNews extends Fragment {
                 int i = 0;
             }
         });
+    }
+
+    private String getNewsEditionCode() {
+        String newsEdition = Locale.getDefault().getLanguage().toLowerCase();
+        String country = Locale.getDefault().getCountry().toLowerCase();
+        String editionCode;
+
+        if (newsEdition.equals(country)) {
+            editionCode = newsEdition;
+        } else {
+            editionCode = newsEdition + "_" + country;
+        }
+
+        String edition = AppHelper.getNewsEditionCode(getContext(), editionCode);
+
+        if (edition.equals("us")) {
+            edition = AppHelper.getNewsEditionCode(getContext(), country);
+        }
+        return edition;
     }
 }

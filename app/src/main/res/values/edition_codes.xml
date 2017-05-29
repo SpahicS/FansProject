@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="country_codes">
+
+        <!--region Asia-->
+        <item>ar_me</item>
+        <item>au</item>
+        <item>bn_bd</item>
+        <item>cn</item>
+        <item>hk</item>
+        <item>in</item>
+        <item>hi_in</item>
+        <item>ml_in</item>
+        <item>ta_in</item>
+        <item>te_in</item>
+        <item>id_id</item>
+        <item>en_il</item>
+        <item>iw_il</item>
+        <item>jp</item>
+        <item>ar_lb</item>
+        <item>en_my</item>
+        <item>nz</item>
+        <item>en_pk</item>
+        <item>en_ph</item>
+        <item>ar_sa</item>
+        <item>en_sg</item>
+        <item>kr</item>
+        <item>tw</item>
+        <item>th_th</item>
+        <item>ar_ae</item>
+        <item>vi_vn</item>
+
+        <!--Region Europe & Africa-->
+        <item>de_at</item>
+        <item>nl_be</item>
+        <item>fr_be</item>
+        <item>en_bw</item>
+        <item>bg_bg</item>
+        <item>cs_cz</item>
+        <item>ar_eg</item>
+        <item>en_et</item>
+        <item>fr</item>
+        <item>de</item>
+        <item>en_gh</item>
+        <item>el_gr</item>
+        <item>en_ie</item>
+        <item>it</item>
+        <item>en_ke</item>
+        <item>lv_lv</item>
+        <item>lt_lt</item>
+        <item>hu_hu</item>
+        <item>fr_ma</item>
+        <item>en_na</item>
+        <item>nl_nl</item>
+        <item>en_ng</item>
+        <item>no_no</item>
+        <item>pl_pl</item>
+        <item>pt-PT_pt</item>
+        <item>ro_ro</item>
+        <item>ru_ru</item>
+        <item>de_ch</item>
+        <item>fr_sn</item>
+        <item>sr_rs</item>
+        <item>sl_si</item>
+        <item>sk_sk</item>
+        <item>en_za</item>
+        <item>fr_ch</item>
+        <item>sv_se</item>
+        <item>en_tz</item>
+        <item>tr_tr</item>
+        <item>en_ug</item>
+        <item>ru_ua</item>
+        <item>uk_ua</item>
+        <item>uk</item>
+        <item>en_zw</item>
+
+        <!--Region North & South America-->
+        <item>es_ar</item>
+        <item>pt-BR_br</item>
+        <item>ca</item>
+        <item>fr_ca</item>
+        <item>es_cl</item>
+        <item>es_co</item>
+        <item>es_cu</item>
+        <item>es_mx</item>
+        <item>es_pe</item>
+        <item>us</item>
+        <item>es_us</item>
+        <item>es_ve</item>
+
+    </string-array>
+</resources>
