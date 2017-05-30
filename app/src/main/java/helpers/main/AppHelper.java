@@ -16,7 +16,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -184,5 +187,24 @@ public class AppHelper {
     public static void hide(View view, Context context) {
         view.setVisibility(View.GONE);
         view.startAnimation(getAnimationDown(context));
+    }
+
+    public static String getNewsEditionCode(Context context, String countryCode){
+
+        List<String> editionCodes;
+        editionCodes = Arrays.asList(context.getResources().getStringArray(R.array.country_codes));
+        String editionCode = "us";
+
+        int codesSize = editionCodes.size();
+        for (int i = 0; i < codesSize; i++) {
+            if (editionCodes.get(i).equals(countryCode)) {
+                editionCode = editionCodes.get(i);
+                break;
+            } else if (editionCodes.get(i).contains(countryCode)) {
+                editionCode = editionCodes.get(i);
+            }
+        }
+
+        return editionCode;
     }
 }
