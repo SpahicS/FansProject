@@ -33,17 +33,20 @@ import digitalbath.fansproject.R;
 import helpers.main.AppController;
 import helpers.main.AppHelper;
 import helpers.other.GetMetaDataFromUrl;
+import helpers.other.MetaTagsLoad;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import models.FeedItem;
+import models.MetaTag;
 
 /**
  * Created by unexpected_err on 20/05/2017.
  */
 
-public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+    implements MetaTagsLoad {
 
     private final int FEED_ITEM_TYPE = 0;
     private final int NEW_MESSAGE_TYPE = 1;
@@ -200,11 +203,27 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 holder.articlePublisher.setText(domain);
 
+                SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
+
+                    @Override
+                    public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
+
+                        holder.articlePublisherIcon.setImageBitmap(bitmap);
+
+                    }
+
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+
+                        holder.articlePublisherIcon.setImageResource(R.drawable.publisher_icon);
+                    }
+                };
+
                 Glide.with(mActivity)
                     .load("http://www." + domain + "/favicon.ico")
                     .asBitmap()
-                    .placeholder(R.drawable.ic_rss_feed)
-                    .into(holder.articlePublisherIcon);
+                    .into(target);
 
             }
 
@@ -401,8 +420,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             public void onLoadFailed(Exception e, Drawable errorDrawable) {
                 super.onLoadFailed(e, errorDrawable);
 
-                GetMetaDataFromUrl worker = new GetMetaDataFromUrl(mActivity,
-                    holder, item, isPreviewCreated);
+                GetMetaDataFromUrl worker = new GetMetaDataFromUrl(mActivity, FeedAdapter.this,
+                    holder, 0, item, isPreviewCreated);
+
                 worker.execute(url);
 
             }
@@ -412,6 +432,63 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             .load(url)
             .asBitmap()
             .into(target);
+    }
+
+    @Override
+    public void onMetaTagsLoaded(RecyclerView.ViewHolder holder, int position, MetaTag metaTag) {
+
+        final FeedAdapter.NewMessageViewHolder feedHolder = ((FeedAdapter.NewMessageViewHolder) holder);
+
+        feedHolder.articlePreview.setVisibility(View.VISIBLE);
+        feedHolder.articleTitle.setText(metaTag.getTitle());
+
+        if (metaTag.getImageUrl() != null) {
+
+            Glide.with(mActivity)
+                .load(metaTag.getImageUrl())
+                .into(feedHolder.articleImage);
+
+        }
+
+        if (metaTag.getArticleUrl() != null) {
+
+            String domain = AppHelper.getDomainName(metaTag.getArticleUrl());
+
+            feedHolder.articlePublisher.setText(domain);
+
+            SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
+
+                @Override
+                public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
+
+                    feedHolder.articlePublisherIcon.setImageBitmap(bitmap);
+
+                }
+
+                @Override
+                public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                    super.onLoadFailed(e, errorDrawable);
+
+                    feedHolder.articlePublisherIcon
+                        .setImageResource(R.drawable.publisher_icon);
+                }
+            };
+
+            Glide.with(mActivity)
+                .load("http://www." + domain + "/favicon.ico")
+                .asBitmap()
+                .into(target);
+
+        }
+
+        mDataSet.get(position).setArticleTitle(metaTag.getTitle());
+        mDataSet.get(position).setArticleImageUrl(metaTag.getImageUrl());
+        mDataSet.get(position).setArticleUrl(metaTag.getArticleUrl());
+        mDataSet.get(position).setIsArticleItem(true);
+
+        isPreviewCreated = true;
+
+        feedHolder.progressBar.setVisibility(View.GONE);
     }
 
     public static class FeedItemViewHolder extends RecyclerView.ViewHolder {
@@ -432,7 +509,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public RelativeLayout articleCont;
         public TextView articleTitle;
         public TextView articlePublisher;
-        public ImageView articlePublisherIcon;
+        public CircleImageView articlePublisherIcon;
         public ImageView articleImage;
 
         FeedItemViewHolder(View itemView) {
@@ -459,7 +536,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             articleCont = (RelativeLayout) itemView.findViewById(R.id.article_cont);
             articleTitle = (TextView) itemView.findViewById(R.id.article_title);
             articlePublisher = (TextView) itemView.findViewById(R.id.article_publisher_name);
-            articlePublisherIcon = (ImageView) itemView.findViewById(R.id.article_publisher_icon);
+            articlePublisherIcon = (CircleImageView) itemView.findViewById(R.id.article_publisher_icon);
             articleImage = (ImageView) itemView.findViewById(R.id.article_image);
         }
     }

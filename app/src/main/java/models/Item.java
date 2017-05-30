@@ -27,6 +27,8 @@ public class Item {
     @Element(required = false)
     private String description;
 
+    private String imageUrl;
+
     public String getIsPermaLink() {
         return isPermaLink;
     }
@@ -49,5 +51,13 @@ public class Item {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

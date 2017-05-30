@@ -71,7 +71,7 @@ public class FragmentNews extends Fragment {
 
         String edition = getNewsEditionCode();
 
-        NewsAPI.service.getNewsData(query, "rss", edition).enqueue(new Callback<ResponseData>() {
+        NewsAPI.service.getNewsData(query, 20, "rss", edition).enqueue(new Callback<ResponseData>() {
             @Override
             public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
 

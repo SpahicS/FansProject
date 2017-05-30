@@ -1,16 +1,30 @@
 package adapters;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import de.hdodenhof.circleimageview.CircleImageView;
 import digitalbath.fansproject.R;
 import helpers.main.AppHelper;
 import helpers.other.GetMetaDataFromUrl;
+import helpers.other.MetaTagsLoad;
 import listeners.OnArticleClickListener;
+import models.Item;
+import models.MetaTag;
 import models.ResponseData;
 import com.bumptech.glide.Glide;
 
@@ -18,7 +32,8 @@ import com.bumptech.glide.Glide;
  * Created by Spaja on 26-Apr-17.
  */
 
-public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ArticleViewHolder> {
+public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>
+    implements MetaTagsLoad{
 
     private ResponseData mDataSet;
     private Activity mActivity;
@@ -36,28 +51,61 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ArticleViewHol
     }
 
     @Override
-    public void onBindViewHolder(ArticleViewHolder holder, int position) {
+    public void onBindViewHolder(final ArticleViewHolder holder, int position) {
 
-        holder.title.setText(mDataSet.getChannel().getNewsList().get(position).getTitle());
+        Item articleItem = mDataSet.getChannel().getNewsList().get(position);
 
-        String url = mDataSet.getChannel().getNewsList().get(position).getLink().split("url=")[1];
-        GetMetaDataFromUrl worker = new GetMetaDataFromUrl(mActivity, holder, null, false);
-        worker.execute(url);
+        holder.title.setText(articleItem.getTitle());
+
+        String url = articleItem.getLink().split("url=")[1];
+
+        if (articleItem.getImageUrl() == null) {
+
+            holder.image.setVisibility(View.VISIBLE);
+
+            GetMetaDataFromUrl worker = new GetMetaDataFromUrl
+                (mActivity, this, holder, position, null, false);
+
+            worker.execute(url);
+
+        } else if (TextUtils.isEmpty(articleItem.getImageUrl())) {
+
+            holder.image.setVisibility(View.GONE);
+
+        } else {
+
+            loadImage(holder.image, articleItem.getImageUrl(), false);
+
+        }
 
         String domain = AppHelper.getDomainName(url);
 
-        holder.publisher.setText(domain);
+        holder.publisherNameAndTime.setText(domain + " · " + AppHelper
+            .getTimeDifference(articleItem.getPubDate()));
+
+        SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
+
+            @Override
+            public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
+
+                holder.publisherIcon.setImageBitmap(bitmap);
+
+            }
+
+            @Override
+            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                super.onLoadFailed(e, errorDrawable);
+
+                holder.publisherIcon.setImageResource(R.drawable.publisher_icon);
+            }
+        };
 
         Glide.with(mActivity)
-                .load("http://www." + domain + "/favicon.ico")
-                .placeholder(R.drawable.ic_rss_feed)
-                .into(holder.favIcon);
+            .load("http://www." + domain + "/favicon.ico")
+            .asBitmap()
+            .into(target);
 
-        holder.pubDate.setText(AppHelper.getTimeDifference(mDataSet.getChannel()
-            .getNewsList().get(position).getPubDate()));
-
-        holder.title.setOnClickListener(new OnArticleClickListener(mActivity, url));
-        holder.image.setOnClickListener(new OnArticleClickListener(mActivity, url));
+        holder.itemView.setOnClickListener(new OnArticleClickListener(mActivity, url));
 
     }
 
@@ -71,18 +119,92 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ArticleViewHol
         return position;
     }
 
+    @Override
+    public void onMetaTagsLoaded(RecyclerView.ViewHolder holder, int position, MetaTag metatag) {
+
+        final ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
+
+        Item articleItem = mDataSet.getChannel().getNewsList().get(position);
+
+        articleItem.setImageUrl(metatag.getImageUrl());
+
+        loadImage(articleViewHolder.image, articleItem.getImageUrl(), true);
+
+    }
+
+    private void loadImage(final ImageView image, String imageUrl, final boolean animate) {
+
+        SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
+
+            @Override
+            public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
+
+                if (animate) {
+
+                    TransitionDrawable td = new TransitionDrawable(new Drawable[] {
+                        new ColorDrawable(Color.TRANSPARENT),
+                        new BitmapDrawable(mActivity.getResources(), bitmap)
+                    });
+
+                    image.setImageDrawable(td);
+
+                    td.startTransition(300);
+
+                } else {
+
+                    image.setImageBitmap(bitmap);
+                }
+            }
+
+            @Override
+            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                super.onLoadFailed(e, errorDrawable);
+
+                image.setVisibility(View.GONE);
+
+            }
+        };
+
+        Glide.with(mActivity)
+            .load(imageUrl)
+            .asBitmap()
+            .into(target);
+
+    }
+
     public class ArticleViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView image, favIcon;
-        public TextView title, publisher, pubDate;
+        public ImageView image;
+        public CircleImageView publisherIcon;
+        public TextView title, publisherNameAndTime;
+        public TextView numberOfLikes;
+        public TextView numberOfUnlikes;
+        public LinearLayout likeCont;
+        public LinearLayout unlikeCont;
+        public TextView like;
+        public TextView unlike;
+        public ImageView likeIcon;
+        public ImageView unlikeIcon;
 
         public ArticleViewHolder(View itemView) {
             super(itemView);
-            image = (ImageView) itemView.findViewById(R.id.news_item_image);
-            title = (TextView) itemView.findViewById(R.id.news_item_title);
-            favIcon = (ImageView) itemView.findViewById(R.id.fav_icon);
-            publisher = (TextView) itemView.findViewById(R.id.publisher);
-            pubDate = (TextView) itemView.findViewById(R.id.pub_date);
+            image = (ImageView) itemView.findViewById(R.id.image);
+            title = (TextView) itemView.findViewById(R.id.title);
+            publisherIcon = (CircleImageView) itemView.findViewById(R.id.publisher_icon);
+            publisherNameAndTime = (TextView) itemView.findViewById(R.id.publisher_name_and_time);
+
+            numberOfLikes = (TextView) itemView.findViewById(R.id.likes);
+            numberOfUnlikes = (TextView) itemView.findViewById(R.id.unlikes);
+
+            likeCont = (LinearLayout) itemView.findViewById(R.id.like_cont);
+            unlikeCont = (LinearLayout) itemView.findViewById(R.id.unlike_cont);
+
+            like = (TextView) itemView.findViewById(R.id.like);
+            unlike = (TextView) itemView.findViewById(R.id.unlike);
+
+            likeIcon = (ImageView) itemView.findViewById(R.id.like_icon);
+            unlikeIcon = (ImageView) itemView.findViewById(R.id.unlike_icon);
         }
     }
+
 }

@@ -17,11 +17,8 @@ public interface NewsAPI {
     String BASE_URL = "https://news.google.com/";
 
     @GET("news")
-
-    //@Query scoring - sortiranje vijesti
-    //@Query num - broj rezultata
-    //@Query ned - news edition
-    Call<ResponseData> getNewsData(@Query("q") String query, @Query("output") String output, @Query("ned") String edition);
+    Call<ResponseData> getNewsData(@Query("q") String query, @Query("num") int num,
+        @Query("output") String output, @Query("ned") String edition);
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)

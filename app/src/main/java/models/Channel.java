@@ -49,43 +49,7 @@ public class Channel {
         return title;
     }
 
-    public ImageElement getImage() {
-        return image;
-    }
-
-    public String getPubDate() {
-        return pubDate;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public String getLastBuildDate() {
-        return lastBuildDate;
-    }
-
     public List<Item> getNewsList() {
         return item;
-    }
-
-    public String getGenerator() {
-        return generator;
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public String getCopyright() {
-        return copyright;
-    }
-
-    public String getWebMaster() {
-        return webMaster;
     }
 }

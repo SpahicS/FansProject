@@ -3,12 +3,16 @@ package helpers.other;
 import adapters.FeedAdapter;
 import adapters.NewsAdapter;
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
 
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import digitalbath.fansproject.R;
 import helpers.main.AppHelper;
 import models.FeedItem;
@@ -27,15 +31,19 @@ public class GetMetaDataFromUrl extends AsyncTask<String, Void, Void> {
     private Activity mActivity;
     private MetaTag metaTag;
     private RecyclerView.ViewHolder mHolder;
+    private RecyclerView.Adapter mAdapter;
     private FeedItem mFeedItem;
     private boolean mIsPreviewCreated;
+    private int mPosition;
 
-    public GetMetaDataFromUrl(Activity activity, RecyclerView.ViewHolder holder, FeedItem item,
-        boolean isPreviewCreated) {
+    public GetMetaDataFromUrl(Activity activity, RecyclerView.Adapter adapter,
+        RecyclerView.ViewHolder holder, int position, FeedItem item, boolean isPreviewCreated) {
 
         this.mActivity = activity;
+        this.mAdapter = adapter;
         this.mHolder = holder;
         this.mFeedItem = item;
+        this.mPosition = position;
         this.mIsPreviewCreated = isPreviewCreated;
 
         metaTag = new MetaTag();
@@ -62,49 +70,13 @@ public class GetMetaDataFromUrl extends AsyncTask<String, Void, Void> {
 
         if (!mActivity.isDestroyed()) {
 
-            if (mHolder instanceof NewsAdapter.ArticleViewHolder &&
-                metaTag.getImageUrl() != null) {
+            if (mAdapter instanceof NewsAdapter) {
 
-                Glide.with(mActivity)
-                    .load(metaTag.getImageUrl())
-                    .into(((NewsAdapter.ArticleViewHolder) mHolder).image);
+                ((NewsAdapter) mAdapter).onMetaTagsLoaded(mHolder, mPosition, metaTag);
 
-            } else if (mHolder instanceof FeedAdapter.NewMessageViewHolder) {
+            } else if (mAdapter instanceof FeedAdapter) {
 
-                FeedAdapter.NewMessageViewHolder holder = ((FeedAdapter.NewMessageViewHolder) mHolder);
-
-                holder.articlePreview.setVisibility(View.VISIBLE);
-                holder.articleTitle.setText(metaTag.getTitle());
-
-                if (metaTag.getImageUrl() != null) {
-
-                    Glide.with(mActivity)
-                        .load(metaTag.getImageUrl())
-                        .into(holder.articleImage);
-
-                }
-
-                if (metaTag.getArticleUrl() != null) {
-
-                    String domain = AppHelper.getDomainName(metaTag.getArticleUrl());
-
-                    holder.articlePublisher.setText(domain);
-
-                    Glide.with(mActivity)
-                        .load("http://www." + domain + "/favicon.ico")
-                        .placeholder(R.drawable.ic_rss_feed)
-                        .into(holder.articlePublisherIcon);
-
-                }
-
-                mFeedItem.setArticleTitle(metaTag.getTitle());
-                mFeedItem.setArticleImageUrl(metaTag.getImageUrl());
-                mFeedItem.setArticleUrl(metaTag.getArticleUrl());
-                mFeedItem.setIsArticleItem(true);
-
-
-                mIsPreviewCreated = true;
-                holder.progressBar.setVisibility(View.GONE);
+                ((FeedAdapter) mAdapter).onMetaTagsLoaded(mHolder, mPosition, metaTag);
             }
         }
     }
