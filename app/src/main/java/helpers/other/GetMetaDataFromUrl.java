@@ -91,7 +91,7 @@ public class GetMetaDataFromUrl extends AsyncTask<String, Void, Void> {
                     holder.articlePublisher.setText(domain);
 
                     Glide.with(mActivity)
-                        .load("http://" + domain + "/favicon.ico")
+                        .load("http://www." + domain + "/favicon.ico")
                         .placeholder(R.drawable.ic_rss_feed)
                         .into(holder.articlePublisherIcon);
 
@@ -102,7 +102,9 @@ public class GetMetaDataFromUrl extends AsyncTask<String, Void, Void> {
                 mFeedItem.setArticleUrl(metaTag.getArticleUrl());
                 mFeedItem.setIsArticleItem(true);
 
+
                 mIsPreviewCreated = true;
+                holder.progressBar.setVisibility(View.GONE);
             }
         }
     }

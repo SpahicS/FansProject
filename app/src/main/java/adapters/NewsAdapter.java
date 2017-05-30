@@ -49,7 +49,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ArticleViewHol
         holder.publisher.setText(domain);
 
         Glide.with(mActivity)
-                .load("http://" + domain + "/favicon.ico")
+                .load("http://www." + domain + "/favicon.ico")
                 .placeholder(R.drawable.ic_rss_feed)
                 .into(holder.favIcon);
 
