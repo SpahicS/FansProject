@@ -1,6 +1,7 @@
 package dashboard;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
@@ -68,8 +69,14 @@ public class FragmentNews extends Fragment {
     }
 
     private void getNewsList(String query) {
+        String edition;
+        SharedPreferences prefs = getContext().getSharedPreferences("COUNTRY_CODES", Context.MODE_PRIVATE);
+        edition = prefs.getString("COUNTRY_CODE", null);
+        //String edition = getNewsEditionCode();
 
-        String edition = getNewsEditionCode();
+        if (edition == null) {
+            edition = getNewsEditionCode();
+        }
 
         NewsAPI.service.getNewsData(query, 20, "rss", edition).enqueue(new Callback<ResponseData>() {
             @Override
