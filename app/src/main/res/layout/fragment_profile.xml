@@ -5,20 +5,40 @@
     android:background="@color/fragment_bcg"
     android:orientation="vertical">
 
-    <Button
+    <RelativeLayout
+        android:id="@+id/country_selector"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/transparent"
-        android:hint="- Select news region -"
-        android:id="@+id/country_selector"/>
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/transparent"
+            android:hint="- Select news region -" />
+
+        <TextView
+            android:id="@+id/country_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:hint="Selected country"
+            android:textAlignment="center" />
+
+    </RelativeLayout>
+
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/country_codes_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/fragment_bcg"
-        android:id="@+id/country_codes_recycler"
         android:visibility="gone">
 
     </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:text="sadkasdadadadsaddfkogjfdkgćdflkgjdflgfjfdhgjćkhfghćklfjh" />
 
 </LinearLayout>

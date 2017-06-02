@@ -1,14 +1,18 @@
 package adapters;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import digitalbath.fansproject.R;
 import listeners.OnCountryCodeClickListener;
+import models.Country;
 
 /**
  * Created by Spaja on 31-May-17.
@@ -16,13 +20,28 @@ import listeners.OnCountryCodeClickListener;
 
 public class CountryCodesAdapter extends RecyclerView.Adapter<CountryCodesAdapter.MyViewHolder> {
 
-    private String[] mDataSet;
     private Context mContext;
+    private RecyclerView mCountriesRecycler;
+    private TextView mCountryName;
+    private ArrayList<Country> mDataSet;
+    private LinearLayoutManager mManager;
 
-    public CountryCodesAdapter(Context context, String[] stringArray) {
+    public CountryCodesAdapter(Context context, ArrayList<Country> countries,
+                               RecyclerView countriesRecycler, TextView countryName, LinearLayoutManager manager) {
 
-        this.mDataSet = stringArray;
         this.mContext = context;
+        this.mCountriesRecycler = countriesRecycler;
+        this.mCountryName = countryName;
+        this.mDataSet = countries;
+        this.mManager = manager;
+
+        String code = mContext.getSharedPreferences("COUNTRY_CODES", Context.MODE_PRIVATE).getString("COUNTRY_CODE", null);
+
+        for (int i = 0; i < mDataSet.size(); i++) {
+            if (mDataSet.get(i).getCountryCode().equals(code)) {
+                mDataSet.get(i).setSelected(true);
+            }
+        }
     }
 
     @Override
@@ -35,21 +54,30 @@ public class CountryCodesAdapter extends RecyclerView.Adapter<CountryCodesAdapte
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        holder.countryCode.setText(mDataSet[position]);
-        holder.countryCode.setOnClickListener(new OnCountryCodeClickListener(mContext, holder.countryCode.getText().toString()));
+        if (mDataSet.get(position).isSelected()) {
+            holder.countryCode.setBackgroundColor(mContext.getResources().getColor(R.color.colorAccent));
+        } else {
+            holder.countryCode.setBackgroundColor(mContext.getResources().getColor(R.color.transparent));
+        }
+
+        holder.countryCode.setText(mDataSet.get(position).getCountryName());
+
+        holder.countryCode.setOnClickListener(
+                new OnCountryCodeClickListener(mContext, mDataSet, mCountriesRecycler,
+                        holder.countryCode, position, mManager, mCountryName, true));
 
     }
 
     @Override
     public int getItemCount() {
-        return mDataSet.length;
+        return mDataSet.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView countryCode;
 
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
 
             super(itemView);
             countryCode = (TextView) itemView.findViewById(R.id.country_code);

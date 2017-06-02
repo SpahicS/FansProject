@@ -29,6 +29,16 @@ public class Item {
 
     private String imageUrl;
 
+    private boolean selected;
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
     public String getIsPermaLink() {
         return isPermaLink;
     }
