@@ -65,8 +65,12 @@ public class FragmentNews extends Fragment {
     }
 
     private void getNewsList(String query) {
+
         String edition;
-        SharedPreferences prefs = getContext().getSharedPreferences("COUNTRY_CODES", Context.MODE_PRIVATE);
+
+        SharedPreferences prefs = getContext()
+            .getSharedPreferences("COUNTRY_CODES", Context.MODE_PRIVATE);
+
         edition = prefs.getString("COUNTRY_CODE", null);
         //String edition = getNewsEditionCode();
 
@@ -90,6 +94,7 @@ public class FragmentNews extends Fragment {
     }
 
     private String getNewsEditionCode() {
+
         String newsEdition = Locale.getDefault().getLanguage().toLowerCase();
         String country = Locale.getDefault().getCountry().toLowerCase();
         String editionCode;
@@ -105,6 +110,7 @@ public class FragmentNews extends Fragment {
         if (edition.equals("us")) {
             edition = AppHelper.getNewsEditionCode(getContext(), country);
         }
+
         return edition;
     }
 }
