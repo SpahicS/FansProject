@@ -55,7 +55,7 @@ public class FragmentProfile extends Fragment {
         String[] countryNames = getActivity().getResources().getStringArray(R.array.country_names);
         TextView countryName = (TextView) rootView.findViewById(R.id.country_name);
         int position = 0;
-        String code = getActivity().getSharedPreferences("COUNTRY_CODES", Context.MODE_PRIVATE).getString("COUNTRY_CODE", null);
+        String code = getActivity().getSharedPreferences("COUNTRY_CODES", Context.MODE_PRIVATE).getString("COUNTRY_CODE", "us");
         for (int i = 0; i < countryCodes.length; i++) {
             if (code.equals(countryCodes[i])) {
                 position = i;
