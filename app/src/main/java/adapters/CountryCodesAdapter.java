@@ -1,11 +1,13 @@
 package adapters;
 
 import android.content.Context;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -24,16 +26,17 @@ public class CountryCodesAdapter extends RecyclerView.Adapter<CountryCodesAdapte
     private RecyclerView mCountriesRecycler;
     private TextView mCountryName;
     private ArrayList<Country> mDataSet;
-    private LinearLayoutManager mManager;
+    private AppBarLayout appBarLayout;
 
     public CountryCodesAdapter(Context context, ArrayList<Country> countries,
-                               RecyclerView countriesRecycler, TextView countryName, LinearLayoutManager manager) {
+                               RecyclerView countriesRecycler, TextView countryName,
+                               AppBarLayout appBarLayout) {
 
         this.mContext = context;
         this.mCountriesRecycler = countriesRecycler;
         this.mCountryName = countryName;
         this.mDataSet = countries;
-        this.mManager = manager;
+        this.appBarLayout = appBarLayout;
 
         String code = mContext.getSharedPreferences("COUNTRY_CODES", Context.MODE_PRIVATE).getString("COUNTRY_CODE", null);
 
@@ -55,9 +58,9 @@ public class CountryCodesAdapter extends RecyclerView.Adapter<CountryCodesAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         if (mDataSet.get(position).isSelected()) {
-            holder.countryCode.setBackgroundColor(mContext.getResources().getColor(R.color.colorAccent));
+            holder.checkMark.setVisibility(View.VISIBLE);
         } else {
-            holder.countryCode.setBackgroundColor(mContext.getResources().getColor(R.color.transparent));
+            holder.checkMark.setVisibility(View.GONE);
         }
 
         holder.countryCode.setText(mDataSet.get(position).getCountryName());
@@ -73,14 +76,20 @@ public class CountryCodesAdapter extends RecyclerView.Adapter<CountryCodesAdapte
         return mDataSet.size();
     }
 
+    public void expandToolbar() {
+        appBarLayout.setExpanded(true, true);
+    }
+
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView countryCode;
+        ImageView checkMark;
 
         MyViewHolder(View itemView) {
 
             super(itemView);
             countryCode = (TextView) itemView.findViewById(R.id.country_code);
+            checkMark = (ImageView) itemView.findViewById(R.id.check_mark);
         }
     }
 }

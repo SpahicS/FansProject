@@ -33,7 +33,7 @@ public class OnCountrySelectorClickListener implements View.OnClickListener {
             mRecyclerView.setVisibility(View.VISIBLE);
             for (int i = 0; i < mDataSet.size(); i++) {
                 if (mDataSet.get(i).isSelected()) {
-                    mManager.scrollToPositionWithOffset(i, 20);
+                    mManager.scrollToPositionWithOffset(i, 0);
                 }
             }
         } else {

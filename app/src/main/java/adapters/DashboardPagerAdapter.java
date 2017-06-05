@@ -1,5 +1,6 @@
 package adapters;
 
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -13,6 +14,7 @@ import dashboard.FragmentTeam;
  */
 
 public class DashboardPagerAdapter extends FragmentPagerAdapter {
+
 
     public DashboardPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -29,7 +31,6 @@ public class DashboardPagerAdapter extends FragmentPagerAdapter {
                 return FragmentTeam.newInstance(position + 1);
             case 3:
                 return FragmentProfile.newInstance(position + 1);
-
         }
 
         return FragmentFeed.newInstance(position + 1);

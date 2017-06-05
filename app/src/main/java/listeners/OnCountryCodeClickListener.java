@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import adapters.CountryCodesAdapter;
 import models.Country;
 
 /**
@@ -53,5 +54,6 @@ public class OnCountryCodeClickListener implements View.OnClickListener {
 
         mDataSet.get(position).setSelected(true);
         mCountriesRecycler.getAdapter().notifyItemChanged(position);
+        ((CountryCodesAdapter) mCountriesRecycler.getAdapter()).expandToolbar();
     }
 }

@@ -8,23 +8,53 @@
     <RelativeLayout
         android:id="@+id/country_selector"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:paddingStart="10dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/transparent"
-            android:hint="- Select news region -" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:id="@+id/language"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="10dp"
+                android:text="Language" />
+
+            <TextView
+                android:id="@+id/hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/language"
+                android:text="Displays news in selected language, if available"
+                android:textColor="@color/light_gray"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
 
         <TextView
             android:id="@+id/country_name"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
             android:hint="Selected country"
-            android:textAlignment="center" />
+            android:textColor="@color/colorAccent" />
 
     </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_gray_ultra">
+
+    </LinearLayout>
 
 
     <android.support.v7.widget.RecyclerView

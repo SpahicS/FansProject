@@ -2,6 +2,7 @@ package dashboard;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import adapters.CountryCodesAdapter;
@@ -44,6 +46,7 @@ public class FragmentProfile extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
+        AppBarLayout appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.appbar);
 
         RecyclerView countryCodesRecycler = (RecyclerView) rootView.findViewById(R.id.country_codes_recycler);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
@@ -71,7 +74,7 @@ public class FragmentProfile extends Fragment {
         }
 
         countryCodesRecycler.setAdapter(new CountryCodesAdapter(getContext(), countryList ,
-                countryCodesRecycler, countryName, manager));
+                countryCodesRecycler, countryName, appBarLayout));
 
         RelativeLayout selector = (RelativeLayout) rootView.findViewById(R.id.country_selector);
         selector.setOnClickListener(new OnCountrySelectorClickListener(countryCodesRecycler, countryList, manager));
