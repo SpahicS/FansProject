@@ -8,11 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import digitalbath.fansproject.R;
+import helpers.main.AppHelper;
 import listeners.OnCountryCodeClickListener;
 import models.Country;
 
@@ -65,7 +67,7 @@ public class CountryCodesAdapter extends RecyclerView.Adapter<CountryCodesAdapte
 
         holder.countryCode.setText(mDataSet.get(position).getCountryName());
 
-        holder.countryCode.setOnClickListener(
+        holder.country.setOnClickListener(
                 new OnCountryCodeClickListener(mContext, mDataSet, mCountriesRecycler,
                         position, mCountryName));
 
@@ -84,12 +86,15 @@ public class CountryCodesAdapter extends RecyclerView.Adapter<CountryCodesAdapte
 
         TextView countryCode;
         ImageView checkMark;
+        RelativeLayout country;
 
         MyViewHolder(View itemView) {
 
             super(itemView);
             countryCode = (TextView) itemView.findViewById(R.id.country_code);
+            countryCode.setTypeface(AppHelper.getRobotoLight(mContext));
             checkMark = (ImageView) itemView.findViewById(R.id.check_mark);
+            country = (RelativeLayout) itemView.findViewById(R.id.country);
         }
     }
 }

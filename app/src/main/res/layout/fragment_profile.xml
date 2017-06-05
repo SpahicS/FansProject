@@ -8,44 +8,43 @@
     <RelativeLayout
         android:id="@+id/country_selector"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="5dp"
-        android:paddingStart="10dp">
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true">
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp">
 
             <TextView
                 android:id="@+id/language"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="5dp"
                 android:text="Language" />
 
             <TextView
-                android:id="@+id/hint"
+                android:id="@+id/country_name"
+                android:textSize="14sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/language"
-                android:text="Displays news in selected language, if available"
-                android:textColor="@color/light_gray"
-                android:textSize="12sp" />
+                android:hint="Selected country"
+                android:textColor="@color/colorAccent" />
+
+            <!--<TextView-->
+            <!--android:id="@+id/hint"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/language"-->
+            <!--android:layout_marginBottom="5dp"-->
+            <!--android:text="Displays news in selected language, if available"-->
+            <!--android:textColor="@color/light_gray"-->
+            <!--android:textSize="12sp" />-->
         </RelativeLayout>
-
-
-        <TextView
-            android:id="@+id/country_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="10dp"
-            android:hint="Selected country"
-            android:textColor="@color/colorAccent" />
 
     </RelativeLayout>
 
@@ -65,10 +64,5 @@
         android:visibility="gone">
 
     </android.support.v7.widget.RecyclerView>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:text="sadkasdadadadsaddfkogjfdkgćdflkgjdflgfjfdhgjćkhfghćklfjh" />
 
 </LinearLayout>
