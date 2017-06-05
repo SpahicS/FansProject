@@ -212,7 +212,7 @@
         />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/comments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/username"
@@ -269,13 +269,15 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/comment_cont"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
         android:layout_marginBottom="3dp"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingLeft="4dp">
+        android:paddingLeft="4dp"
+        >
 
       <ImageView
           android:id="@+id/imageView5"
@@ -284,7 +286,8 @@
           android:layout_marginLeft="3dp"
           android:layout_marginTop="2dp"
           android:tint="@color/light_gray_with_tr"
-          app:srcCompat="@drawable/ic_comment"/>
+          app:srcCompat="@drawable/ic_comment"
+          />
 
       <TextView
           android:id="@+id/comment"
@@ -294,9 +297,10 @@
           android:layout_marginLeft="5dp"
           android:layout_toRightOf="@+id/avatar"
           android:gravity="center"
-          android:textColor="@color/main_color_dark"
           android:text="comment"
-          android:textSize="13sp"/>
+          android:textColor="@color/main_color_dark"
+          android:textSize="13sp"
+          />
 
     </LinearLayout>
 

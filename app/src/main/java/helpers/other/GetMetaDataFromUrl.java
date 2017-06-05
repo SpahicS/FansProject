@@ -46,7 +46,6 @@ public class GetMetaDataFromUrl extends AsyncTask<String, Void, Void> {
         this.mPosition = position;
         this.mIsPreviewCreated = isPreviewCreated;
 
-        metaTag = new MetaTag();
     }
 
     @Override
@@ -55,11 +54,16 @@ public class GetMetaDataFromUrl extends AsyncTask<String, Void, Void> {
         try {
 
             Document document = Jsoup.connect(params[0]).get();
+
+            metaTag = new MetaTag();
+
             metaTag.setTitle(document.select("meta[property=og:title]").attr("content"));
             metaTag.setImageUrl(document.select("meta[property=og:image]").attr("content"));
             metaTag.setArticleUrl(document.select("meta[property=og:url]").attr("content"));
 
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

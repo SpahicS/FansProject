@@ -1,4 +1,4 @@
-package dashboard;
+package activities;
 
 import adapters.DashboardPagerAdapter;
 import android.support.design.widget.TabLayout;
