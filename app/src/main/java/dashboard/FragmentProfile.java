@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import adapters.CountryCodesAdapter;
 import digitalbath.fansproject.R;
 import listeners.OnCountryCodeClickListener;
+import listeners.OnCountrySelectorClickListener;
 import models.Country;
 
 /**
@@ -69,10 +70,11 @@ public class FragmentProfile extends Fragment {
             countryList.add(country);
         }
 
-        countryCodesRecycler.setAdapter(new CountryCodesAdapter(getContext(), countryList , countryCodesRecycler, countryName, manager));
+        countryCodesRecycler.setAdapter(new CountryCodesAdapter(getContext(), countryList ,
+                countryCodesRecycler, countryName, manager));
 
         RelativeLayout selector = (RelativeLayout) rootView.findViewById(R.id.country_selector);
-        selector.setOnClickListener(new OnCountryCodeClickListener(getContext(), countryList, countryCodesRecycler, countryName, 0, manager, null,  false));
+        selector.setOnClickListener(new OnCountrySelectorClickListener(countryCodesRecycler, countryList, manager));
 
         return rootView;
     }

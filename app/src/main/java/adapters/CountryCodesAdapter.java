@@ -64,7 +64,7 @@ public class CountryCodesAdapter extends RecyclerView.Adapter<CountryCodesAdapte
 
         holder.countryCode.setOnClickListener(
                 new OnCountryCodeClickListener(mContext, mDataSet, mCountriesRecycler,
-                        holder.countryCode, position, mManager, mCountryName, true));
+                        position, mCountryName));
 
     }
 
