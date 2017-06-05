@@ -2,15 +2,23 @@ package dashboard;
 
 import adapters.FeedAdapter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import digitalbath.fansproject.R;
 import helpers.main.AppController;
 import java.util.Date;
@@ -27,6 +35,7 @@ public class FragmentFeed extends Fragment {
     private RecyclerView mRecyclerView;
     private FeedAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private RelativeLayout mCommentsCont;
 
     private DatabaseReference mDatabase;
 
@@ -51,37 +60,19 @@ public class FragmentFeed extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
 
+        mCommentsCont = (RelativeLayout) rootView.findViewById(R.id.comments_cont);
+
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.feed_recycler);
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new FeedAdapter(getActivity(), mDatabase.child("feed"));
+        mAdapter = new FeedAdapter(getActivity(), mDatabase.child("feed"), mCommentsCont);
 
         mRecyclerView.setAdapter(mAdapter);
 
-        final EditText commentInput = (EditText) rootView.findViewById(R.id.message);
-
-        rootView.findViewById(R.id.send).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                DatabaseReference quotes = mDatabase.child("feed");
-
-                FeedItem feedItem = new FeedItem();
-
-                feedItem.setUsername(AppController.getUser().getDisplayName());
-                feedItem.setUserId(AppController.getUser().getUid());
-                feedItem.setMessage(commentInput.getText().toString());
-                feedItem.setDate(new Date().toString());
-                feedItem.setAvatar(AppController.getUser().getPhotoUrl().toString());
-
-                quotes.push().setValue(feedItem);
-
-                commentInput.setText("");
-            }
-        });
-
         return rootView;
     }
+
+
 }

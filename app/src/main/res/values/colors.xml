@@ -9,6 +9,7 @@
 
   <color name="transparent">#00ffffff</color>
   <color name="semi_transparent">#80ffffff</color>
+  <color name="semi_transparent_one">#80000000</color>
 
   <color name="tab_selected">#16a4e6</color>
   <color name="tab_unselected">#acacac</color>

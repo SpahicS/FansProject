@@ -7,7 +7,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -38,6 +42,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import listeners.OnArticleClickListener;
+import models.Comment;
 import models.FeedItem;
 import models.MetaTag;
 
@@ -55,16 +61,21 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private ArrayList<FeedItem> mDataSet;
     private Activity mActivity;
-    private DatabaseReference mDatabase;
+    private DatabaseReference mFeedDatabase;
+    private RelativeLayout mCommentsCont;
+    private CommentsAdapter mCommentsAdapter;
 
-    public FeedAdapter(Activity activity, DatabaseReference database) {
+    private int mCommentsViewPosition;
+
+    public FeedAdapter(Activity activity, DatabaseReference database, RelativeLayout commentsCont) {
 
         mDataSet = new ArrayList<>();
 
         mActivity = activity;
-        mDatabase = database;
+        mFeedDatabase = database;
+        mCommentsCont = commentsCont;
 
-        this.mDatabase.addValueEventListener(new ValueEventListener() {
+        this.mFeedDatabase.addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -81,6 +92,12 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 notifyDataSetChanged();
 
+                if (mCommentsCont.getVisibility() == View.VISIBLE) {
+
+                    mCommentsAdapter.setDataSet(mDataSet.get(mCommentsViewPosition).getComments());
+                    mCommentsAdapter.notifyDataSetChanged();
+
+                }
             }
 
             @Override
@@ -113,7 +130,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return vh;
     }
 
-    @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         switch (holder.getItemViewType()) {
 
@@ -133,14 +151,74 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return mDataSet.size();
     }
 
-    @Override public int getItemViewType(int position) {
+    @Override
+    public int getItemViewType(int position) {
         if (position == 0)
             return NEW_MESSAGE_TYPE;
         else
             return FEED_ITEM_TYPE;
     }
 
-    private void bindFeedItem(final FeedItemViewHolder holder, int position) {
+    @Override
+    public void onMetaTagsLoaded(RecyclerView.ViewHolder holder, int position, MetaTag metaTag) {
+
+        final FeedAdapter.NewMessageViewHolder feedHolder = ((FeedAdapter.NewMessageViewHolder) holder);
+        feedHolder.progressBar.setVisibility(View.GONE);
+
+        if (metaTag == null)
+            return;
+
+        feedHolder.articlePreview.setVisibility(View.VISIBLE);
+        feedHolder.articleTitle.setText(metaTag.getTitle());
+
+        if (metaTag.getImageUrl() != null) {
+
+            Glide.with(mActivity)
+                .load(metaTag.getImageUrl())
+                .into(feedHolder.articleImage);
+
+        }
+
+        if (metaTag.getArticleUrl() != null) {
+
+            String domain = AppHelper.getDomainName(metaTag.getArticleUrl());
+
+            feedHolder.articlePublisher.setText(domain);
+
+            SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
+
+                @Override
+                public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
+
+                    feedHolder.articlePublisherIcon.setImageBitmap(bitmap);
+
+                }
+
+                @Override
+                public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                    super.onLoadFailed(e, errorDrawable);
+
+                    feedHolder.articlePublisherIcon
+                        .setImageResource(R.drawable.publisher_icon);
+                }
+            };
+
+            Glide.with(mActivity)
+                .load("http://www." + domain + "/favicon.ico")
+                .asBitmap()
+                .into(target);
+
+        }
+
+        mDataSet.get(position).setArticleTitle(metaTag.getTitle());
+        mDataSet.get(position).setArticleImageUrl(metaTag.getImageUrl());
+        mDataSet.get(position).setArticleUrl(metaTag.getArticleUrl());
+        mDataSet.get(position).setIsArticleItem(true);
+
+        isPreviewCreated = true;
+    }
+
+    private void bindFeedItem(final FeedItemViewHolder holder, final int position) {
 
         final FeedItem item = mDataSet.get(position);
 
@@ -170,6 +248,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
 
         holder.numberOfLikes.setText(Integer.toString(item.getLikes().size()) + " thumbs up");
+        holder.numberOfComments.setText(Integer.toString(item.getComments().size()) + " comments");
         holder.numberOfUnlikes.setText(Integer.toString(item.getUnlikes().size()) + " thumbs down");
 
         if (item.getLikes().get(AppController.getUser().getUid()) != null
@@ -187,6 +266,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (item.isArticleItem()) {
 
             holder.articleCont.setVisibility(View.VISIBLE);
+
+            holder.articleCont.setOnClickListener(new OnArticleClickListener
+                (mActivity, item.getArticleUrl()));
+
             holder.articleTitle.setText(item.getArticleTitle());
 
             if (item.getArticleImageUrl() != null) {
@@ -242,12 +325,12 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     Map<String, Object> taskMap = new HashMap<>();
                     taskMap.put(AppController.getUser().getUid(), true);
 
-                    mDatabase.child(item.getId())
+                    mFeedDatabase.child(item.getId())
                         .child("likes").updateChildren(taskMap);
 
                 } else {
 
-                    mDatabase.child(item.getId())
+                    mFeedDatabase.child(item.getId())
                         .child("likes").child(AppController.getUser().getUid()).removeValue();
                 }
             }
@@ -274,14 +357,26 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     Map<String, Object> taskMap = new HashMap<>();
                     taskMap.put(AppController.getUser().getUid(), true);
 
-                    mDatabase.child(item.getId())
+                    mFeedDatabase.child(item.getId())
                         .child("unlikes").updateChildren(taskMap);
 
                 } else {
 
-                    mDatabase.child(item.getId())
+                    mFeedDatabase.child(item.getId())
                         .child("unlikes").child(AppController.getUser().getUid()).removeValue();
                 }
+            }
+        });
+
+        holder.commentCont.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+
+                AppBarLayout appBarLayout = (AppBarLayout) mActivity.findViewById(R.id.appbar);
+                appBarLayout.setExpanded(false, true);
+
+                mCommentsViewPosition = position;
+
+                getComments(item.getComments(), item.getId());
             }
         });
     }
@@ -334,7 +429,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 if (!TextUtils.isEmpty(item.getImageUrl()))
                     feedItemToPost.setImageUrl(item.getImageUrl());
 
-                mDatabase.push().setValue(feedItemToPost);
+                mFeedDatabase.push().setValue(feedItemToPost);
 
                 holder.message.setText("");
 
@@ -391,8 +486,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         });
     }
 
-    private void loadPreviewImage(final String url, final FeedItem item,
-        final NewMessageViewHolder holder) {
+    private void loadPreviewImage(final String url, final FeedItem item, final NewMessageViewHolder holder) {
 
         SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
 
@@ -434,62 +528,87 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             .into(target);
     }
 
-    @Override
-    public void onMetaTagsLoaded(RecyclerView.ViewHolder holder, int position, MetaTag metaTag) {
+    //region Comments
+    public void getComments(ArrayList<Comment> comments, String itemId) {
 
-        final FeedAdapter.NewMessageViewHolder feedHolder = ((FeedAdapter.NewMessageViewHolder) holder);
+        DatabaseReference mItemCommentsDatabase = mFeedDatabase.child(itemId);
 
-        feedHolder.articlePreview.setVisibility(View.VISIBLE);
-        feedHolder.articleTitle.setText(metaTag.getTitle());
+        final LinearLayout mEmptyListCont = (LinearLayout)
+            mCommentsCont.findViewById(R.id.empty_list_favorites);
+        mEmptyListCont.setVisibility(View.GONE);
 
-        if (metaTag.getImageUrl() != null) {
+        final RecyclerView mCommentsRecycler = (RecyclerView)
+            mCommentsCont.findViewById(R.id.comments_recycler);
+        mCommentsRecycler.setVisibility(View.GONE);
 
-            Glide.with(mActivity)
-                .load(metaTag.getImageUrl())
-                .into(feedHolder.articleImage);
+        mCommentsCont.setVisibility(View.VISIBLE);
 
+        if (comments.size() > 0) {
+            mCommentsRecycler.setVisibility(View.VISIBLE);
+            mEmptyListCont.setVisibility(View.GONE);
+        } else {
+            mEmptyListCont.setVisibility(View.VISIBLE);
+            mCommentsRecycler.setVisibility(View.GONE);
         }
 
-        if (metaTag.getArticleUrl() != null) {
+        final CardView commentsContInner = (CardView)
+            mCommentsCont.findViewById(R.id.comments_cont_inner);
+        commentsContInner.startAnimation(AppHelper.getAnimationUp(mActivity));
 
-            String domain = AppHelper.getDomainName(metaTag.getArticleUrl());
+        mCommentsRecycler.setLayoutManager(new LinearLayoutManager(mActivity));
 
-            feedHolder.articlePublisher.setText(domain);
+        mCommentsAdapter = new CommentsAdapter(mActivity, comments,
+            mItemCommentsDatabase, AppController.getUser().getUid());
 
-            SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
+        mCommentsRecycler.setAdapter(mCommentsAdapter);
 
-                @Override
-                public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
+        ImageView closeComments = (ImageView) mCommentsCont.findViewById(R.id.close_comments);
+        closeComments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                    feedHolder.articlePublisherIcon.setImageBitmap(bitmap);
+                mCommentsCont.setVisibility(View.GONE);
+                //commentsContInner.startAnimation(animationDown);
+            }
+        });
 
-                }
+        mCommentsCont.findViewById(R.id.post_comment).setOnClickListener
+            (new OnPostCommentListener(mItemCommentsDatabase));
 
-                @Override
-                public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                    super.onLoadFailed(e, errorDrawable);
-
-                    feedHolder.articlePublisherIcon
-                        .setImageResource(R.drawable.publisher_icon);
-                }
-            };
-
-            Glide.with(mActivity)
-                .load("http://www." + domain + "/favicon.ico")
-                .asBitmap()
-                .into(target);
-
-        }
-
-        mDataSet.get(position).setArticleTitle(metaTag.getTitle());
-        mDataSet.get(position).setArticleImageUrl(metaTag.getImageUrl());
-        mDataSet.get(position).setArticleUrl(metaTag.getArticleUrl());
-        mDataSet.get(position).setIsArticleItem(true);
-
-        isPreviewCreated = true;
-
-        feedHolder.progressBar.setVisibility(View.GONE);
     }
+
+    private class OnPostCommentListener implements View.OnClickListener {
+
+        private DatabaseReference mItemCommentsDatabase;
+
+        public OnPostCommentListener(DatabaseReference itemCommentsDatabase) {
+
+            mItemCommentsDatabase = itemCommentsDatabase;
+
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            EditText commentInput = (EditText) mCommentsCont.findViewById(R.id.comment_input);
+
+            Comment comment = new Comment();
+
+            comment.setUsername(AppController.getUser().getDisplayName());
+            comment.setUserId(AppController.getUser().getUid());
+            comment.setText(commentInput.getText().toString());
+            comment.setDate(new Date().toString());
+
+            if (AppController.getUser().getPhotoUrl() != null)
+                comment.setAvatar(AppController.getUser().getPhotoUrl().toString());
+
+            mItemCommentsDatabase.child("comments").push().setValue(comment);
+
+            commentInput.setText("");
+
+        }
+    }
+    //endregion
 
     public static class FeedItemViewHolder extends RecyclerView.ViewHolder {
 
@@ -497,11 +616,13 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public TextView username;
         public TextView time;
         public TextView numberOfLikes;
+        public TextView numberOfComments;
         public TextView numberOfUnlikes;
         public CircleImageView avatar;
         public ImageView image;
         public LinearLayout likeCont;
         public LinearLayout unlikeCont;
+        public LinearLayout commentCont;
         public TextView like;
         public TextView unlike;
         public ImageView likeIcon;
@@ -522,10 +643,12 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             image = (ImageView) itemView.findViewById(R.id.image);
 
             numberOfLikes = (TextView) itemView.findViewById(R.id.likes);
+            numberOfComments = (TextView) itemView.findViewById(R.id.comments);
             numberOfUnlikes = (TextView) itemView.findViewById(R.id.unlikes);
 
             likeCont = (LinearLayout) itemView.findViewById(R.id.like_cont);
             unlikeCont = (LinearLayout) itemView.findViewById(R.id.unlike_cont);
+            commentCont = (LinearLayout) itemView.findViewById(R.id.comment_cont);
 
             like = (TextView) itemView.findViewById(R.id.like);
             unlike = (TextView) itemView.findViewById(R.id.unlike);
@@ -579,5 +702,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         }
     }
+
+
 }
 

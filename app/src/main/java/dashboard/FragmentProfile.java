@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 import adapters.CountryCodesAdapter;
 import digitalbath.fansproject.R;
-import listeners.OnCountryCodeClickListener;
 import listeners.OnCountrySelectorClickListener;
 import models.Country;
 

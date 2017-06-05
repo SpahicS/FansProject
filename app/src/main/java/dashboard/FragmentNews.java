@@ -1,25 +1,21 @@
 package dashboard;
 
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Locale;
 
 import adapters.NewsAdapter;
 import digitalbath.fansproject.R;
 import helpers.main.AppHelper;
-import models.Item;
 import models.ResponseData;
 import networking.NewsAPI;
 import retrofit2.Call;
@@ -52,7 +48,7 @@ public class FragmentNews extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_news, container, false);
         newsRecycler = (RecyclerView) rootView.findViewById(R.id.news_list_recycler);
 
         getNewsList("Juventus");

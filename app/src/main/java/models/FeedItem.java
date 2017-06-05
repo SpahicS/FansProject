@@ -1,7 +1,10 @@
 package models;
 
 import com.google.firebase.database.IgnoreExtraProperties;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by unexpected_err on 20/05/2017.
@@ -24,6 +27,7 @@ public class FeedItem {
     private boolean articleItem;
     private HashMap<String, Boolean> likes = new HashMap<>();
     private HashMap<String, Boolean> unlikes = new HashMap<>();
+    private HashMap<String, Comment> comments = new HashMap<>();
 
     public String getId() {
         return id;
@@ -85,16 +89,8 @@ public class FeedItem {
         return likes;
     }
 
-    public void setLikes(HashMap<String, Boolean> likes) {
-        this.likes = likes;
-    }
-
     public HashMap<String, Boolean> getUnlikes() {
         return unlikes;
-    }
-
-    public void setUnlikes(HashMap<String, Boolean> unlikes) {
-        this.unlikes = unlikes;
     }
 
     public String getArticleTitle() {
@@ -135,5 +131,24 @@ public class FeedItem {
 
     public void setArticleUrl(String articleUrl) {
         this.articleUrl = articleUrl;
+    }
+
+    public ArrayList<Comment> getComments() {
+
+        ArrayList<Comment> arrayComments = new ArrayList<>();
+
+        Iterator it = comments.entrySet().iterator();
+
+        while (it.hasNext()) {
+
+            Map.Entry pair = (Map.Entry) it.next();
+
+            Comment comment = (Comment) pair.getValue();
+            comment.setId((String) pair.getKey());
+
+            arrayComments.add(comment);
+        }
+
+        return arrayComments;
     }
 }
