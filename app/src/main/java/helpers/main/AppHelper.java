@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -206,5 +207,26 @@ public class AppHelper {
         }
 
         return editionCode;
+    }
+
+    public static String getNewsEditionCode(Context context) {
+
+        String newsEdition = Locale.getDefault().getLanguage().toLowerCase();
+        String country = Locale.getDefault().getCountry().toLowerCase();
+        String editionCode;
+
+        if (newsEdition.equals(country)) {
+            editionCode = newsEdition;
+        } else {
+            editionCode = newsEdition + "_" + country;
+        }
+
+        String edition = AppHelper.getNewsEditionCode(context, editionCode);
+
+        if (edition.equals("us")) {
+            edition = AppHelper.getNewsEditionCode(context, country);
+        }
+
+        return edition;
     }
 }

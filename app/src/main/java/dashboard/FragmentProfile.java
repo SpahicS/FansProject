@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import adapters.CountryCodesAdapter;
 import digitalbath.fansproject.R;
+import helpers.main.AppHelper;
 import listeners.OnCountrySelectorClickListener;
 import models.Country;
 
@@ -59,6 +60,10 @@ public class FragmentProfile extends Fragment {
 
         String code = getActivity().getSharedPreferences("COUNTRY_CODES", Context.MODE_PRIVATE).getString("COUNTRY_CODE", null);
 
+        if (code == null) {
+            code = AppHelper.getNewsEditionCode(getContext());
+        }
+
         for (int i = 0; i < countryCodes.length; i++) {
             if (code.equals(countryCodes[i])) {
                 position = i;
@@ -68,14 +73,14 @@ public class FragmentProfile extends Fragment {
 
         ArrayList<Country> countryList = new ArrayList<>();
 
-        for (int i = 0; i <  countryCodes.length; i++) {
+        for (int i = 0; i < countryCodes.length; i++) {
             Country country = new Country();
             country.setCountryCode(countryCodes[i]);
             country.setCountryName(countryNames[i]);
             countryList.add(country);
         }
 
-        countryCodesRecycler.setAdapter(new CountryCodesAdapter(getContext(), countryList ,
+        countryCodesRecycler.setAdapter(new CountryCodesAdapter(getContext(), countryList,
                 countryCodesRecycler, countryName, appBarLayout));
 
         RelativeLayout selector = (RelativeLayout) rootView.findViewById(R.id.country_selector);

@@ -75,7 +75,7 @@ public class FragmentNews extends Fragment {
         //String edition = getNewsEditionCode();
 
         if (edition == null) {
-            edition = getNewsEditionCode();
+            edition = AppHelper.getNewsEditionCode(getContext());
         }
 
         NewsAPI.service.getNewsData(query, 20, "rss", edition).enqueue(new Callback<ResponseData>() {
@@ -91,26 +91,5 @@ public class FragmentNews extends Fragment {
                 int i = 0;
             }
         });
-    }
-
-    private String getNewsEditionCode() {
-
-        String newsEdition = Locale.getDefault().getLanguage().toLowerCase();
-        String country = Locale.getDefault().getCountry().toLowerCase();
-        String editionCode;
-
-        if (newsEdition.equals(country)) {
-            editionCode = newsEdition;
-        } else {
-            editionCode = newsEdition + "_" + country;
-        }
-
-        String edition = AppHelper.getNewsEditionCode(getContext(), editionCode);
-
-        if (edition.equals("us")) {
-            edition = AppHelper.getNewsEditionCode(getContext(), country);
-        }
-
-        return edition;
     }
 }
