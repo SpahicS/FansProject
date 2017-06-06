@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ProgressBar;
 import java.util.Locale;
 
 import adapters.NewsAdapter;
@@ -31,6 +32,7 @@ public class FragmentNews extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
     private NewsAdapter newsAdapter;
     private RecyclerView newsRecycler;
+    private ProgressBar progressBar;
 
     public FragmentNews() {
     }
@@ -49,7 +51,10 @@ public class FragmentNews extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_news, container, false);
+
         newsRecycler = (RecyclerView) rootView.findViewById(R.id.news_list_recycler);
+
+        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
 
         getNewsList("Juventus");
 
@@ -84,6 +89,9 @@ public class FragmentNews extends Fragment {
 
                 newsAdapter = new NewsAdapter(getActivity(), response.body());
                 newsRecycler.setAdapter(newsAdapter);
+
+                progressBar.setVisibility(View.GONE);
+
             }
 
             @Override
