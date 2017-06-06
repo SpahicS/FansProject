@@ -77,7 +77,6 @@ public class FragmentNews extends Fragment {
             .getSharedPreferences("COUNTRY_CODES", Context.MODE_PRIVATE);
 
         edition = prefs.getString("COUNTRY_CODE", null);
-        //String edition = getNewsEditionCode();
 
         if (edition == null) {
             edition = AppHelper.getNewsEditionCode(getContext());

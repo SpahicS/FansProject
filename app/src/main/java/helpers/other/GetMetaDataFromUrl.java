@@ -62,6 +62,8 @@ public class GetMetaDataFromUrl extends AsyncTask<String, Void, Void> {
             metaTag.setArticleUrl(document.select("meta[property=og:url]").attr("content"));
 
         } catch (IOException e) {
+            //TODO provjeriti sa Harom kako ovo handlati
+            metaTag = new MetaTag();
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();

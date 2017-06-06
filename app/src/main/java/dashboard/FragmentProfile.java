@@ -9,8 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import helpers.main.AppController;
+import jp.wasabeef.glide.transformations.BlurTransformation;
+import org.w3c.dom.Text;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -46,15 +52,19 @@ public class FragmentProfile extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
-        AppBarLayout appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.appbar);
 
+        AppBarLayout appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.appbar);
         RecyclerView countryCodesRecycler = (RecyclerView) rootView.findViewById(R.id.country_codes_recycler);
+        TextView countryName = (TextView) rootView.findViewById(R.id.country_name);
+        RelativeLayout selector = (RelativeLayout) rootView.findViewById(R.id.country_selector);
+
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         countryCodesRecycler.setLayoutManager(manager);
 
+        bindProfileHeader(rootView);
+
         String[] countryCodes = getActivity().getResources().getStringArray(R.array.country_codes);
         String[] countryNames = getActivity().getResources().getStringArray(R.array.country_names);
-        TextView countryName = (TextView) rootView.findViewById(R.id.country_name);
 
         int position = 0;
 
@@ -83,11 +93,29 @@ public class FragmentProfile extends Fragment {
         countryCodesRecycler.setAdapter(new CountryCodesAdapter(getContext(), countryList,
                 countryCodesRecycler, countryName, appBarLayout));
 
-        RelativeLayout selector = (RelativeLayout) rootView.findViewById(R.id.country_selector);
-        selector.setOnClickListener(new OnCountrySelectorClickListener(countryCodesRecycler, countryList, manager));
+        selector.setOnClickListener(new OnCountrySelectorClickListener(countryCodesRecycler,
+                countryList, manager));
 
         return rootView;
     }
 
+    private void bindProfileHeader(View rootView) {
 
+        Glide.with(this)
+            .load(AppController.getUser().getPhotoUrl())
+            .error(R.drawable.profile_bcg)
+            .bitmapTransform(new BlurTransformation(getContext(), 15))
+            .into((ImageView) rootView.findViewById(R.id.image_blur));
+
+        Glide.with(this)
+            .load(AppController.getUser().getPhotoUrl())
+            .error(R.drawable.avatar)
+            .into((ImageView) rootView.findViewById(R.id.avatar));
+
+        ((TextView) rootView.findViewById(R.id.user_name))
+            .setText(AppController.getUser().getDisplayName());
+
+        ((TextView) rootView.findViewById(R.id.user_email))
+            .setText(AppController.getUser().getEmail());
+    }
 }
