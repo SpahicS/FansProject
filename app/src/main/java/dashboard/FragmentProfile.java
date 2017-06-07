@@ -12,9 +12,6 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import adapters.CountryCodesAdapter;
@@ -30,13 +27,12 @@ import models.Country;
 public class FragmentProfile extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private View rootView;
-    private AppBarLayout appBarLayout;
-    private RecyclerView countryCodesRecycler;
-    private TextView countryName, language;
-    private RelativeLayout selector;
-    private ArrayList<Country> countryList;
-    private LinearLayoutManager manager;
+    private AppBarLayout mAppBarLayout;
+    private RecyclerView mCountryCodesRecycler;
+    private TextView mCountryName;
+    private RelativeLayout mSelector;
+    private ArrayList<Country> mCountryList;
+    private LinearLayoutManager mLayoutManager;
 
     public FragmentProfile() {
     }
@@ -54,14 +50,14 @@ public class FragmentProfile extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.fragment_profile, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        initializeViews();
+        initializeViews(rootView);
         initializeCountryList();
         initializeRecyclerView();
 
-        selector.setOnClickListener(new OnCountrySelectorClickListener(countryCodesRecycler,
-                countryList, manager));
+        mSelector.setOnClickListener(new OnCountrySelectorClickListener(mCountryCodesRecycler,
+                mCountryList, mLayoutManager));
 
         return rootView;
     }
@@ -70,8 +66,6 @@ public class FragmentProfile extends Fragment {
 
         String[] countryCodes = getActivity().getResources().getStringArray(R.array.country_codes);
         String[] countryNames = getActivity().getResources().getStringArray(R.array.country_names);
-        language.setTypeface(AppHelper.getRobotoLight(getContext()));
-        countryName.setTypeface(AppHelper.getRobotoLight(getContext()));
 
         int position = 0;
 
@@ -86,32 +80,32 @@ public class FragmentProfile extends Fragment {
                 position = i;
             }
         }
-        countryName.setText(countryNames[position]);
 
-        countryList = new ArrayList<>();
+        mCountryName.setText(countryNames[position]);
+
+        mCountryList = new ArrayList<>();
 
         for (int i = 0; i < countryCodes.length; i++) {
             Country country = new Country();
             country.setCountryCode(countryCodes[i]);
             country.setCountryName(countryNames[i]);
-            countryList.add(country);
+            mCountryList.add(country);
         }
     }
 
     private void initializeRecyclerView() {
 
-        manager = new LinearLayoutManager(getContext());
-        countryCodesRecycler.setLayoutManager(manager);
-        countryCodesRecycler.setAdapter(new CountryCodesAdapter(getContext(), countryList,
-                countryCodesRecycler, countryName, appBarLayout));
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mCountryCodesRecycler.setLayoutManager(mLayoutManager);
+        mCountryCodesRecycler.setAdapter(new CountryCodesAdapter(getContext(), mCountryList,
+                mCountryCodesRecycler, mCountryName, mAppBarLayout));
     }
 
-    private void initializeViews() {
+    private void initializeViews(View rootView) {
 
-        appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.appbar);
-        countryCodesRecycler = (RecyclerView) rootView.findViewById(R.id.country_codes_recycler);
-        countryName = (TextView) rootView.findViewById(R.id.country_name);
-        language = (TextView) rootView.findViewById(R.id.language);
-        selector = (RelativeLayout) rootView.findViewById(R.id.country_selector);
+        mAppBarLayout = (AppBarLayout) getActivity().findViewById(R.id.appbar);
+        mCountryCodesRecycler = (RecyclerView) rootView.findViewById(R.id.country_codes_recycler);
+        mCountryName = (TextView) rootView.findViewById(R.id.country_name);
+        mSelector = (RelativeLayout) rootView.findViewById(R.id.country_selector);
     }
 }
