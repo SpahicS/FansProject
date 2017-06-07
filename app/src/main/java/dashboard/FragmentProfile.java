@@ -9,14 +9,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
 import adapters.CountryCodesAdapter;
 import digitalbath.fansproject.R;
+import helpers.main.AppController;
 import helpers.main.AppHelper;
+import jp.wasabeef.glide.transformations.BlurTransformation;
 import listeners.OnCountrySelectorClickListener;
 import models.Country;
 
@@ -52,7 +57,10 @@ public class FragmentProfile extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
+
         initializeViews(rootView);
+        bindProfileHeader(rootView);
+
         initializeCountryList();
         initializeRecyclerView();
 
@@ -60,6 +68,26 @@ public class FragmentProfile extends Fragment {
                 mCountryList, mLayoutManager));
 
         return rootView;
+    }
+
+    private void bindProfileHeader(View rootView) {
+
+        Glide.with(this)
+                .load(AppController.getUser().getPhotoUrl())
+                .error(R.drawable.profile_bcg)
+                .bitmapTransform(new BlurTransformation(getContext(), 10))
+                .into((ImageView) rootView.findViewById(R.id.image_blur));
+
+        Glide.with(this)
+                .load(AppController.getUser().getPhotoUrl())
+                .error(R.drawable.avatar)
+                .into((ImageView) rootView.findViewById(R.id.avatar));
+
+        ((TextView) rootView.findViewById(R.id.user_name))
+                .setText(AppController.getUser().getDisplayName());
+
+        ((TextView) rootView.findViewById(R.id.user_email))
+                .setText(AppController.getUser().getEmail());
     }
 
     private void initializeCountryList() {
@@ -108,4 +136,5 @@ public class FragmentProfile extends Fragment {
         mCountryName = (TextView) rootView.findViewById(R.id.country_name);
         mSelector = (RelativeLayout) rootView.findViewById(R.id.country_selector);
     }
+
 }

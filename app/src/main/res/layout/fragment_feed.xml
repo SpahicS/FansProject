@@ -7,6 +7,14 @@
     android:orientation="vertical"
     >
 
+  <ProgressBar
+      android:id="@+id/progressBar"
+      android:layout_width="30dp"
+      android:layout_height="30dp"
+      android:layout_centerInParent="true"
+      style="?android:attr/progressBarStyle"
+      />
+
   <android.support.v7.widget.RecyclerView
       android:id="@+id/feed_recycler"
       android:layout_width="match_parent"

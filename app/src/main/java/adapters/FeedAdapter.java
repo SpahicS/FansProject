@@ -98,6 +98,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     mCommentsAdapter.notifyDataSetChanged();
 
                 }
+
+                mActivity.findViewById(R.id.progressBar).setVisibility(View.GONE);
+
             }
 
             @Override
