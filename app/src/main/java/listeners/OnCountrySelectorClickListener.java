@@ -18,7 +18,9 @@ public class OnCountrySelectorClickListener implements View.OnClickListener {
     private ArrayList<Country> mDataSet;
     private LinearLayoutManager mManager;
 
-    public OnCountrySelectorClickListener(RecyclerView mRecyclerView, ArrayList<Country> countries, LinearLayoutManager manager) {
+    public OnCountrySelectorClickListener(RecyclerView mRecyclerView, ArrayList<Country> countries,
+                                          LinearLayoutManager manager) {
+
         this.mRecyclerView = mRecyclerView;
         this.mDataSet = countries;
         this.mManager = manager;

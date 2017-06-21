@@ -1,26 +1,18 @@
 package helpers.other;
 
-import adapters.FeedAdapter;
-import adapters.NewsAdapter;
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
-import com.bumptech.glide.Glide;
-
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
-import digitalbath.fansproject.R;
-import helpers.main.AppHelper;
-import models.FeedItem;
-import models.MetaTag;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
+
+import adapters.FeedAdapter;
+import adapters.NewsAdapter;
+import models.FeedItem;
+import models.MetaTag;
 
 /**
  * Created by Spaja on 25-Apr-17.

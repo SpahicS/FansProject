@@ -23,7 +23,8 @@ public class OnCountryCodeClickListener implements View.OnClickListener {
     private ArrayList<Country> mDataSet;
     private int position;
 
-    public OnCountryCodeClickListener(Context context, ArrayList<Country> countries, RecyclerView countriesRecycler,
+    public OnCountryCodeClickListener(Context context, ArrayList<Country> countries,
+                                      RecyclerView countriesRecycler,
                                       int position, TextView countryName) {
         this.mContext = context;
         this.mCountriesRecycler = countriesRecycler;
@@ -35,10 +36,7 @@ public class OnCountryCodeClickListener implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        SharedPreferences prefs = mContext.getSharedPreferences("COUNTRY_CODES", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("COUNTRY_CODE", mDataSet.get(position).getCountryCode());
-        editor.apply();
+        saveCountryCode();
 
         mCountriesRecycler.setVisibility(View.GONE);
 
@@ -55,5 +53,13 @@ public class OnCountryCodeClickListener implements View.OnClickListener {
         mDataSet.get(position).setSelected(true);
         mCountriesRecycler.getAdapter().notifyItemChanged(position);
         ((CountryCodesAdapter) mCountriesRecycler.getAdapter()).expandToolbar();
+    }
+
+    private void saveCountryCode() {
+        SharedPreferences prefs = mContext
+                .getSharedPreferences("COUNTRY_CODES", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("COUNTRY_CODE", mDataSet.get(position).getCountryCode());
+        editor.apply();
     }
 }

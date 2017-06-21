@@ -8,39 +8,45 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import de.hdodenhof.circleimageview.CircleImageView;
+
 import digitalbath.fansproject.R;
-import helpers.main.AppHelper;
-import helpers.other.GetMetaDataFromUrl;
 import helpers.other.MetaTagsLoad;
-import listeners.OnArticleClickListener;
 import models.Item;
 import models.MetaTag;
+import models.NewsItem;
 import models.ResponseData;
+
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 /**
  * Created by Spaja on 26-Apr-17.
  */
 
-public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>
-    implements MetaTagsLoad{
+public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
+        implements MetaTagsLoad {
 
     private ResponseData mDataSet;
     private Activity mActivity;
+    private DatabaseReference mNewsRef;
 
     public NewsAdapter(Activity activity, ResponseData mDataSet) {
+
         this.mDataSet = mDataSet;
         this.mActivity = activity;
+        FirebaseDatabase mNewsDatabase = FirebaseDatabase.getInstance();
+        mNewsRef = mNewsDatabase.getReference().child("news");
+
     }
 
     @Override
@@ -51,62 +57,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ArticleViewHol
     }
 
     @Override
-    public void onBindViewHolder(final ArticleViewHolder holder, int position) {
+    public void onBindViewHolder(final ArticleViewHolder holder, final int position) {
 
-        Item articleItem = mDataSet.getChannel().getNewsList().get(position);
-
-        holder.title.setText(articleItem.getTitle());
-
-        String url = articleItem.getLink().split("url=")[1];
-
-        if (articleItem.getImageUrl() == null) {
-
-            holder.image.setVisibility(View.VISIBLE);
-
-            GetMetaDataFromUrl worker = new GetMetaDataFromUrl
-                (mActivity, this, holder, position, null, false);
-
-            worker.execute(url);
-
-        } else if (TextUtils.isEmpty(articleItem.getImageUrl())) {
-
-            holder.image.setVisibility(View.GONE);
-
-        } else {
-
-            loadImage(holder.image, articleItem.getImageUrl(), false);
-
-        }
-
-        String domain = AppHelper.getDomainName(url);
-
-        holder.publisherNameAndTime.setText(domain + " · " + AppHelper
-            .getTimeDifference(articleItem.getPubDate()));
-
-        SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
-
-            @Override
-            public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
-
-                holder.publisherIcon.setImageBitmap(bitmap);
-
-            }
-
-            @Override
-            public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                super.onLoadFailed(e, errorDrawable);
-
-                holder.publisherIcon.setImageResource(R.drawable.publisher_icon);
-            }
-        };
-
-        Glide.with(mActivity)
-            .load("http://www." + domain + "/favicon.ico")
-            .asBitmap()
-            .into(target);
-
-        holder.itemView.setOnClickListener(new OnArticleClickListener(mActivity, url));
-
+        holder.render(this, position, mDataSet.getChannel().getNewsList().get(position),
+                mActivity);
     }
 
     @Override
@@ -132,7 +86,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ArticleViewHol
 
     }
 
-    private void loadImage(final ImageView image, String imageUrl, final boolean animate) {
+    void loadImage(final ImageView image, String imageUrl, final boolean animate) {
 
         SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
 
@@ -141,9 +95,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ArticleViewHol
 
                 if (animate) {
 
-                    TransitionDrawable td = new TransitionDrawable(new Drawable[] {
-                        new ColorDrawable(Color.TRANSPARENT),
-                        new BitmapDrawable(mActivity.getResources(), bitmap)
+                    TransitionDrawable td = new TransitionDrawable(new Drawable[]{
+                            new ColorDrawable(Color.TRANSPARENT),
+                            new BitmapDrawable(mActivity.getResources(), bitmap)
                     });
 
                     image.setImageDrawable(td);
@@ -166,45 +120,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ArticleViewHol
         };
 
         Glide.with(mActivity)
-            .load(imageUrl)
-            .asBitmap()
-            .into(target);
+                .load(imageUrl)
+                .asBitmap()
+                .into(target);
 
     }
-
-    public class ArticleViewHolder extends RecyclerView.ViewHolder {
-
-        public ImageView image;
-        public CircleImageView publisherIcon;
-        public TextView title, publisherNameAndTime;
-        public TextView numberOfLikes;
-        public TextView numberOfUnlikes;
-        public LinearLayout likeCont;
-        public LinearLayout unlikeCont;
-        public TextView like;
-        public TextView unlike;
-        public ImageView likeIcon;
-        public ImageView unlikeIcon;
-
-        public ArticleViewHolder(View itemView) {
-            super(itemView);
-            image = (ImageView) itemView.findViewById(R.id.image);
-            title = (TextView) itemView.findViewById(R.id.title);
-            publisherIcon = (CircleImageView) itemView.findViewById(R.id.publisher_icon);
-            publisherNameAndTime = (TextView) itemView.findViewById(R.id.publisher_name_and_time);
-
-            numberOfLikes = (TextView) itemView.findViewById(R.id.likes);
-            numberOfUnlikes = (TextView) itemView.findViewById(R.id.unlikes);
-
-            likeCont = (LinearLayout) itemView.findViewById(R.id.like_cont);
-            unlikeCont = (LinearLayout) itemView.findViewById(R.id.unlike_cont);
-
-            like = (TextView) itemView.findViewById(R.id.like);
-            unlike = (TextView) itemView.findViewById(R.id.unlike);
-
-            likeIcon = (ImageView) itemView.findViewById(R.id.like_icon);
-            unlikeIcon = (ImageView) itemView.findViewById(R.id.unlike_icon);
-        }
-    }
-
 }

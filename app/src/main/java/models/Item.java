@@ -19,7 +19,7 @@ public class Item {
     private String link;
 
     @Element(required = false)
-    private Guid guid;
+    private String guid;
 
     @Element(required = false)
     private String pubDate;
@@ -47,7 +47,7 @@ public class Item {
         return link;
     }
 
-    public Guid getGuid() {
+    public String getGuid() {
         return guid;
     }
 

@@ -97,7 +97,9 @@ public class FragmentProfile extends Fragment {
 
         int position = 0;
 
-        String code = getActivity().getSharedPreferences("COUNTRY_CODES", Context.MODE_PRIVATE).getString("COUNTRY_CODE", null);
+        String code = getActivity()
+                .getSharedPreferences("COUNTRY_CODES", Context.MODE_PRIVATE)
+                .getString("COUNTRY_CODE", null);
 
         if (code == null) {
             code = AppHelper.getNewsEditionCode(getContext());
