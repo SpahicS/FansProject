@@ -7,7 +7,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -47,6 +46,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import listeners.OnArticleClickListener;
+import listeners.OnPostCommentListener;
 import models.Comment;
 import models.FeedItem;
 import models.MetaTag;
@@ -344,7 +344,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         });
 
         if (item.getUnlikes().get(AppController.getUser().getUid()) != null
-                && item.getUnlikes().get(AppController.getUser().getUid()) == true) {
+                && item.getUnlikes().get(AppController.getUser().getUid())) {
 
             holder.unlike.setTextColor(mActivity.getResources().getColor(R.color.colorAccent));
             holder.unlikeIcon.setColorFilter(ContextCompat.getColor(mActivity, R.color.colorAccent));
@@ -587,7 +587,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         });
 
         mCommentsCont.findViewById(R.id.post_comment).setOnClickListener
-                (new OnPostCommentListener(mItemCommentsDatabase));
+                (new OnPostCommentListener(mItemCommentsDatabase, mCommentsCont));
 
     }
 
@@ -684,39 +684,5 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         }
     }
-
-    private class OnPostCommentListener implements View.OnClickListener {
-
-        private DatabaseReference mItemCommentsDatabase;
-
-        public OnPostCommentListener(DatabaseReference itemCommentsDatabase) {
-
-            mItemCommentsDatabase = itemCommentsDatabase;
-
-        }
-
-        @Override
-        public void onClick(View v) {
-
-            EditText commentInput = (EditText) mCommentsCont.findViewById(R.id.comment_input);
-
-            Comment comment = new Comment();
-
-            comment.setUsername(AppController.getUser().getDisplayName());
-            comment.setUserId(AppController.getUser().getUid());
-            comment.setText(commentInput.getText().toString());
-            comment.setDate(new Date().toString());
-
-            if (AppController.getUser().getPhotoUrl() != null)
-                comment.setAvatar(AppController.getUser().getPhotoUrl().toString());
-
-            mItemCommentsDatabase.child("comments").push().setValue(comment);
-
-            commentInput.setText("");
-
-        }
-    }
-
-
 }
 

@@ -4,6 +4,7 @@ package dashboard;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,12 +13,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import adapters.NewsAdapter;
 import digitalbath.fansproject.R;
+import helpers.main.AppController;
 import helpers.main.AppHelper;
+import models.Item;
+import models.NewsItem;
 import models.ResponseData;
 import networking.NewsAPI;
 import retrofit2.Call;
@@ -34,6 +46,8 @@ public class FragmentNews extends Fragment {
     private NewsAdapter newsAdapter;
     private RecyclerView newsRecycler;
     private ProgressBar progressBar;
+    private RelativeLayout mCommentsCont;
+
 
     public FragmentNews() {
     }
@@ -48,10 +62,16 @@ public class FragmentNews extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_news, container, false);
+        mCommentsCont = (RelativeLayout) rootView.findViewById(R.id.comments_cont);
 
         initializeViews(rootView);
 
@@ -84,7 +104,8 @@ public class FragmentNews extends Fragment {
             @Override
             public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
 
-                newsAdapter = new NewsAdapter(getActivity(), response.body());
+                ArrayList<NewsItem> newsItems = getNewsItems(response.body().getChannel().getNewsList());
+                newsAdapter = new NewsAdapter(getActivity(), newsItems, mCommentsCont);
                 newsRecycler.setAdapter(newsAdapter);
 
                 progressBar.setVisibility(View.GONE);
@@ -96,6 +117,14 @@ public class FragmentNews extends Fragment {
                 int i = 0;
             }
         });
+    }
+
+    private ArrayList<NewsItem> getNewsItems(List<Item> newsList) {
+        ArrayList<NewsItem> newsItems = new ArrayList<>(newsList.size());
+        for (int i = 0; i < newsList.size(); i++) {
+            newsItems.add(NewsItem.getInstance(newsList.get(i)));
+        }
+        return newsItems;
     }
 
     private String getNewsEditionCode() {

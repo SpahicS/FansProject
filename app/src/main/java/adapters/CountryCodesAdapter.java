@@ -62,13 +62,15 @@ public class CountryCodesAdapter extends RecyclerView.Adapter<CountryCodesViewHo
 
         holder.initializeViews(holder.itemView, mContext);
 
-        if (mDataSet.get(position).isSelected()) {
+        Country country = mDataSet.get(position);
+
+        if (country.isSelected()) {
             holder.checkMark.setVisibility(View.VISIBLE);
         } else {
             holder.checkMark.setVisibility(View.GONE);
         }
 
-        holder.countryCode.setText(mDataSet.get(position).getCountryName());
+        holder.countryCode.setText(country.getCountryName());
 
         holder.country.setOnClickListener(
                 new OnCountryCodeClickListener(mContext, mDataSet, mCountriesRecycler,

@@ -42,17 +42,25 @@ public class OnCountryCodeClickListener implements View.OnClickListener {
 
         mCountryName.setText(mDataSet.get(position).getCountryName());
 
-        for (int i = 0; i < mDataSet.size(); i++) {
-
-            if (mDataSet.get(i).isSelected()) {
-                mDataSet.get(i).setSelected(false);
-                mCountriesRecycler.getAdapter().notifyItemChanged(i);
-            }
-        }
+        deselectCountry();
 
         mDataSet.get(position).setSelected(true);
         mCountriesRecycler.getAdapter().notifyItemChanged(position);
         ((CountryCodesAdapter) mCountriesRecycler.getAdapter()).expandToolbar();
+    }
+
+    private void deselectCountry() {
+
+        int listSize = mDataSet.size();
+
+        for (int i = 0; i < listSize; i++) {
+
+            if (mDataSet.get(i).isSelected()) {
+                mDataSet.get(i).setSelected(false);
+                mCountriesRecycler.getAdapter().notifyItemChanged(i);
+                break;
+            }
+        }
     }
 
     private void saveCountryCode() {

@@ -19,7 +19,8 @@ import digitalbath.fansproject.R;
 import helpers.main.AppHelper;
 import helpers.other.GetMetaDataFromUrl;
 import listeners.OnArticleClickListener;
-import models.Item;
+import models.NewsItem;
+import persistance.NewsItemDataService;
 
 /**
  * Created by Spaja on 21-Jun-17.
@@ -30,14 +31,16 @@ class ArticleViewHolder extends RecyclerView.ViewHolder {
     ImageView image;
     private CircleImageView publisherIcon;
     private TextView title, publisherNameAndTime;
-    private TextView numberOfLikes;
-    private TextView numberOfUnlikes;
-    private LinearLayout likeCont;
-    private LinearLayout unlikeCont;
+    TextView numberOfLikes;
+    TextView numberOfUnlikes;
+    LinearLayout likeCont;
+    LinearLayout unlikeCont;
     private TextView like;
     private TextView unlike;
     private ImageView likeIcon;
     private ImageView unlikeIcon;
+    LinearLayout commentsCont;
+    public TextView numberOfComments;
 
     ArticleViewHolder(View itemView) {
         super(itemView);
@@ -48,9 +51,11 @@ class ArticleViewHolder extends RecyclerView.ViewHolder {
 
         numberOfLikes = (TextView) itemView.findViewById(R.id.likes);
         numberOfUnlikes = (TextView) itemView.findViewById(R.id.unlikes);
+        numberOfComments = (TextView) itemView.findViewById(R.id.comments);
 
         likeCont = (LinearLayout) itemView.findViewById(R.id.like_cont);
         unlikeCont = (LinearLayout) itemView.findViewById(R.id.unlike_cont);
+        commentsCont = (LinearLayout) itemView.findViewById(R.id.comment_cont);
 
         like = (TextView) itemView.findViewById(R.id.like);
         unlike = (TextView) itemView.findViewById(R.id.unlike);
@@ -59,7 +64,9 @@ class ArticleViewHolder extends RecyclerView.ViewHolder {
         unlikeIcon = (ImageView) itemView.findViewById(R.id.unlike_icon);
     }
 
-    void render(NewsAdapter newsAdapter, final int position, final Item articleItem, final Activity mActivity) {
+    void render(final NewsAdapter newsAdapter, final int position, final NewsItem articleItem,
+                final Activity mActivity, final NewsItemDataService newsItemDataService) {
+
         title.setText(articleItem.getTitle());
 
         String url = articleItem.getLink().split("url=")[1];
@@ -67,10 +74,8 @@ class ArticleViewHolder extends RecyclerView.ViewHolder {
         if (articleItem.getImageUrl() == null) {
 
             image.setVisibility(View.VISIBLE);
-
             GetMetaDataFromUrl worker = new GetMetaDataFromUrl
                     (mActivity, newsAdapter, this, position, null, false);
-
             worker.execute(url);
 
         } else if (TextUtils.isEmpty(articleItem.getImageUrl())) {
@@ -111,12 +116,26 @@ class ArticleViewHolder extends RecyclerView.ViewHolder {
                 .into(target);
 
         image.setOnClickListener(new OnArticleClickListener(mActivity, url));
-        like.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AppHelper.showToast(mActivity, "Liked!");
-            }
-        });
+   }
+
+    void setLikeButtonOn(Activity mActivity) {
+        likeIcon.setColorFilter(mActivity.getResources().getColor(R.color.colorAccent));
+        like.setTextColor(mActivity.getResources().getColor(R.color.colorAccent));
+    }
+
+    void setLikeButtonOff(Activity mActivity) {
+        likeIcon.setColorFilter(mActivity.getResources().getColor(R.color.light_gray_with_tr));
+        like.setTextColor(mActivity.getResources().getColor(R.color.main_color_dark));
+    }
+
+    void setDislikeButtonOn(Activity mActivity) {
+        unlikeIcon.setColorFilter(mActivity.getResources().getColor(R.color.colorAccent));
+        unlike.setTextColor(mActivity.getResources().getColor(R.color.colorAccent));
+    }
+
+    void setDislikeButtonOff(Activity mActivity) {
+        unlikeIcon.setColorFilter(mActivity.getResources().getColor(R.color.light_gray_with_tr));
+        unlike.setTextColor(mActivity.getResources().getColor(R.color.main_color_dark));
     }
 }
 
