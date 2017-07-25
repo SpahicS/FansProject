@@ -3,6 +3,7 @@ package activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
 import digitalbath.fansproject.R;
@@ -23,6 +24,8 @@ public class ArticleActivity extends AppCompatActivity {
     private void loadWebView(String url) {
         WebView webView = (WebView) findViewById(R.id.article_web_view);
         webView.setWebViewClient(new WebViewClient());
+        webView.setWebChromeClient(new WebChromeClient());
+        webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(url);
     }
 

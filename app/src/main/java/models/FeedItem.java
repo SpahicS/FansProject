@@ -18,6 +18,7 @@ public class FeedItem {
     private String userId;
     private String message;
     private String imageUrl;
+    private String videoUrl;
     private String date;
     private String avatar;
     private String articleTitle;
@@ -85,6 +86,14 @@ public class FeedItem {
         this.imageUrl = imageUrl;
     }
 
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
     public HashMap<String, Boolean> getLikes() {
         return likes;
     }
@@ -150,5 +159,9 @@ public class FeedItem {
         }
 
         return arrayComments;
+    }
+
+    public int getCommentsCount() {
+        return comments.size();
     }
 }

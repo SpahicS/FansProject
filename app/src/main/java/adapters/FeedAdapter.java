@@ -7,7 +7,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -19,6 +18,10 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -92,12 +95,12 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 notifyDataSetChanged();
 
-                if (mCommentsCont.getVisibility() == View.VISIBLE) {
+                /*if (mCommentsCont.getVisibility() == View.VISIBLE) {
 
                     mCommentsAdapter.setDataSet(mDataSet.get(mCommentsViewPosition).getComments());
                     mCommentsAdapter.notifyDataSetChanged();
 
-                }
+                }*/
 
                 mActivity.findViewById(R.id.progressBar).setVisibility(View.GONE);
 
@@ -251,7 +254,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
 
         holder.numberOfLikes.setText(Integer.toString(item.getLikes().size()) + " thumbs up");
-        holder.numberOfComments.setText(Integer.toString(item.getComments().size()) + " comments");
+        holder.numberOfComments.setText(Integer.toString(item.getCommentsCount()) + " comments");
         holder.numberOfUnlikes.setText(Integer.toString(item.getUnlikes().size()) + " thumbs down");
 
         if (item.getLikes().get(AppController.getUser().getUid()) != null
@@ -379,7 +382,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 mCommentsViewPosition = position;
 
-                getComments(item.getComments(), item.getId());
+                getComments(item.getId());
             }
         });
     }
@@ -482,6 +485,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 if (!TextUtils.isEmpty(url)) {
 
                     holder.progressBar.setVisibility(View.VISIBLE);
+
                     loadPreviewImage(url, item, holder);
 
                 }
@@ -532,9 +536,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     //region Comments
-    public void getComments(ArrayList<Comment> comments, String itemId) {
+    public void getComments(String itemId) {
 
-        DatabaseReference mItemCommentsDatabase = mFeedDatabase.child(itemId);
+        DatabaseReference mItemCommentsDatabase = mFeedDatabase.child(itemId).child("comments");
 
         final LinearLayout mEmptyListCont = (LinearLayout)
             mCommentsCont.findViewById(R.id.empty_list_favorites);
@@ -546,21 +550,13 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         mCommentsCont.setVisibility(View.VISIBLE);
 
-        if (comments.size() > 0) {
-            mCommentsRecycler.setVisibility(View.VISIBLE);
-            mEmptyListCont.setVisibility(View.GONE);
-        } else {
-            mEmptyListCont.setVisibility(View.VISIBLE);
-            mCommentsRecycler.setVisibility(View.GONE);
-        }
-
         final CardView commentsContInner = (CardView)
             mCommentsCont.findViewById(R.id.comments_cont_inner);
         commentsContInner.startAnimation(AppHelper.getAnimationUp(mActivity));
 
         mCommentsRecycler.setLayoutManager(new LinearLayoutManager(mActivity));
 
-        mCommentsAdapter = new CommentsAdapter(mActivity, comments,
+        mCommentsAdapter = new CommentsAdapter(mActivity, mCommentsRecycler, mEmptyListCont,
             mItemCommentsDatabase, AppController.getUser().getUid());
 
         mCommentsRecycler.setAdapter(mCommentsAdapter);
@@ -605,7 +601,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if (AppController.getUser().getPhotoUrl() != null)
                 comment.setAvatar(AppController.getUser().getPhotoUrl().toString());
 
-            mItemCommentsDatabase.child("comments").push().setValue(comment);
+            mItemCommentsDatabase.push().setValue(comment);
 
             commentInput.setText("");
 

@@ -5,9 +5,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 import digitalbath.fansproject.R;
 import helpers.main.AppHelper;
@@ -15,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import models.Comment;
+import models.FeedItem;
 
 /**
  * Created by unexpected_err on 19/02/2017.
@@ -25,16 +30,50 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
     private ArrayList<Comment> mComments = new ArrayList<>();
     private Context mContext;
     private String mUserId;
+    private RecyclerView mCommentsRecycler;
+    private LinearLayout mEmptyListCont;
     private DatabaseReference mDataBaseRef;
 
-    public CommentsAdapter(Context context, ArrayList<Comment> comments,
-                           DatabaseReference databaseReference, String userId) {
+    public CommentsAdapter(Context context, RecyclerView commentsRecycler,
+        LinearLayout emptyListCont, DatabaseReference databaseReference, String userId) {
 
         this.mContext = context;
-        this.mComments = comments;
         this.mUserId = userId;
+        this.mCommentsRecycler = commentsRecycler;
+        this.mEmptyListCont = emptyListCont;
         this.mDataBaseRef = databaseReference;
 
+        this.mDataBaseRef.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+
+                mComments.clear();
+
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    Comment commentItem = postSnapshot.getValue(Comment.class);
+                    commentItem.setId(postSnapshot.getKey());
+                    mComments.add(commentItem);
+                }
+
+                notifyDataSetChanged();
+
+                if (mComments.size() > 0) {
+                    mCommentsRecycler.setVisibility(View.VISIBLE);
+                    mEmptyListCont.setVisibility(View.GONE);
+                } else {
+                    mEmptyListCont.setVisibility(View.VISIBLE);
+                    mCommentsRecycler.setVisibility(View.GONE);
+                }
+
+                mCommentsRecycler.smoothScrollToPosition(mComments.size());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError firebaseError) {
+
+            }
+        });
     }
 
     @Override
