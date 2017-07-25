@@ -18,16 +18,13 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -35,18 +32,21 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import digitalbath.fansproject.R;
 import helpers.main.AppController;
 import helpers.main.AppHelper;
 import helpers.other.GetMetaDataFromUrl;
 import helpers.other.MetaTagsLoad;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
 import listeners.OnArticleClickListener;
-import models.Comment;
+import listeners.OnPostCommentListener;
 import models.FeedItem;
 import models.MetaTag;
 
@@ -55,7 +55,7 @@ import models.MetaTag;
  */
 
 public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
-    implements MetaTagsLoad {
+        implements MetaTagsLoad {
 
     private final int FEED_ITEM_TYPE = 0;
     private final int NEW_MESSAGE_TYPE = 1;
@@ -95,14 +95,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 notifyDataSetChanged();
 
-                /*if (mCommentsCont.getVisibility() == View.VISIBLE) {
-
-                    mCommentsAdapter.setDataSet(mDataSet.get(mCommentsViewPosition).getComments());
-                    mCommentsAdapter.notifyDataSetChanged();
-
-                }*/
-
-                mActivity.findViewById(R.id.progressBar).setVisibility(View.GONE);
+                mActivity.findViewById(R.id.progressBarFeed).setVisibility(View.GONE);
 
             }
 
@@ -121,14 +114,14 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (viewType == NEW_MESSAGE_TYPE) {
 
             View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.new_message_item, parent, false);
+                    .inflate(R.layout.new_message_item, parent, false);
 
             vh = new NewMessageViewHolder(v);
 
         } else {
 
             View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.feed_item, parent, false);
+                    .inflate(R.layout.feed_item, parent, false);
 
             vh = new FeedItemViewHolder(v);
         }
@@ -180,8 +173,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (metaTag.getImageUrl() != null) {
 
             Glide.with(mActivity)
-                .load(metaTag.getImageUrl())
-                .into(feedHolder.articleImage);
+                    .load(metaTag.getImageUrl())
+                    .into(feedHolder.articleImage);
 
         }
 
@@ -205,14 +198,14 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     super.onLoadFailed(e, errorDrawable);
 
                     feedHolder.articlePublisherIcon
-                        .setImageResource(R.drawable.publisher_icon);
+                            .setImageResource(R.drawable.publisher_icon);
                 }
             };
 
             Glide.with(mActivity)
-                .load("http://www." + domain + "/favicon.ico")
-                .asBitmap()
-                .into(target);
+                    .load("http://www." + domain + "/favicon.ico")
+                    .asBitmap()
+                    .into(target);
 
         }
 
@@ -229,11 +222,11 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         final FeedItem item = mDataSet.get(position);
 
         Glide.with(mActivity)
-            .load(item.getAvatar())
-            .dontAnimate()
-            .placeholder(R.drawable.avatar)
-            .error(R.drawable.avatar)
-            .into(holder.avatar);
+                .load(item.getAvatar())
+                .dontAnimate()
+                .placeholder(R.drawable.avatar)
+                .error(R.drawable.avatar)
+                .into(holder.avatar);
 
         holder.username.setText(item.getUsername());
         holder.time.setText(AppHelper.getTimeDifference(item.getDate()));
@@ -245,28 +238,12 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.image.setVisibility(View.VISIBLE);
 
             Glide.with(mActivity)
-                .load(item.getImageUrl())
-                .into(holder.image);
+                    .load(item.getImageUrl())
+                    .into(holder.image);
         } else {
 
             holder.image.setVisibility(View.GONE);
             holder.image.setBackground(null);
-        }
-
-        holder.numberOfLikes.setText(Integer.toString(item.getLikes().size()) + " thumbs up");
-        holder.numberOfComments.setText(Integer.toString(item.getCommentsCount()) + " comments");
-        holder.numberOfUnlikes.setText(Integer.toString(item.getUnlikes().size()) + " thumbs down");
-
-        if (item.getLikes().get(AppController.getUser().getUid()) != null
-            && item.getLikes().get(AppController.getUser().getUid()) == true) {
-
-            holder.like.setTextColor(mActivity.getResources().getColor(R.color.colorAccent));
-            holder.likeIcon.setColorFilter(ContextCompat.getColor(mActivity, R.color.colorAccent));
-
-        } else {
-
-            holder.like.setTextColor(mActivity.getResources().getColor(R.color.main_color_dark));
-            holder.likeIcon.setColorFilter(ContextCompat.getColor(mActivity, R.color.light_gray_with_tr));
         }
 
         if (item.isArticleItem()) {
@@ -274,15 +251,15 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.articleCont.setVisibility(View.VISIBLE);
 
             holder.articleCont.setOnClickListener(new OnArticleClickListener
-                (mActivity, item.getArticleUrl()));
+                    (mActivity, item.getArticleUrl()));
 
             holder.articleTitle.setText(item.getArticleTitle());
 
             if (item.getArticleImageUrl() != null) {
 
                 Glide.with(mActivity)
-                    .load(item.getArticleImageUrl())
-                    .into(holder.articleImage);
+                        .load(item.getArticleImageUrl())
+                        .into(holder.articleImage);
 
             }
 
@@ -310,9 +287,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 };
 
                 Glide.with(mActivity)
-                    .load("http://www." + domain + "/favicon.ico")
-                    .asBitmap()
-                    .into(target);
+                        .load("http://www." + domain + "/favicon.ico")
+                        .asBitmap()
+                        .into(target);
 
             }
 
@@ -320,6 +297,34 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             holder.articleCont.setVisibility(View.GONE);
 
+        }
+
+        holder.numberOfLikes.setText(Integer.toString(item.getLikes().size()) + " thumbs up");
+        holder.numberOfComments.setText(Integer.toString(item.getCommentsCount()) + " comments");
+        holder.numberOfUnlikes.setText(Integer.toString(item.getUnlikes().size()) + " thumbs down");
+
+        if (item.getLikes().get(AppController.getUser().getUid()) != null
+            && item.getLikes().get(AppController.getUser().getUid())) {
+
+            holder.like.setTextColor(mActivity.getResources().getColor(R.color.colorAccent));
+            holder.likeIcon.setColorFilter(ContextCompat.getColor(mActivity, R.color.colorAccent));
+
+        } else {
+
+            holder.like.setTextColor(mActivity.getResources().getColor(R.color.main_color_dark));
+            holder.likeIcon.setColorFilter(ContextCompat.getColor(mActivity, R.color.light_gray_with_tr));
+        }
+
+        if (item.getUnlikes().get(AppController.getUser().getUid()) != null
+            && item.getUnlikes().get(AppController.getUser().getUid())) {
+
+            holder.unlike.setTextColor(mActivity.getResources().getColor(R.color.colorAccent));
+            holder.unlikeIcon.setColorFilter(ContextCompat.getColor(mActivity, R.color.colorAccent));
+
+        } else {
+
+            holder.unlike.setTextColor(mActivity.getResources().getColor(R.color.main_color_dark));
+            holder.unlikeIcon.setColorFilter(ContextCompat.getColor(mActivity, R.color.light_gray_with_tr));
         }
 
         holder.likeCont.setOnClickListener(new View.OnClickListener() {
@@ -332,27 +337,15 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     taskMap.put(AppController.getUser().getUid(), true);
 
                     mFeedDatabase.child(item.getId())
-                        .child("likes").updateChildren(taskMap);
+                            .child("likes").updateChildren(taskMap);
 
                 } else {
 
                     mFeedDatabase.child(item.getId())
-                        .child("likes").child(AppController.getUser().getUid()).removeValue();
+                            .child("likes").child(AppController.getUser().getUid()).removeValue();
                 }
             }
         });
-
-        if (item.getUnlikes().get(AppController.getUser().getUid()) != null
-            && item.getUnlikes().get(AppController.getUser().getUid()) == true) {
-
-            holder.unlike.setTextColor(mActivity.getResources().getColor(R.color.colorAccent));
-            holder.unlikeIcon.setColorFilter(ContextCompat.getColor(mActivity, R.color.colorAccent));
-
-        } else {
-
-            holder.unlike.setTextColor(mActivity.getResources().getColor(R.color.main_color_dark));
-            holder.unlikeIcon.setColorFilter(ContextCompat.getColor(mActivity, R.color.light_gray_with_tr));
-        }
 
         holder.unlikeCont.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -364,18 +357,19 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     taskMap.put(AppController.getUser().getUid(), true);
 
                     mFeedDatabase.child(item.getId())
-                        .child("unlikes").updateChildren(taskMap);
+                            .child("unlikes").updateChildren(taskMap);
 
                 } else {
 
                     mFeedDatabase.child(item.getId())
-                        .child("unlikes").child(AppController.getUser().getUid()).removeValue();
+                            .child("unlikes").child(AppController.getUser().getUid()).removeValue();
                 }
             }
         });
 
         holder.commentCont.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 AppBarLayout appBarLayout = (AppBarLayout) mActivity.findViewById(R.id.appbar);
                 appBarLayout.setExpanded(false, true);
@@ -392,11 +386,11 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         final FeedItem item = mDataSet.get(0);
 
         Glide.with(mActivity)
-            .load(AppController.getUser().getPhotoUrl())
-            .dontAnimate()
-            .placeholder(R.drawable.avatar)
-            .error(R.drawable.avatar)
-            .into(holder.avatar);
+                .load(AppController.getUser().getPhotoUrl())
+                .dontAnimate()
+                .placeholder(R.drawable.avatar)
+                .error(R.drawable.avatar)
+                .into(holder.avatar);
 
         holder.title.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -417,7 +411,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         });
 
         holder.post.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 FeedItem feedItemToPost = new FeedItem();
                 feedItemToPost.setUsername(AppController.getUser().getDisplayName());
@@ -454,7 +449,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         });
 
         holder.discard.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 holder.title.setText("Write a new post :)");
                 holder.message.setText("");
@@ -471,11 +467,15 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         holder.message.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
 
                 if (isPreviewCreated)
                     return;
@@ -504,9 +504,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 item.setImageUrl(url);
 
-                TransitionDrawable td = new TransitionDrawable(new Drawable[] {
-                    new ColorDrawable(Color.TRANSPARENT),
-                    new BitmapDrawable(mActivity.getResources(), bitmap)
+                TransitionDrawable td = new TransitionDrawable(new Drawable[]{
+                        new ColorDrawable(Color.TRANSPARENT),
+                        new BitmapDrawable(mActivity.getResources(), bitmap)
                 });
 
                 holder.image.setImageDrawable(td);
@@ -522,7 +522,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 super.onLoadFailed(e, errorDrawable);
 
                 GetMetaDataFromUrl worker = new GetMetaDataFromUrl(mActivity, FeedAdapter.this,
-                    holder, 0, item, isPreviewCreated);
+                        holder, 0, item, isPreviewCreated);
 
                 worker.execute(url);
 
@@ -530,28 +530,27 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         };
 
         Glide.with(mActivity)
-            .load(url)
-            .asBitmap()
-            .into(target);
+                .load(url)
+                .asBitmap()
+                .into(target);
     }
 
-    //region Comments
     public void getComments(String itemId) {
 
         DatabaseReference mItemCommentsDatabase = mFeedDatabase.child(itemId).child("comments");
 
         final LinearLayout mEmptyListCont = (LinearLayout)
-            mCommentsCont.findViewById(R.id.empty_list_favorites);
+                mCommentsCont.findViewById(R.id.empty_list_favorites);
         mEmptyListCont.setVisibility(View.GONE);
 
         final RecyclerView mCommentsRecycler = (RecyclerView)
-            mCommentsCont.findViewById(R.id.comments_recycler);
+                mCommentsCont.findViewById(R.id.comments_recycler);
         mCommentsRecycler.setVisibility(View.GONE);
 
         mCommentsCont.setVisibility(View.VISIBLE);
 
         final CardView commentsContInner = (CardView)
-            mCommentsCont.findViewById(R.id.comments_cont_inner);
+                mCommentsCont.findViewById(R.id.comments_cont_inner);
         commentsContInner.startAnimation(AppHelper.getAnimationUp(mActivity));
 
         mCommentsRecycler.setLayoutManager(new LinearLayoutManager(mActivity));
@@ -567,49 +566,15 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             public void onClick(View v) {
 
                 mCommentsCont.setVisibility(View.GONE);
-                //commentsContInner.startAnimation(animationDown);
             }
         });
 
         mCommentsCont.findViewById(R.id.post_comment).setOnClickListener
-            (new OnPostCommentListener(mItemCommentsDatabase));
+                (new OnPostCommentListener(mItemCommentsDatabase, mCommentsCont));
 
     }
 
-    private class OnPostCommentListener implements View.OnClickListener {
-
-        private DatabaseReference mItemCommentsDatabase;
-
-        public OnPostCommentListener(DatabaseReference itemCommentsDatabase) {
-
-            mItemCommentsDatabase = itemCommentsDatabase;
-
-        }
-
-        @Override
-        public void onClick(View v) {
-
-            EditText commentInput = (EditText) mCommentsCont.findViewById(R.id.comment_input);
-
-            Comment comment = new Comment();
-
-            comment.setUsername(AppController.getUser().getDisplayName());
-            comment.setUserId(AppController.getUser().getUid());
-            comment.setText(commentInput.getText().toString());
-            comment.setDate(new Date().toString());
-
-            if (AppController.getUser().getPhotoUrl() != null)
-                comment.setAvatar(AppController.getUser().getPhotoUrl().toString());
-
-            mItemCommentsDatabase.push().setValue(comment);
-
-            commentInput.setText("");
-
-        }
-    }
-    //endregion
-
-    public static class FeedItemViewHolder extends RecyclerView.ViewHolder {
+    public class FeedItemViewHolder extends RecyclerView.ViewHolder {
 
         public TextView message;
         public TextView username;
@@ -663,7 +628,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    public static class NewMessageViewHolder extends RecyclerView.ViewHolder {
+    public class NewMessageViewHolder extends RecyclerView.ViewHolder {
 
         public TextView title;
         public EditText message;
@@ -702,6 +667,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-
 }
+
 

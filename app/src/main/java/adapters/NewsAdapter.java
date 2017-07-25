@@ -7,6 +7,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.support.design.widget.AppBarLayout;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -14,46 +17,172 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
+
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import de.hdodenhof.circleimageview.CircleImageView;
-import digitalbath.fansproject.R;
-import helpers.main.AppHelper;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
 import helpers.other.GetMetaDataFromUrl;
+import java.util.ArrayList;
+
+import digitalbath.fansproject.R;
+import helpers.main.AppController;
+import helpers.main.AppHelper;
 import helpers.other.MetaTagsLoad;
 import listeners.OnArticleClickListener;
-import models.Item;
+import listeners.OnPostCommentListener;
 import models.MetaTag;
-import models.ResponseData;
-import com.bumptech.glide.Glide;
+import models.NewsItem;
+import persistance.NewsItemDataService;
 
 /**
  * Created by Spaja on 26-Apr-17.
  */
 
-public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>
-    implements MetaTagsLoad{
+public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
+        implements MetaTagsLoad {
 
-    private ResponseData mDataSet;
+    private final NewsItemDataService newsItemDataService;
     private Activity mActivity;
+    private ArrayList<NewsItem> mDataSet;
+    private DatabaseReference mNewsRef;
+    private CommentsAdapter mCommentsAdapter;
+    private RelativeLayout mCommentsCont;
 
-    public NewsAdapter(Activity activity, ResponseData mDataSet) {
+    public NewsAdapter(Activity activity, final ArrayList<NewsItem> mDataSet, RelativeLayout mCommentsCont) {
+
         this.mDataSet = mDataSet;
         this.mActivity = activity;
+        this.mCommentsCont = mCommentsCont;
+        this.newsItemDataService = new NewsItemDataService();
+
+        mNewsRef = AppController.getFirebaseDatabase().child("news");
     }
 
     @Override
     public ArticleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.article_item, parent, false);
+
         return new ArticleViewHolder(v);
+
     }
 
     @Override
-    public void onBindViewHolder(final ArticleViewHolder holder, int position) {
+    public void onBindViewHolder(final ArticleViewHolder holder, final int position) {
 
-        Item articleItem = mDataSet.getChannel().getNewsList().get(position);
+        final NewsItem item = mDataSet.get(position);
+        final String uid = AppController.getUser().getUid();
+
+        bindArticleItem(holder, position, item, mActivity);
+
+        mNewsRef.child(item.getId()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                NewsItem newsItem = dataSnapshot.getValue(NewsItem.class);
+
+                if (newsItem != null) {
+
+                    item.setLikes(newsItem.getLikes());
+                    item.setDislikes(newsItem.getDislikes());
+                    item.setCommentsMap(newsItem.getCommentsMap());
+
+                    if (item.getLikes().containsKey(uid))
+                        holder.setLikeButtonOn(mActivity);
+                    else
+                        holder.setLikeButtonOff(mActivity);
+
+
+                    if (item.getDislikes().containsKey(uid))
+                        holder.setDislikeButtonOn(mActivity);
+                    else
+                        holder.setDislikeButtonOff(mActivity);
+
+
+                } else {
+
+                    item.getLikes().clear();
+                    item.getDislikes().clear();
+
+                    holder.setLikeButtonOff(mActivity);
+                    holder.setDislikeButtonOff(mActivity);
+                }
+
+                holder.numberOfLikes.setText(Integer.toString(item.getLikes().size()) + " thumbs up");
+                holder.numberOfComments.setText(Integer.toString(item.getCommentsCount()) + " comments");
+                holder.numberOfUnlikes.setText(Integer.toString(item.getDislikes().size()) + " thumbs down");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+
+        holder.likeCont.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (item.getLikes().containsKey(uid)) {
+                    newsItemDataService.removeLike(item.getId(), uid);
+                } else {
+                    newsItemDataService.saveLike(item.getId(), uid);
+                }
+            }
+        });
+
+        holder.unlikeCont.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (item.getDislikes().containsKey(uid)) {
+                    newsItemDataService.removeDislike(item.getId(), uid);
+                } else {
+                    newsItemDataService.saveDislike(item.getId(), uid);
+                }
+            }
+        });
+
+        holder.commentsCont.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AppBarLayout appBarLayout = (AppBarLayout) mActivity.findViewById(R.id.appbar);
+                appBarLayout.setExpanded(false, true);
+
+                getComments(item.getId());
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return mDataSet.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
+    public void onMetaTagsLoaded(RecyclerView.ViewHolder holder, int position, MetaTag metatag) {
+
+        final ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
+
+        NewsItem articleItem = mDataSet.get(position);
+
+        articleItem.setImageUrl(metatag.getImageUrl());
+
+        loadImage(articleViewHolder.image, articleItem.getImageUrl(), true);
+
+    }
+
+    private void bindArticleItem(final ArticleViewHolder holder, final int position,
+        final NewsItem articleItem, final Activity mActivity) {
 
         holder.title.setText(articleItem.getTitle());
 
@@ -62,10 +191,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ArticleViewHol
         if (articleItem.getImageUrl() == null) {
 
             holder.image.setVisibility(View.VISIBLE);
-
             GetMetaDataFromUrl worker = new GetMetaDataFromUrl
-                (mActivity, this, holder, position, null, false);
-
+                (mActivity, NewsAdapter.this, holder, position, null, false);
             worker.execute(url);
 
         } else if (TextUtils.isEmpty(articleItem.getImageUrl())) {
@@ -105,31 +232,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ArticleViewHol
             .asBitmap()
             .into(target);
 
-        holder.itemView.setOnClickListener(new OnArticleClickListener(mActivity, url));
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return mDataSet.getChannel().getNewsList().size();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return position;
-    }
-
-    @Override
-    public void onMetaTagsLoaded(RecyclerView.ViewHolder holder, int position, MetaTag metatag) {
-
-        final ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
-
-        Item articleItem = mDataSet.getChannel().getNewsList().get(position);
-
-        articleItem.setImageUrl(metatag.getImageUrl());
-
-        loadImage(articleViewHolder.image, articleItem.getImageUrl(), true);
-
+        holder.image.setOnClickListener(new OnArticleClickListener(mActivity, url));
     }
 
     private void loadImage(final ImageView image, String imageUrl, final boolean animate) {
@@ -141,9 +244,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ArticleViewHol
 
                 if (animate) {
 
-                    TransitionDrawable td = new TransitionDrawable(new Drawable[] {
-                        new ColorDrawable(Color.TRANSPARENT),
-                        new BitmapDrawable(mActivity.getResources(), bitmap)
+                    TransitionDrawable td = new TransitionDrawable(new Drawable[]{
+                            new ColorDrawable(Color.TRANSPARENT),
+                            new BitmapDrawable(mActivity.getResources(), bitmap)
                     });
 
                     image.setImageDrawable(td);
@@ -166,45 +269,48 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ArticleViewHol
         };
 
         Glide.with(mActivity)
-            .load(imageUrl)
-            .asBitmap()
-            .into(target);
+                .load(imageUrl)
+                .asBitmap()
+                .into(target);
 
     }
 
-    public class ArticleViewHolder extends RecyclerView.ViewHolder {
+    private void getComments(String itemId) {
 
-        public ImageView image;
-        public CircleImageView publisherIcon;
-        public TextView title, publisherNameAndTime;
-        public TextView numberOfLikes;
-        public TextView numberOfUnlikes;
-        public LinearLayout likeCont;
-        public LinearLayout unlikeCont;
-        public TextView like;
-        public TextView unlike;
-        public ImageView likeIcon;
-        public ImageView unlikeIcon;
+        DatabaseReference mItemCommentsDatabase = mNewsRef.child(itemId).child("comments");
 
-        public ArticleViewHolder(View itemView) {
-            super(itemView);
-            image = (ImageView) itemView.findViewById(R.id.image);
-            title = (TextView) itemView.findViewById(R.id.title);
-            publisherIcon = (CircleImageView) itemView.findViewById(R.id.publisher_icon);
-            publisherNameAndTime = (TextView) itemView.findViewById(R.id.publisher_name_and_time);
+        LinearLayout mEmptyListCont = (LinearLayout)
+                mCommentsCont.findViewById(R.id.empty_list_favorites);
+        mEmptyListCont.setVisibility(View.GONE);
 
-            numberOfLikes = (TextView) itemView.findViewById(R.id.likes);
-            numberOfUnlikes = (TextView) itemView.findViewById(R.id.unlikes);
+        final RecyclerView mCommentsRecycler = (RecyclerView)
+                mCommentsCont.findViewById(R.id.comments_recycler);
+        mCommentsRecycler.setVisibility(View.GONE);
 
-            likeCont = (LinearLayout) itemView.findViewById(R.id.like_cont);
-            unlikeCont = (LinearLayout) itemView.findViewById(R.id.unlike_cont);
+        mCommentsCont.setVisibility(View.VISIBLE);
 
-            like = (TextView) itemView.findViewById(R.id.like);
-            unlike = (TextView) itemView.findViewById(R.id.unlike);
+        final CardView commentsContInner = (CardView)
+                mCommentsCont.findViewById(R.id.comments_cont_inner);
+        commentsContInner.startAnimation(AppHelper.getAnimationUp(mActivity));
 
-            likeIcon = (ImageView) itemView.findViewById(R.id.like_icon);
-            unlikeIcon = (ImageView) itemView.findViewById(R.id.unlike_icon);
-        }
+        mCommentsRecycler.setLayoutManager(new LinearLayoutManager(mActivity));
+
+        mCommentsAdapter = new CommentsAdapter(mActivity, mCommentsRecycler, mEmptyListCont,
+                mItemCommentsDatabase, AppController.getUser().getUid());
+
+        mCommentsRecycler.setAdapter(mCommentsAdapter);
+
+        ImageView closeComments = (ImageView) mCommentsCont.findViewById(R.id.close_comments);
+        closeComments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mCommentsCont.setVisibility(View.GONE);
+            }
+        });
+
+        mCommentsCont.findViewById(R.id.post_comment).setOnClickListener
+                (new OnPostCommentListener(mItemCommentsDatabase, mCommentsCont));
+
     }
-
 }

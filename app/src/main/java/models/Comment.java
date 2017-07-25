@@ -73,6 +73,4 @@ public class Comment {
     public void setLikes(HashMap<String, Boolean> likes) {
         this.likes = likes;
     }
-
-
 }

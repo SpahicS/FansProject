@@ -121,7 +121,7 @@
             />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/comments"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/username"
@@ -178,6 +178,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/comment_cont"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:layout_marginBottom="3dp"

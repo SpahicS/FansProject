@@ -2,6 +2,7 @@ package models;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.strategy.Strategy;
 
 /**
  * Created by Spaja on 26-Apr-17.
@@ -19,7 +20,7 @@ public class Item {
     private String link;
 
     @Element(required = false)
-    private Guid guid;
+    private String guid;
 
     @Element(required = false)
     private String pubDate;
@@ -47,7 +48,7 @@ public class Item {
         return link;
     }
 
-    public Guid getGuid() {
+    public String getGuid() {
         return guid;
     }
 
@@ -70,4 +71,10 @@ public class Item {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public String getHashCode() {
+        return String.valueOf(getGuid().hashCode());
+    }
+
+
 }

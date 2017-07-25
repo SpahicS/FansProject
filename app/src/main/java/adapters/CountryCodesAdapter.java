@@ -2,7 +2,6 @@ package adapters;
 
 import android.content.Context;
 import android.support.design.widget.AppBarLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +21,7 @@ import models.Country;
  * Created by Spaja on 31-May-17.
  */
 
-public class CountryCodesAdapter extends RecyclerView.Adapter<CountryCodesAdapter.MyViewHolder> {
+public class CountryCodesAdapter extends RecyclerView.Adapter<CountryCodesViewHolder> {
 
     private Context mContext;
     private RecyclerView mCountriesRecycler;
@@ -40,7 +39,9 @@ public class CountryCodesAdapter extends RecyclerView.Adapter<CountryCodesAdapte
         this.mDataSet = countries;
         this.appBarLayout = appBarLayout;
 
-        String code = mContext.getSharedPreferences("COUNTRY_CODES", Context.MODE_PRIVATE).getString("COUNTRY_CODE", null);
+        String code = mContext
+                .getSharedPreferences("COUNTRY_CODES", Context.MODE_PRIVATE)
+                .getString("COUNTRY_CODE", null);
 
         for (int i = 0; i < mDataSet.size(); i++) {
             if (mDataSet.get(i).getCountryCode().equals(code)) {
@@ -50,22 +51,26 @@ public class CountryCodesAdapter extends RecyclerView.Adapter<CountryCodesAdapte
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CountryCodesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.country_code_item, parent, false);
-        return new CountryCodesAdapter.MyViewHolder(v);
+        return new CountryCodesViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(CountryCodesViewHolder holder, int position) {
 
-        if (mDataSet.get(position).isSelected()) {
+        holder.initializeViews(holder.itemView, mContext);
+
+        Country country = mDataSet.get(position);
+
+        if (country.isSelected()) {
             holder.checkMark.setVisibility(View.VISIBLE);
         } else {
             holder.checkMark.setVisibility(View.GONE);
         }
 
-        holder.countryCode.setText(mDataSet.get(position).getCountryName());
+        holder.countryCode.setText(country.getCountryName());
 
         holder.country.setOnClickListener(
                 new OnCountryCodeClickListener(mContext, mDataSet, mCountriesRecycler,
@@ -80,21 +85,5 @@ public class CountryCodesAdapter extends RecyclerView.Adapter<CountryCodesAdapte
 
     public void expandToolbar() {
         appBarLayout.setExpanded(true, true);
-    }
-
-    class MyViewHolder extends RecyclerView.ViewHolder {
-
-        TextView countryCode;
-        ImageView checkMark;
-        RelativeLayout country;
-
-        MyViewHolder(View itemView) {
-
-            super(itemView);
-            countryCode = (TextView) itemView.findViewById(R.id.country_code);
-            countryCode.setTypeface(AppHelper.getRobotoLight(mContext));
-            checkMark = (ImageView) itemView.findViewById(R.id.check_mark);
-            country = (RelativeLayout) itemView.findViewById(R.id.country);
-        }
     }
 }
