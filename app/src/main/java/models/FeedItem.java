@@ -27,7 +27,7 @@ public class FeedItem {
     private String articleUrl;
     private boolean articleItem;
     private HashMap<String, Boolean> likes = new HashMap<>();
-    private HashMap<String, Boolean> unlikes = new HashMap<>();
+    private HashMap<String, Boolean> dislikes = new HashMap<>();
     private HashMap<String, Comment> comments = new HashMap<>();
 
     public String getId() {
@@ -98,8 +98,8 @@ public class FeedItem {
         return likes;
     }
 
-    public HashMap<String, Boolean> getUnlikes() {
-        return unlikes;
+    public HashMap<String, Boolean> getDislikes() {
+        return dislikes;
     }
 
     public String getArticleTitle() {
