@@ -1,4 +1,4 @@
-package login;
+package activities;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -25,8 +26,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import activities.DashboardActivity;
 import digitalbath.fansproject.R;
+import helpers.main.AppConfig;
 import helpers.main.AppController;
 import helpers.main.AppHelper;
 
@@ -46,9 +47,16 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        initializeMainView();
+
         initializeFirebaseAuthentication();
 
         initializeStatusBar();
+    }
+
+    private void initializeMainView() {
+
+        ((TextView) findViewById(R.id.app_name)).setText(AppConfig.TEAM + " Fans");
     }
 
     private void initializeFirebaseAuthentication() {

@@ -121,12 +121,12 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
                     Map<String, Object> taskMap = new HashMap<>();
                     taskMap.put(mUserId, true);
 
-                    mDataBaseRef.child("comments").child(comment.getId())
+                    mDataBaseRef.child(comment.getId())
                             .child("likes").updateChildren(taskMap);
 
                 } else {
 
-                    mDataBaseRef.child("comments").child(comment.getId())
+                    mDataBaseRef.child(comment.getId())
                             .child("likes").child(mUserId).removeValue();
                 }
             }

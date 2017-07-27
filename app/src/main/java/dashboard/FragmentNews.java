@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import helpers.main.AppConfig;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +69,7 @@ public class FragmentNews extends Fragment {
 
         initializeViews(rootView);
 
-        getNewsList("Juventus");
+        getNewsList(AppConfig.TEAM);
 
         initializeNewsRecycler();
 

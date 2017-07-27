@@ -115,17 +115,6 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView36"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/username"
-            android:layout_marginTop="1dp"
-            android:layout_toRightOf="@+id/avatar"
-            android:text="&#183;"
-            android:textSize="12sp"
-            android:textStyle="bold"/>
-
         <!--<LinearLayout
             android:id="@+id/share"
             android:layout_width="wrap_content"

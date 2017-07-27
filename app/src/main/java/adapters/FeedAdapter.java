@@ -68,8 +68,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private RelativeLayout mCommentsCont;
     private CommentsAdapter mCommentsAdapter;
 
-    private int mCommentsViewPosition;
-
     public FeedAdapter(Activity activity, DatabaseReference database, RelativeLayout commentsCont) {
 
         mDataSet = new ArrayList<>();
@@ -95,7 +93,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 notifyDataSetChanged();
 
-                mActivity.findViewById(R.id.progressBarFeed).setVisibility(View.GONE);
+                if (mActivity.findViewById(R.id.progressBarFeed) != null)
+                    mActivity.findViewById(R.id.progressBarFeed).setVisibility(View.GONE);
 
             }
 
@@ -374,8 +373,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 AppBarLayout appBarLayout = (AppBarLayout) mActivity.findViewById(R.id.appbar);
                 appBarLayout.setExpanded(false, true);
 
-                mCommentsViewPosition = position;
-
                 getComments(item.getId());
             }
         });
@@ -460,6 +457,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 holder.message.setVisibility(View.GONE);
                 holder.actions.setVisibility(View.GONE);
+                holder.image.setVisibility(View.GONE);
+                holder.articlePreview.setVisibility(View.GONE);
                 holder.progressBar.setVisibility(View.GONE);
             }
         });
