@@ -35,10 +35,13 @@ import helpers.main.AppController;
 import helpers.main.AppHelper;
 import helpers.other.MetaTagsLoad;
 import listeners.OnArticleClickListener;
+import listeners.OnDislikeClickListener;
+import listeners.OnLikeClickListener;
 import listeners.OnPostCommentListener;
 import models.MetaTag;
 import models.NewsItem;
 import persistance.NewsItemDataService;
+import viewholders.ArticleViewHolder;
 
 /**
  * Created by Spaja on 26-Apr-17.
@@ -117,34 +120,15 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
 
                 holder.numberOfLikes.setText(Integer.toString(item.getLikes().size()) + " thumbs up");
                 holder.numberOfComments.setText(Integer.toString(item.getCommentsCount()) + " comments");
-                holder.numberOfUnlikes.setText(Integer.toString(item.getDislikes().size()) + " thumbs down");
+                holder.numberOfDislikes.setText(Integer.toString(item.getDislikes().size()) + " thumbs down");
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
 
-        holder.likeCont.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (item.getLikes().containsKey(uid)) {
-                    newsItemDataService.removeLike(item.getId(), uid);
-                } else {
-                    newsItemDataService.saveLike(item.getId(), uid);
-                }
-            }
-        });
-
-        holder.unlikeCont.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (item.getDislikes().containsKey(uid)) {
-                    newsItemDataService.removeDislike(item.getId(), uid);
-                } else {
-                    newsItemDataService.saveDislike(item.getId(), uid);
-                }
-            }
-        });
+        holder.likeCont.setOnClickListener(new OnLikeClickListener(item, newsItemDataService));
+        holder.dislikeCont.setOnClickListener(new OnDislikeClickListener(item, newsItemDataService));
 
         holder.commentsCont.setOnClickListener(new View.OnClickListener() {
             @Override

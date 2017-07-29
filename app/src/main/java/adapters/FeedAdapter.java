@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.support.design.widget.AppBarLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,12 +17,9 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -33,7 +29,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import digitalbath.fansproject.R;
 import helpers.main.AppController;
 import helpers.main.AppHelper;
@@ -42,13 +37,15 @@ import helpers.other.MetaTagsLoad;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import listeners.OnArticleClickListener;
+import listeners.OnDislikeClickListener;
+import listeners.OnLikeClickListener;
 import listeners.OnPostCommentListener;
 import models.FeedItem;
 import models.MetaTag;
+import viewholders.FeedItemViewHolder;
+import viewholders.NewMessageViewHolder;
 
 /**
  * Created by unexpected_err on 20/05/2017.
@@ -160,7 +157,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onMetaTagsLoaded(RecyclerView.ViewHolder holder, int position, MetaTag metaTag) {
 
-        final FeedAdapter.NewMessageViewHolder feedHolder = ((FeedAdapter.NewMessageViewHolder) holder);
+        final NewMessageViewHolder feedHolder = ((NewMessageViewHolder) holder);
         feedHolder.progressBar.setVisibility(View.GONE);
 
         if (metaTag == null)
@@ -293,78 +290,34 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
 
         } else {
-
             holder.articleCont.setVisibility(View.GONE);
-
         }
 
         holder.numberOfLikes.setText(Integer.toString(item.getLikes().size()) + " thumbs up");
         holder.numberOfComments.setText(Integer.toString(item.getCommentsCount()) + " comments");
-        holder.numberOfUnlikes.setText(Integer.toString(item.getUnlikes().size()) + " thumbs down");
+        holder.numberOfDislikes.setText(Integer.toString(item.getDislikes().size()) + " thumbs down");
 
         if (item.getLikes().get(AppController.getUser().getUid()) != null
-            && item.getLikes().get(AppController.getUser().getUid())) {
+                && item.getLikes().get(AppController.getUser().getUid())) {
 
-            holder.like.setTextColor(mActivity.getResources().getColor(R.color.colorAccent));
-            holder.likeIcon.setColorFilter(ContextCompat.getColor(mActivity, R.color.colorAccent));
-
-        } else {
-
-            holder.like.setTextColor(mActivity.getResources().getColor(R.color.main_color_dark));
-            holder.likeIcon.setColorFilter(ContextCompat.getColor(mActivity, R.color.light_gray_with_tr));
-        }
-
-        if (item.getUnlikes().get(AppController.getUser().getUid()) != null
-            && item.getUnlikes().get(AppController.getUser().getUid())) {
-
-            holder.unlike.setTextColor(mActivity.getResources().getColor(R.color.colorAccent));
-            holder.unlikeIcon.setColorFilter(ContextCompat.getColor(mActivity, R.color.colorAccent));
+            holder.setLikeButtonOn(mActivity);
 
         } else {
-
-            holder.unlike.setTextColor(mActivity.getResources().getColor(R.color.main_color_dark));
-            holder.unlikeIcon.setColorFilter(ContextCompat.getColor(mActivity, R.color.light_gray_with_tr));
+            holder.setLikeButtonOff(mActivity);
         }
 
-        holder.likeCont.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        if (item.getDislikes().get(AppController.getUser().getUid()) != null
+                && item.getDislikes().get(AppController.getUser().getUid())) {
 
-                if (item.getLikes().get(AppController.getUser().getUid()) == null) {
+            holder.setDislikeButtonOn(mActivity);
 
-                    Map<String, Object> taskMap = new HashMap<>();
-                    taskMap.put(AppController.getUser().getUid(), true);
+        } else {
+            holder.setDislikeButtonOff(mActivity);
+        }
 
-                    mFeedDatabase.child(item.getId())
-                            .child("likes").updateChildren(taskMap);
+        holder.likeCont.setOnClickListener(new OnLikeClickListener(item, mFeedDatabase));
 
-                } else {
-
-                    mFeedDatabase.child(item.getId())
-                            .child("likes").child(AppController.getUser().getUid()).removeValue();
-                }
-            }
-        });
-
-        holder.unlikeCont.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (item.getUnlikes().get(AppController.getUser().getUid()) == null) {
-
-                    Map<String, Object> taskMap = new HashMap<>();
-                    taskMap.put(AppController.getUser().getUid(), true);
-
-                    mFeedDatabase.child(item.getId())
-                            .child("unlikes").updateChildren(taskMap);
-
-                } else {
-
-                    mFeedDatabase.child(item.getId())
-                            .child("unlikes").child(AppController.getUser().getUid()).removeValue();
-                }
-            }
-        });
+        holder.dislikeCont.setOnClickListener(new OnDislikeClickListener(item, mFeedDatabase));
 
         holder.commentCont.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -555,7 +508,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         mCommentsRecycler.setLayoutManager(new LinearLayoutManager(mActivity));
 
         mCommentsAdapter = new CommentsAdapter(mActivity, mCommentsRecycler, mEmptyListCont,
-            mItemCommentsDatabase, AppController.getUser().getUid());
+                mItemCommentsDatabase, AppController.getUser().getUid());
 
         mCommentsRecycler.setAdapter(mCommentsAdapter);
 
@@ -572,100 +525,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 (new OnPostCommentListener(mItemCommentsDatabase, mCommentsCont));
 
     }
-
-    public class FeedItemViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView message;
-        public TextView username;
-        public TextView time;
-        public TextView numberOfLikes;
-        public TextView numberOfComments;
-        public TextView numberOfUnlikes;
-        public CircleImageView avatar;
-        public ImageView image;
-        public LinearLayout likeCont;
-        public LinearLayout unlikeCont;
-        public LinearLayout commentCont;
-        public TextView like;
-        public TextView unlike;
-        public ImageView likeIcon;
-        public ImageView unlikeIcon;
-        public RelativeLayout articleCont;
-        public TextView articleTitle;
-        public TextView articlePublisher;
-        public CircleImageView articlePublisherIcon;
-        public ImageView articleImage;
-
-        FeedItemViewHolder(View itemView) {
-            super(itemView);
-
-            message = (TextView) itemView.findViewById(R.id.message);
-            username = (TextView) itemView.findViewById(R.id.username);
-            time = (TextView) itemView.findViewById(R.id.time_published);
-            avatar = (CircleImageView) itemView.findViewById(R.id.avatar);
-            image = (ImageView) itemView.findViewById(R.id.image);
-
-            numberOfLikes = (TextView) itemView.findViewById(R.id.likes);
-            numberOfComments = (TextView) itemView.findViewById(R.id.comments);
-            numberOfUnlikes = (TextView) itemView.findViewById(R.id.unlikes);
-
-            likeCont = (LinearLayout) itemView.findViewById(R.id.like_cont);
-            unlikeCont = (LinearLayout) itemView.findViewById(R.id.unlike_cont);
-            commentCont = (LinearLayout) itemView.findViewById(R.id.comment_cont);
-
-            like = (TextView) itemView.findViewById(R.id.like);
-            unlike = (TextView) itemView.findViewById(R.id.unlike);
-
-            likeIcon = (ImageView) itemView.findViewById(R.id.like_icon);
-            unlikeIcon = (ImageView) itemView.findViewById(R.id.unlike_icon);
-
-            articleCont = (RelativeLayout) itemView.findViewById(R.id.article_cont);
-            articleTitle = (TextView) itemView.findViewById(R.id.article_title);
-            articlePublisher = (TextView) itemView.findViewById(R.id.article_publisher_name);
-            articlePublisherIcon = (CircleImageView) itemView.findViewById(R.id.article_publisher_icon);
-            articleImage = (ImageView) itemView.findViewById(R.id.article_image);
-        }
-    }
-
-    public class NewMessageViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView title;
-        public EditText message;
-        public CircleImageView avatar;
-        public ImageView image;
-        public LinearLayout post;
-        public LinearLayout discard;
-        public LinearLayout actions;
-
-        public RelativeLayout articlePreview;
-        public TextView articleTitle;
-        public TextView articlePublisher;
-        public ImageView articlePublisherIcon;
-        public ImageView articleImage;
-        public ProgressBar progressBar;
-
-        NewMessageViewHolder(View itemView) {
-            super(itemView);
-
-            title = (TextView) itemView.findViewById(R.id.title);
-            message = (EditText) itemView.findViewById(R.id.message);
-            avatar = (CircleImageView) itemView.findViewById(R.id.avatar);
-            image = (ImageView) itemView.findViewById(R.id.image);
-            post = (LinearLayout) itemView.findViewById(R.id.post_btn);
-            discard = (LinearLayout) itemView.findViewById(R.id.discard_btn);
-            actions = (LinearLayout) itemView.findViewById(R.id.actions_cont);
-
-            articlePreview = (RelativeLayout) itemView.findViewById(R.id.preview_article);
-            articleTitle = (TextView) itemView.findViewById(R.id.preview_title);
-            articlePublisher = (TextView) itemView.findViewById(R.id.preview_publisher_name);
-            articlePublisherIcon = (ImageView) itemView.findViewById(R.id.preview_publisher_icon);
-            articleImage = (ImageView) itemView.findViewById(R.id.article_image);
-
-            progressBar = (ProgressBar) itemView.findViewById(R.id.progress_bar);
-
-        }
-    }
-
 }
 
 

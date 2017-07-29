@@ -1,4 +1,4 @@
-package adapters;
+package viewholders;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -14,19 +14,19 @@ import helpers.main.AppHelper;
  * Created by Spaja on 21-Jun-17.
  */
 
-class CountryCodesViewHolder extends RecyclerView.ViewHolder {
+public class CountryCodesViewHolder extends RecyclerView.ViewHolder {
 
-    TextView countryCode;
-    ImageView checkMark;
-    RelativeLayout country;
+    public TextView countryCode;
+    public ImageView checkMark;
+    public RelativeLayout country;
 
-    CountryCodesViewHolder(View itemView) {
+    public CountryCodesViewHolder(View itemView) {
 
         super(itemView);
 
     }
 
-    void initializeViews(View itemView, Context mContext) {
+    public void initializeViews(View itemView, Context mContext) {
         countryCode = (TextView) itemView.findViewById(R.id.country_code);
         countryCode.setTypeface(AppHelper.getRobotoLight(mContext));
         checkMark = (ImageView) itemView.findViewById(R.id.check_mark);
