@@ -44,7 +44,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="visible"
+            android:visibility="invisible"
             >
 
             <TextView
@@ -89,7 +89,7 @@
 
         <com.wang.avi.AVLoadingIndicatorView
             android:id="@+id/progress_bar"
-            android:layout_width="match_parent"
+            android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_weight="1"
             app:indicatorColor="@color/colorAccent"
