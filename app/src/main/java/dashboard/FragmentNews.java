@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.wang.avi.AVLoadingIndicatorView;
 import helpers.main.AppConfig;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class FragmentNews extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
     private NewsAdapter newsAdapter;
     private RecyclerView newsRecycler;
-    private ProgressBar progressBar;
+    private AVLoadingIndicatorView progressBar;
     private RelativeLayout mCommentsCont;
 
 
@@ -79,7 +80,7 @@ public class FragmentNews extends Fragment {
     private void initializeViews(View rootView) {
 
         newsRecycler = (RecyclerView) rootView.findViewById(R.id.news_list_recycler);
-        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBarNews);
+        progressBar = (AVLoadingIndicatorView) rootView.findViewById(R.id.progressBarNews);
 
     }
 

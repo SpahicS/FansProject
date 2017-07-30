@@ -140,6 +140,8 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
                 getComments(item.getId());
             }
         });
+
+        AppHelper.animateItemAppearance(holder.itemView, position);
     }
 
     @Override

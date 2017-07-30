@@ -2,11 +2,16 @@ package helpers.main;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -230,4 +235,41 @@ public class AppHelper {
 
         return edition;
     }
+
+    public static void animateItemAppearance(View view, int position) {
+
+        AnimationSet set = new AnimationSet(true);
+
+        ScaleAnimation scale =  new ScaleAnimation(0.9f, 1f, 0.9f, 1f,
+            Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+
+        AlphaAnimation alpha = new AlphaAnimation(0, 1);
+
+        set.addAnimation(scale);
+        set.addAnimation(alpha);
+
+        switch (position) {
+
+            case 0:
+               set.setStartOffset(0);
+                break;
+            case 1:
+                set.setStartOffset(300);
+                break;
+            case 2:
+                set.setStartOffset(600);
+                break;
+            default:
+                set.setStartOffset(0);
+                break;
+
+        }
+
+        set.setDuration(800);
+
+        view.startAnimation(set);
+
+    }
+
+
 }

@@ -7,12 +7,13 @@
     android:orientation="vertical"
     >
 
-  <ProgressBar
+  <com.wang.avi.AVLoadingIndicatorView
       android:id="@+id/progressBarFeed"
-      android:layout_width="30dp"
-      android:layout_height="30dp"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
       android:layout_centerInParent="true"
-      style="?android:attr/progressBarStyle"
+      app:indicatorColor="@color/colorAccent"
+      app:indicatorName="BallScaleMultipleIndicator"
       />
 
   <android.support.v7.widget.RecyclerView
@@ -20,6 +21,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:scrollbars="vertical"
+      android:visibility="visible"
       />
 
   <RelativeLayout
@@ -50,12 +52,13 @@
           android:visibility="visible"
           >
 
-        <ProgressBar
+        <com.wang.avi.AVLoadingIndicatorView
             android:id="@+id/progressBar6"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerInParent="true"
-            style="?android:attr/progressBarStyle"
+            app:indicatorColor="@color/colorAccent"
+            app:indicatorName="BallScaleMultipleIndicator"
             />
 
         <android.support.v7.widget.RecyclerView

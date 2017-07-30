@@ -26,6 +26,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.wang.avi.AVLoadingIndicatorView;
 import digitalbath.fansproject.R;
 import helpers.main.AppConfig;
 import helpers.main.AppController;
@@ -88,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                 loginCont.setVisibility(View.INVISIBLE);
                 loginCont.startAnimation(AppHelper.getAnimationDown(LoginActivity.this));
 
-                ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+                AVLoadingIndicatorView progressBar = (AVLoadingIndicatorView) findViewById(R.id.progress_bar);
                 progressBar.setVisibility(View.VISIBLE);
                 progressBar.startAnimation(AppHelper.getAnimationUp(LoginActivity.this));
             }
@@ -116,7 +117,7 @@ public class LoginActivity extends AppCompatActivity {
                     loginCont.setVisibility(View.VISIBLE);
                     loginCont.startAnimation(AppHelper.getAnimationUp(LoginActivity.this));
 
-                    ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+                    AVLoadingIndicatorView progressBar = (AVLoadingIndicatorView) findViewById(R.id.progress_bar);
                     progressBar.setVisibility(View.INVISIBLE);
                     progressBar.startAnimation(AppHelper.getAnimationDown(LoginActivity.this));
 
@@ -140,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
                         loginCont.setVisibility(View.VISIBLE);
                         loginCont.startAnimation(AppHelper.getAnimationDown(LoginActivity.this));
 
-                        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+                        AVLoadingIndicatorView progressBar = (AVLoadingIndicatorView) findViewById(R.id.progress_bar);
                         progressBar.setVisibility(View.INVISIBLE);
                         progressBar.startAnimation(AppHelper.getAnimationUp(LoginActivity.this));
 

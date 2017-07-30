@@ -44,7 +44,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="invisible"
+            android:visibility="visible"
             >
 
             <TextView
@@ -87,13 +87,15 @@
             </RelativeLayout>
         </LinearLayout>
 
-        <ProgressBar
+        <com.wang.avi.AVLoadingIndicatorView
             android:id="@+id/progress_bar"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:layout_weight="1"
-            style="?android:attr/progressBarStyle"
+            app:indicatorColor="@color/colorAccent"
+            app:indicatorName="BallScaleMultipleIndicator"
             />
+
     </LinearLayout>
 
 </RelativeLayout>

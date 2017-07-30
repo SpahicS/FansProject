@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.wang.avi.AVLoadingIndicatorView;
 import de.hdodenhof.circleimageview.CircleImageView;
 import digitalbath.fansproject.R;
 
@@ -32,7 +33,7 @@ public class NewMessageViewHolder extends RecyclerView.ViewHolder {
     public TextView articlePublisher;
     public ImageView articlePublisherIcon;
     public ImageView articleImage;
-    public ProgressBar progressBar;
+    public AVLoadingIndicatorView progressBar;
 
     public NewMessageViewHolder(View itemView) {
         super(itemView);
@@ -51,7 +52,7 @@ public class NewMessageViewHolder extends RecyclerView.ViewHolder {
         articlePublisherIcon = (ImageView) itemView.findViewById(R.id.preview_publisher_icon);
         articleImage = (ImageView) itemView.findViewById(R.id.article_image);
 
-        progressBar = (ProgressBar) itemView.findViewById(R.id.progress_bar);
+        progressBar = (AVLoadingIndicatorView) itemView.findViewById(R.id.progress_bar);
 
     }
 }

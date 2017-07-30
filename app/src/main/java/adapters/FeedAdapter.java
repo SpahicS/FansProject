@@ -139,6 +139,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 bindFeedItem(googleViewHolder, position);
                 break;
         }
+
+        AppHelper.animateItemAppearance(holder.itemView, position);
     }
 
     @Override
