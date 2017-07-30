@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -50,6 +51,8 @@ import viewholders.ArticleViewHolder;
 public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
         implements MetaTagsLoad {
 
+    private boolean shouldAnimateListItems = true;
+
     private final NewsItemDataService newsItemDataService;
     private Activity mActivity;
     private ArrayList<NewsItem> mDataSet;
@@ -65,6 +68,12 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
         this.newsItemDataService = new NewsItemDataService();
 
         mNewsRef = AppController.getFirebaseDatabase().child("news");
+
+        new Handler().postDelayed(new Runnable() {
+            @Override public void run() {
+                shouldAnimateListItems = false;
+            }
+        }, 200);
     }
 
     @Override
@@ -141,7 +150,8 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
             }
         });
 
-        AppHelper.animateItemAppearance(holder.itemView, position);
+        if (shouldAnimateListItems)
+            AppHelper.animateItemAppearance(holder.itemView, position);
     }
 
     @Override

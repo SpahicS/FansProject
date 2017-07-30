@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -58,6 +59,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private final int NEW_MESSAGE_TYPE = 1;
 
     private boolean isPreviewCreated;
+    private boolean shouldAnimateListItems = true;
 
     private ArrayList<FeedItem> mDataSet;
     private Activity mActivity;
@@ -93,6 +95,11 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 if (mActivity.findViewById(R.id.progressBarFeed) != null)
                     mActivity.findViewById(R.id.progressBarFeed).setVisibility(View.GONE);
 
+                new Handler().postDelayed(new Runnable() {
+                    @Override public void run() {
+                        shouldAnimateListItems = false;
+                    }
+                }, 200);
             }
 
             @Override
@@ -140,7 +147,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 break;
         }
 
-        AppHelper.animateItemAppearance(holder.itemView, position);
+        if (shouldAnimateListItems)
+            AppHelper.animateItemAppearance(holder.itemView, position);
+
     }
 
     @Override

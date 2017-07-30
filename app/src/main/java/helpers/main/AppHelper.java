@@ -259,6 +259,9 @@ public class AppHelper {
             case 2:
                 set.setStartOffset(600);
                 break;
+            case 3:
+                set.setStartOffset(900);
+                break;
             default:
                 set.setStartOffset(0);
                 break;
