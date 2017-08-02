@@ -30,15 +30,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 import digitalbath.fansproject.R;
 import helpers.main.AppController;
 import helpers.main.AppHelper;
 import helpers.other.GetMetaDataFromUrl;
 import helpers.other.MetaTagsLoad;
-
-import java.util.ArrayList;
-import java.util.Date;
-
 import listeners.OnArticleClickListener;
 import listeners.OnDislikeClickListener;
 import listeners.OnLikeClickListener;
@@ -66,14 +65,16 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private DatabaseReference mFeedDatabase;
     private RelativeLayout mCommentsCont;
     private CommentsAdapter mCommentsAdapter;
+    private AppBarLayout appBarLayout;
 
-    public FeedAdapter(Activity activity, DatabaseReference database, RelativeLayout commentsCont) {
+    public FeedAdapter(Activity activity, DatabaseReference database, RelativeLayout commentsCont, AppBarLayout appBarLayout) {
 
         mDataSet = new ArrayList<>();
 
         mActivity = activity;
         mFeedDatabase = database;
         mCommentsCont = commentsCont;
+        this.appBarLayout = appBarLayout;
 
         this.mFeedDatabase.addValueEventListener(new ValueEventListener() {
 
@@ -424,6 +425,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 holder.image.setVisibility(View.GONE);
                 holder.articlePreview.setVisibility(View.GONE);
                 holder.progressBar.setVisibility(View.GONE);
+                isPreviewCreated = false;
+                appBarLayout.setExpanded(true, true);
             }
         });
 

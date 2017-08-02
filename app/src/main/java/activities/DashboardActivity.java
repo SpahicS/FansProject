@@ -28,6 +28,7 @@ public class DashboardActivity extends AppCompatActivity {
         /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
 
+        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         initializeContent();
 
     }

@@ -4,6 +4,7 @@ import adapters.FeedAdapter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -66,8 +67,10 @@ public class FragmentFeed extends Fragment {
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
+        AppBarLayout appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.appbar);
 
-        mAdapter = new FeedAdapter(getActivity(), mDatabase.child("feed"), mCommentsCont);
+        mAdapter = new FeedAdapter(getActivity(), mDatabase.child("feed"), mCommentsCont,
+                appBarLayout);
 
         mRecyclerView.setAdapter(mAdapter);
 
