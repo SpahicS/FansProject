@@ -1,6 +1,5 @@
-package models;
+package models.news;
 
-import java.util.ArrayList;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 

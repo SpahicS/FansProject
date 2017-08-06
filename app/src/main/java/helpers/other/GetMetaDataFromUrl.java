@@ -11,8 +11,8 @@ import java.io.IOException;
 
 import adapters.FeedAdapter;
 import adapters.NewsAdapter;
-import models.FeedItem;
-import models.MetaTag;
+import models.news.FeedItem;
+import models.news.MetaTag;
 
 /**
  * Created by Spaja on 25-Apr-17.

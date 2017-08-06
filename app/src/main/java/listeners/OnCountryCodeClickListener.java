@@ -9,7 +9,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import adapters.CountryCodesAdapter;
-import models.Country;
+import models.news.Country;
 
 /**
  * Created by Spaja on 31-May-17.

@@ -1,8 +1,7 @@
-package models;
+package models.news;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
-import org.simpleframework.xml.strategy.Strategy;
 
 /**
  * Created by Spaja on 26-Apr-17.

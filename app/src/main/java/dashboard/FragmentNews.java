@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.wang.avi.AVLoadingIndicatorView;
@@ -23,9 +22,9 @@ import java.util.List;
 import adapters.NewsAdapter;
 import digitalbath.fansproject.R;
 import helpers.main.AppHelper;
-import models.Item;
-import models.NewsItem;
-import models.ResponseData;
+import models.news.Item;
+import models.news.NewsItem;
+import models.news.ResponseData;
 import networking.NewsAPI;
 import retrofit2.Call;
 import retrofit2.Callback;

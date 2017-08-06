@@ -1,4 +1,4 @@
-package models;
+package models.news;
 
 import org.simpleframework.xml.Element;
 

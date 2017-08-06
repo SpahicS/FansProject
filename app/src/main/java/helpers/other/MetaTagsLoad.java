@@ -1,7 +1,7 @@
 package helpers.other;
 
 import android.support.v7.widget.RecyclerView;
-import models.MetaTag;
+import models.news.MetaTag;
 
 /**
  * Created by unexpected_err on 31/05/2017.

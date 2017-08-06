@@ -18,8 +18,7 @@ import helpers.main.AppHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import models.Comment;
-import models.FeedItem;
+import models.news.Comment;
 
 /**
  * Created by unexpected_err on 19/02/2017.

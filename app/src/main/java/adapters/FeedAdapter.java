@@ -42,8 +42,8 @@ import listeners.OnArticleClickListener;
 import listeners.OnDislikeClickListener;
 import listeners.OnLikeClickListener;
 import listeners.OnPostCommentListener;
-import models.FeedItem;
-import models.MetaTag;
+import models.news.FeedItem;
+import models.news.MetaTag;
 import viewholders.FeedItemViewHolder;
 import viewholders.NewMessageViewHolder;
 

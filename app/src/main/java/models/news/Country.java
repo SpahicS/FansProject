@@ -1,4 +1,4 @@
-package models;
+package models.news;
 
 /**
  * Created by Spaja on 02-Jun-17.

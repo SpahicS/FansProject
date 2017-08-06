@@ -1,7 +1,7 @@
 package networking;
 
 
-import models.ResponseData;
+import models.news.ResponseData;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;

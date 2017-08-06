@@ -1,4 +1,4 @@
-package models;
+package models.news;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 import java.util.ArrayList;

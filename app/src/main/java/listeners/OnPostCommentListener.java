@@ -2,7 +2,6 @@ package listeners;
 
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.google.firebase.database.DatabaseReference;
@@ -11,7 +10,7 @@ import java.util.Date;
 
 import digitalbath.fansproject.R;
 import helpers.main.AppController;
-import models.Comment;
+import models.news.Comment;
 
 /**
  * Created by Spaja on 12-Jul-17.
