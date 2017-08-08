@@ -2,6 +2,7 @@ package viewholders;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import digitalbath.fansproject.R;
@@ -13,6 +14,7 @@ import digitalbath.fansproject.R;
 public class LeagueTableViewHolder extends RecyclerView.ViewHolder {
 
     public TextView teamName, points, draws, loses, wins;
+    public ImageView teamLogoMini;
 
     public LeagueTableViewHolder(View itemView) {
         super(itemView);
@@ -22,5 +24,6 @@ public class LeagueTableViewHolder extends RecyclerView.ViewHolder {
         draws = (TextView) itemView.findViewById(R.id.draws);
         wins = (TextView) itemView.findViewById(R.id.wins);
         loses = (TextView) itemView.findViewById(R.id.loses);
+        teamLogoMini = (ImageView) itemView.findViewById(R.id.team_logo_mini);
     }
 }

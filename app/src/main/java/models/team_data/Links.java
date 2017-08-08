@@ -14,6 +14,22 @@ public class Links {
     private AwayTeam awayTeam;
     private TeamHref team;
 
+    public Competition getCompetition() {
+        return competition;
+    }
+
+    public HomeTeam getHomeTeam() {
+        return homeTeam;
+    }
+
+    public AwayTeam getAwayTeam() {
+        return awayTeam;
+    }
+
+    public TeamHref getTeam() {
+        return team;
+    }
+
     public Self getSelf() {
         return self;
     }

@@ -15,7 +15,7 @@ public class LeagueTable {
 
     private String leagueCaption;
     private int matchDay;
-    private ArrayList<Team> standing;
+    private ArrayList<TeamStanding> standing;
 
     public Links getLinks() {
         return links;
@@ -29,7 +29,7 @@ public class LeagueTable {
         return matchDay;
     }
 
-    public ArrayList<Team> getStanding() {
+    public ArrayList<TeamStanding> getStanding() {
         return standing;
     }
 }
