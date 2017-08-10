@@ -24,7 +24,7 @@
             app:srcCompat="@drawable/logo"
             />
 
-        <TextView
+        <helpers.view.FansTextView
             android:id="@+id/app_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
             android:visibility="invisible"
             >
 
-            <TextView
+            <helpers.view.FansTextView
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

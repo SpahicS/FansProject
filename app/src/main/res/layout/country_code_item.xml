@@ -14,7 +14,7 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <TextView
+        <helpers.view.FansTextView
             android:id="@+id/country_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
