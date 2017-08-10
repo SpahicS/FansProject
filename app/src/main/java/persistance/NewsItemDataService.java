@@ -1,16 +1,11 @@
 package persistance;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import helpers.main.AppController;
-import models.NewsItem;
 
 /**
  * Created by Spaja on 22-Jun-17.

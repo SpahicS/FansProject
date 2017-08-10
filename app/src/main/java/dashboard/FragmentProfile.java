@@ -23,7 +23,7 @@ import helpers.main.AppController;
 import helpers.main.AppHelper;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import listeners.OnCountrySelectorClickListener;
-import models.Country;
+import models.news.Country;
 
 /**
  * Created by unexpected_err on 29/04/2017.

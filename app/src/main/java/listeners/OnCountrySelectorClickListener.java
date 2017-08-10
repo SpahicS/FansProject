@@ -6,7 +6,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-import models.Country;
+import models.news.Country;
 
 /**
  * Created by Spaja on 31-May-17.

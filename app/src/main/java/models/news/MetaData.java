@@ -1,4 +1,4 @@
-package models;
+package models.news;
 
 /**
  * Created by unexpected_err on 27/05/2017.

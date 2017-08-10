@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import helpers.main.AppController;
-import models.FeedItem;
-import models.NewsItem;
+import models.news.FeedItem;
+import models.news.NewsItem;
 import persistance.NewsItemDataService;
 
 /**

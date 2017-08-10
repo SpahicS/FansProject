@@ -18,6 +18,7 @@ public class DashboardPagerAdapter extends FragmentPagerAdapter {
 
     public DashboardPagerAdapter(FragmentManager fm) {
         super(fm);
+
     }
 
     @Override public Fragment getItem(int position) {

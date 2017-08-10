@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import digitalbath.fansproject.R;
 import listeners.OnCountryCodeClickListener;
-import models.Country;
+import models.news.Country;
 import viewholders.CountryCodesViewHolder;
 
 /**

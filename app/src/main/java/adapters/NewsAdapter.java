@@ -39,8 +39,8 @@ import listeners.OnArticleClickListener;
 import listeners.OnDislikeClickListener;
 import listeners.OnLikeClickListener;
 import listeners.OnPostCommentListener;
-import models.MetaTag;
-import models.NewsItem;
+import models.news.MetaTag;
+import models.news.NewsItem;
 import persistance.NewsItemDataService;
 import viewholders.ArticleViewHolder;
 

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/progressBarNews"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerInParent="true"
+        app:indicatorColor="@color/colorAccent"
+        app:indicatorName="BallScaleMultipleIndicator"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/next_match"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <ImageView
+                android:id="@+id/home_team_logo"
+                android:layout_width="50dp"
+                android:layout_height="100dp"
+                tools:src="@android:drawable/ic_input_add" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="VS" />
+
+            <ImageView
+                android:id="@+id/away_team_logo"
+                android:layout_width="50dp"
+                android:layout_height="100dp"
+                tools:src="@android:drawable/ic_input_add" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/next_match"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="Next match"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/fixture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/home_team_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="15dp"
+            android:layout_toLeftOf="@+id/dash"
+            android:textAlignment="viewEnd"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="Juventus FC" />
+
+        <TextView
+            android:id="@+id/dash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="-" />
+
+        <TextView
+            android:id="@+id/away_team_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:layout_toRightOf="@id/dash"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="Macnhester United FC" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/stadium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:text="STADUIM"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/match_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="20:45" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="20dp"
+            android:text="Last two matches"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="1dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="25dp"
+            android:background="@color/light_gray">
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_toLeftOf="@+id/vertical_dash">
+
+                <TextView
+                    android:id="@+id/home_team_past_matches"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_toLeftOf="@+id/home_team_past_matches_points"
+                    android:text="juventus fc" />
+
+                <TextView
+                    android:id="@+id/home_team_past_matches_points"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="32"
+                    android:textAlignment="viewEnd" />
+
+                <TextView
+                    android:id="@+id/away_team_past_matches"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/home_team_past_matches"
+                    android:layout_toLeftOf="@+id/away_team_past_matches_points"
+                    android:text="bologna FSC" />
+
+                <TextView
+                    android:id="@+id/away_team_past_matches_points"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/home_team_past_matches_points"
+                    android:text="45"
+                    android:textAlignment="viewEnd" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/vertical_dash"
+                android:layout_width="1dp"
+                android:layout_height="30dp"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="25dp"
+                android:background="@color/light_gray"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="25dp"
+                android:layout_toRightOf="@id/vertical_dash">
+
+                <TextView
+                    android:id="@+id/home_team2_past_matches"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_toLeftOf="@+id/home_team2_past_matches_points"
+                    android:text="juventus fc" />
+
+                <TextView
+                    android:id="@+id/home_team2_past_matches_points"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="32" />
+
+                <TextView
+                    android:id="@+id/away_team2_past_matches"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/home_team2_past_matches"
+                    android:layout_toLeftOf="@+id/away_team2_past_matches_points"
+                    android:text="bologna FSC" />
+
+                <TextView
+                    android:id="@+id/away_team2_past_matches_points"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@id/home_team2_past_matches_points"
+                    android:text="45" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:text="League Table"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/match_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="1dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="25dp"
+        android:background="@color/light_gray">
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/league_table_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp">
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

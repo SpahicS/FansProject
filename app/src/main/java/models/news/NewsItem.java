@@ -1,4 +1,4 @@
-package models;
+package models.news;
 
 import java.util.ArrayList;
 import java.util.HashMap;
