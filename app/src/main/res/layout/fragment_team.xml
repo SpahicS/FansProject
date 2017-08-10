@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -18,7 +19,7 @@
                 android:id="@+id/home_team_logo"
                 android:layout_width="50dp"
                 android:layout_height="100dp"
-                android:src="@android:drawable/ic_input_add" />
+                tools:src="@android:drawable/ic_input_add" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -32,7 +33,7 @@
                 android:id="@+id/away_team_logo"
                 android:layout_width="50dp"
                 android:layout_height="100dp"
-                android:src="@android:drawable/ic_input_add" />
+                tools:src="@android:drawable/ic_input_add" />
 
         </LinearLayout>
 
@@ -47,9 +48,9 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/fixture"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
@@ -59,14 +60,19 @@
             android:id="@+id/home_team_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="JUVENTSUS FSC"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="15dp"
+            android:layout_toLeftOf="@+id/dash"
+            android:textAlignment="viewEnd"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="Juventus FC" />
 
         <TextView
+            android:id="@+id/dash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_centerInParent="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:text="-" />
@@ -75,10 +81,13 @@
             android:id="@+id/away_team_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Manchester FC"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:layout_toRightOf="@id/dash"
             android:textSize="18sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+            android:textStyle="bold"
+            tools:text="Macnhester United FC" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/stadium"
@@ -136,6 +145,8 @@
                     android:id="@+id/home_team_past_matches"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_toLeftOf="@id/home_team_past_matches_points"
                     android:text="juventus fc" />
 
                 <TextView
@@ -143,7 +154,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_toRightOf="@id/home_team_past_matches"
                     android:text="32"
                     android:textAlignment="viewEnd" />
 
@@ -151,15 +161,17 @@
                     android:id="@+id/away_team_past_matches"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
                     android:layout_below="@id/home_team_past_matches"
+                    android:layout_toLeftOf="@id/away_team_past_matches_points"
                     android:text="bologna FSC" />
 
                 <TextView
+                    android:id="@+id/away_team_past_matches_points"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_below="@id/home_team_past_matches_points"
-                    android:layout_toRightOf="@id/away_team_past_matches"
                     android:text="45"
                     android:textAlignment="viewEnd" />
 
@@ -187,6 +199,8 @@
                     android:id="@+id/home_team2_past_matches"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_toLeftOf="@id/home_team2_past_matches_points"
                     android:text="juventus fc" />
 
                 <TextView
@@ -194,25 +208,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_toRightOf="@id/home_team2_past_matches"
-                    android:text="32"
-                    android:textAlignment="viewEnd" />
+                    android:text="32" />
 
                 <TextView
                     android:id="@+id/away_team2_past_matches"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
                     android:layout_below="@id/home_team2_past_matches"
+                    android:layout_toLeftOf="@id/away_team2_past_matches_points"
                     android:text="bologna FSC" />
 
                 <TextView
+                    android:id="@+id/away_team2_past_matches_points"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_below="@id/home_team2_past_matches_points"
-                    android:layout_toRightOf="@id/away_team2_past_matches"
-                    android:text="45"
-                    android:textAlignment="viewEnd" />
+                    android:text="45" />
 
             </RelativeLayout>
 
