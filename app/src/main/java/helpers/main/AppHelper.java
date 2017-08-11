@@ -264,7 +264,7 @@ public class AppHelper {
 
         }
 
-        set.setDuration(800);
+        set.setDuration(500);
 
         view.startAnimation(set);
 

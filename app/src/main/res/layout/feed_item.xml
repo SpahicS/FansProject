@@ -33,7 +33,7 @@
         android:layout_toRightOf="@+id/avatar"
         android:orientation="vertical"
         >
-      <TextView
+      <helpers.view.FansTextView
           android:id="@+id/username"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
           android:text="Haris Muharemovic"
           android:textSize="16sp"
           />
-      <TextView
+      <helpers.view.FansTextView
           android:id="@+id/time_published"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
     </LinearLayout>
   </LinearLayout>
 
-  <TextView
+  <helpers.view.FansTextView
       android:id="@+id/message"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -114,7 +114,7 @@
         android:orientation="vertical"
         android:padding="15dp"
         >
-      <TextView
+      <helpers.view.FansTextView
           android:id="@+id/article_title"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -138,7 +138,7 @@
             android:layout_height="15dp"
             android:scaleType="centerCrop"
             />
-        <TextView
+        <helpers.view.FansTextView
             android:id="@+id/article_publisher_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -166,7 +166,7 @@
       android:orientation="horizontal"
       >
 
-    <TextView
+    <helpers.view.FansTextView
         android:id="@+id/likes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -176,7 +176,7 @@
         android:textSize="10sp"
         />
 
-    <TextView
+    <helpers.view.FansTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/username"
@@ -188,7 +188,7 @@
         android:textStyle="bold"
         />
 
-    <TextView
+    <helpers.view.FansTextView
         android:id="@+id/unlikes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -198,7 +198,7 @@
         android:text="2 thumbs down"
         android:textSize="10sp"
         />
-    <TextView
+    <helpers.view.FansTextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -211,7 +211,7 @@
         android:textStyle="bold"
         />
 
-    <TextView
+    <helpers.view.FansTextView
         android:id="@+id/comments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -253,7 +253,7 @@
           app:srcCompat="@drawable/ic_thumb_up"
           />
 
-      <TextView
+      <helpers.view.FansTextView
           android:id="@+id/like"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -289,7 +289,7 @@
           app:srcCompat="@drawable/ic_comment"
           />
 
-      <TextView
+      <helpers.view.FansTextView
           android:id="@+id/comment"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -324,7 +324,7 @@
           android:tint="@color/light_gray_with_tr"
           app:srcCompat="@drawable/ic_thumb_up"
           />
-      <TextView
+      <helpers.view.FansTextView
           android:id="@+id/unlike"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
