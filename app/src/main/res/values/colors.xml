@@ -24,5 +24,6 @@
   <color name="edit_text_toolbar_underline">#80cce6</color>
   <color name="splash_screen_color">#404040</color>
   <color name="fragment_bcg">#f6f6f6</color>
+  <color name="overview_icons">#bfbfbf</color>
 
 </resources>

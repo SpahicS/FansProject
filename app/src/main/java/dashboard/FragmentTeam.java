@@ -18,7 +18,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.model.StreamEncoder;
 import com.bumptech.glide.load.resource.file.FileToStreamDecoder;
 import com.caverock.androidsvg.SVG;
-import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -45,7 +44,6 @@ public class FragmentTeam extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private RecyclerView leagueTableRecycler;
-    private TextView homeTeamName;
     private TextView awayTeamName;
     private TextView homeTeamPastMatch;
     private TextView awayTeamPastMatch;
@@ -55,12 +53,9 @@ public class FragmentTeam extends Fragment {
     private TextView awayTeam2PastMatch;
     private TextView homeTeam2PastMatchGoals;
     private TextView awayTeam2PastMatchGoals;
-    private TextView stadium;
-    private TextView matchTime;
-    private ImageView homeTeamLogo;
+    private TextView matchDate;
     private ImageView awayTeamLogo;
     private GenericRequestBuilder<Uri, InputStream, SVG, PictureDrawable> requestBuilder;
-    private AVLoadingIndicatorView progressBar;
 
     public FragmentTeam() {
     }
@@ -93,11 +88,7 @@ public class FragmentTeam extends Fragment {
     }
 
     private void initializeViews(View rootView) {
-        homeTeamName = (TextView) rootView.findViewById(R.id.home_team_name);
-        homeTeamLogo = (ImageView) rootView.findViewById(R.id.home_team_logo);
-        awayTeamName = (TextView) rootView.findViewById(R.id.away_team_name);
         awayTeamLogo = (ImageView) rootView.findViewById(R.id.away_team_logo);
-        matchTime = (TextView) rootView.findViewById(R.id.match_time);
         homeTeamPastMatch = (TextView) rootView.findViewById(R.id.home_team_past_matches);
         awayTeamPastMatch = (TextView) rootView.findViewById(R.id.away_team_past_matches);
         homeTeamPastMatchGoals = (TextView) rootView.findViewById(R.id.home_team_past_matches_points);
@@ -106,7 +97,8 @@ public class FragmentTeam extends Fragment {
         awayTeam2PastMatch = (TextView) rootView.findViewById(R.id.away_team2_past_matches);
         homeTeam2PastMatchGoals = (TextView) rootView.findViewById(R.id.home_team2_past_matches_points);
         awayTeam2PastMatchGoals = (TextView) rootView.findViewById(R.id.away_team2_past_matches_points);
-        progressBar = (AVLoadingIndicatorView) rootView.findViewById(R.id.progressBarNews);
+        awayTeamName = (TextView) rootView.findViewById(R.id.away_team);
+        matchDate = (TextView) rootView.findViewById(R.id.match_date_time);
     }
 
     private void initializeSVGHelper() {
@@ -126,26 +118,21 @@ public class FragmentTeam extends Fragment {
 
     private void initializeRecyclerView(View rootView) {
         leagueTableRecycler = (RecyclerView) rootView.findViewById(R.id.league_table_recycler);
+        leagueTableRecycler.setNestedScrollingEnabled(false);
         leagueTableRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    private void getTeamData(int teamId, final boolean homeTeam) {
+    private void getTeamData(int teamId) {
         TeamAPI.service.getTeamData(teamId).enqueue(new Callback<TeamInfo>() {
             @Override
             public void onResponse(Call<TeamInfo> call, Response<TeamInfo> response) {
                 Uri uri = Uri.parse(response.body().getCrestUrl());
 
-                if (homeTeam) {
-                    requestBuilder
-                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                            .load(uri)
-                            .into(homeTeamLogo);
-                } else {
-                    requestBuilder
-                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                            .load(uri)
-                            .into(awayTeamLogo);
-                }
+                requestBuilder
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .load(uri)
+                        .into(awayTeamLogo);
+
             }
 
             @Override
@@ -163,7 +150,6 @@ public class FragmentTeam extends Fragment {
 
                 TextView matchDay = (TextView) getActivity().findViewById(R.id.match_day);
                 matchDay.setText(" (Match day " + String.valueOf(response.body().getMatchDay()) + ")");
-                progressBar.setVisibility(View.GONE);
             }
 
             @Override
@@ -197,73 +183,91 @@ public class FragmentTeam extends Fragment {
         ArrayList<Fixture> fixtures = response.body().getFixtures();
 
         if (fixtures.get(0).getStatus() == null) {
-            homeTeamName.setText(fixtures.get(0).getHomeTeamName());
-            awayTeamName.setText(fixtures.get(0).getAwayTeamName());
-            matchTime.setText(fixtures.get(0).getDate());
-            String homeTeamId = fixtures.get(0).getLinks().getHomeTeam().getHref().split("teams/")[1];
+
             String awayTeamId = fixtures.get(0).getLinks().getAwayTeam().getHref().split("teams/")[1];
+            matchDate.setText(fixtures.get(0).getDate());
 
-            homeTeamPastMatch.setText("N/A");
-            awayTeamPastMatch.setText("N/A");
-            homeTeamPastMatchGoals.setText("N/A");
-            awayTeamPastMatchGoals.setText("N/A");
+            if (!fixtures.get(0).getAwayTeamName().contains("Juventus")) {
+                awayTeamName.setText(fixtures.get(0).getAwayTeamName());
+            } else {
+                awayTeamName.setText(fixtures.get(0).getHomeTeamName());
+            }
 
-            homeTeam2PastMatch.setText("N/A");
-            awayTeam2PastMatch.setText("N/A");
-            homeTeam2PastMatchGoals.setText("N/A");
-            awayTeam2PastMatchGoals.setText("N/A");
+            setFirstPastMatchUnknown();
 
-            getTeamData(Integer.parseInt(homeTeamId), true);
-            getTeamData(Integer.parseInt(awayTeamId), false);
+            setSecondPastMatchUnknown();
+
+            getTeamData(Integer.parseInt(awayTeamId));
         } else {
             for (int i = 0; i < response.body().getFixtures().size(); i++) {
 
                 if (fixtures.get(i).getStatus().equals("TIMED")) {
-                    homeTeamName.setText(fixtures.get(i).getHomeTeamName());
-                    awayTeamName.setText(fixtures.get(i).getAwayTeamName());
-                    matchTime.setText(fixtures.get(i).getDate());
-                    String homeTeamId = fixtures.get(i).getLinks().getHomeTeam().getHref().split("teams/")[1];
-                    String awayTeamId = fixtures.get(i).getLinks().getAwayTeam().getHref().split("teams/")[1];
 
-                    getTeamData(Integer.parseInt(homeTeamId), true);
-                    getTeamData(Integer.parseInt(awayTeamId), false);
+                    matchDate.setText(fixtures.get(i).getDate());
+                    String awayTeamId;
 
-                    if (i == 0) {
-                        homeTeamPastMatch.setText("N/A");
-                        awayTeamPastMatch.setText("N/A");
-                        homeTeamPastMatchGoals.setText("N/A");
-                        awayTeamPastMatchGoals.setText("N/A");
-
-                        homeTeam2PastMatch.setText("N/A");
-                        awayTeam2PastMatch.setText("N/A");
-                        homeTeam2PastMatchGoals.setText("N/A");
-                        awayTeam2PastMatchGoals.setText("N/A");
+                    if (!fixtures.get(i).getAwayTeamName().contains("Juventus")) {
+                        awayTeamId = fixtures.get(i).getLinks().getAwayTeam().getHref().split("teams/")[1];
+                    } else {
+                        awayTeamId = fixtures.get(i).getLinks().getHomeTeam().getHref().split("teams/")[1];
                     }
 
-                    if (i == 1) {
-                        homeTeamPastMatch.setText(fixtures.get(0).getHomeTeamName());
-                        awayTeamPastMatch.setText(fixtures.get(0).getAwayTeamName());
-                        homeTeamPastMatchGoals.setText(fixtures.get(0).getResult().getGoalsHomeTeam());
-                        awayTeamPastMatchGoals.setText(fixtures.get(0).getResult().getGoalsAwayTeam());
+                    getTeamData(Integer.parseInt(awayTeamId));
 
-                        homeTeam2PastMatch.setText("N/A");
-                        awayTeam2PastMatch.setText("N/A");
-                        homeTeam2PastMatchGoals.setText("N/A");
-                        awayTeam2PastMatchGoals.setText("N/A");
+                    boolean isFirstMatch = i == 0;
+                    boolean isSecondMatch = i == 1;
+
+                    if (isFirstMatch) {
+
+                        setFirstPastMatchUnknown();
+
+                        setSecondPastMatchUnknown();
+                    }
+
+                    if (isSecondMatch) {
+
+                        getFirstPastMatch(fixtures, i);
+
+                        setSecondPastMatchUnknown();
                     }
 
                     if (i > 1) {
-                        homeTeamPastMatch.setText(fixtures.get(i - 1).getHomeTeamName());
-                        awayTeamPastMatch.setText(fixtures.get(i - 1).getAwayTeamName());
-                        homeTeamPastMatchGoals.setText(fixtures.get(i - 1).getResult().getGoalsHomeTeam());
-                        awayTeamPastMatchGoals.setText(fixtures.get(i - 1).getResult().getGoalsAwayTeam());
-                        homeTeam2PastMatch.setText(fixtures.get(i - 2).getHomeTeamName());
-                        awayTeam2PastMatch.setText(fixtures.get(i - 2).getAwayTeamName());
-                        homeTeam2PastMatchGoals.setText(fixtures.get(i - 2).getResult().getGoalsHomeTeam());
-                        awayTeam2PastMatchGoals.setText(fixtures.get(i - 2).getResult().getGoalsAwayTeam());
+
+                        getFirstPastMatch(fixtures, i);
+
+                        getSecondPastMatch(fixtures, i);
                     }
                 }
             }
         }
     }
+
+    private void getFirstPastMatch(ArrayList<Fixture> fixtures, int i) {
+        homeTeamPastMatch.setText(fixtures.get(i - 1).getHomeTeamName());
+        awayTeamPastMatch.setText(fixtures.get(i - 1).getAwayTeamName());
+        homeTeamPastMatchGoals.setText(fixtures.get(i - 1).getResult().getGoalsHomeTeam());
+        awayTeamPastMatchGoals.setText(fixtures.get(i - 1).getResult().getGoalsAwayTeam());
+    }
+
+    private void getSecondPastMatch(ArrayList<Fixture> fixtures, int i) {
+        homeTeam2PastMatch.setText(fixtures.get(i - 2).getHomeTeamName());
+        awayTeam2PastMatch.setText(fixtures.get(i - 2).getAwayTeamName());
+        homeTeam2PastMatchGoals.setText(fixtures.get(i - 2).getResult().getGoalsHomeTeam());
+        awayTeam2PastMatchGoals.setText(fixtures.get(i - 2).getResult().getGoalsAwayTeam());
+    }
+
+    private void setFirstPastMatchUnknown() {
+        homeTeamPastMatch.setText("N/A");
+        awayTeamPastMatch.setText("N/A");
+        homeTeamPastMatchGoals.setText("N/A");
+        awayTeamPastMatchGoals.setText("N/A");
+    }
+
+    private void setSecondPastMatchUnknown() {
+        homeTeam2PastMatch.setText("N/A");
+        awayTeam2PastMatch.setText("N/A");
+        homeTeam2PastMatchGoals.setText("N/A");
+        awayTeam2PastMatchGoals.setText("N/A");
+    }
+
 }
