@@ -19,6 +19,7 @@ import com.bumptech.glide.load.model.StreamEncoder;
 import com.bumptech.glide.load.resource.file.FileToStreamDecoder;
 import com.caverock.androidsvg.SVG;
 
+import com.txusballesteros.widgets.FitChart;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -57,8 +58,7 @@ public class FragmentTeam extends Fragment {
     private ImageView awayTeamLogo;
     private GenericRequestBuilder<Uri, InputStream, SVG, PictureDrawable> requestBuilder;
 
-    public FragmentTeam() {
-    }
+    public FragmentTeam() {}
 
     public static FragmentTeam newInstance(int sectionNumber) {
 
@@ -72,11 +72,14 @@ public class FragmentTeam extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.fragment_team, container, false);
 
         initializeViews(rootView);
 
         initializeSVGHelper();
+
+        initializeOverView(rootView);
 
         initializeRecyclerView(rootView);
 
@@ -116,6 +119,31 @@ public class FragmentTeam extends Fragment {
                 .listener(new SvgSoftwareLayerSetter<Uri>());
     }
 
+    private void initializeOverView(View rootView) {
+
+        setChartValue((FitChart) rootView.findViewById(R.id.chart_matches),
+            (TextView) rootView.findViewById(R.id.number_of_matches), 0f, 38f, 32f);
+
+        setChartValue((FitChart) rootView.findViewById(R.id.chart_win),
+            (TextView) rootView.findViewById(R.id.number_win), 0f, 38f, 18f);
+
+        setChartValue((FitChart) rootView.findViewById(R.id.chart_lost),
+            (TextView) rootView.findViewById(R.id.number_lost), 0f, 38f, 4f);
+
+        setChartValue((FitChart) rootView.findViewById(R.id.chart_draw),
+            (TextView) rootView.findViewById(R.id.number_draw), 0f, 38f, 10f);
+    }
+
+    private void setChartValue(FitChart chart, TextView number, float min, float max, float value) {
+
+        chart.setMinValue(min);
+        chart.setMaxValue(max);
+        chart.setValue(value);
+
+        number.setText(Integer.toString((int) value));
+
+    }
+
     private void initializeRecyclerView(View rootView) {
         leagueTableRecycler = (RecyclerView) rootView.findViewById(R.id.league_table_recycler);
         leagueTableRecycler.setNestedScrollingEnabled(false);
@@ -148,8 +176,8 @@ public class FragmentTeam extends Fragment {
 
                 initializeLeagueTableAdapter(response);
 
-                TextView matchDay = (TextView) getActivity().findViewById(R.id.match_day);
-                matchDay.setText(" (Match day " + String.valueOf(response.body().getMatchDay()) + ")");
+                /*TextView matchDay = (TextView) getActivity().findViewById(R.id.match_day);
+                matchDay.setText(" (Match day " + String.valueOf(response.body().getMatchDay()) + ")");*/
             }
 
             @Override

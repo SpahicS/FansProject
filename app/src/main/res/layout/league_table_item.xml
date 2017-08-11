@@ -2,60 +2,70 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="35dp"
-    android:layout_marginEnd="35dp"
     android:layout_marginBottom="5dp"
-    android:orientation="horizontal">
+    android:layout_marginTop="5dp"
+    android:orientation="horizontal"
+    >
 
     <ImageView
-        android:layout_gravity="center"
         android:id="@+id/team_logo_mini"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginRight="5dp"
-        android:src="@android:drawable/ic_input_add" />
-
-    <TextView
         android:layout_gravity="center"
+        android:layout_marginRight="5dp"
+        android:src="@android:drawable/ic_input_add"
+        />
+
+    <helpers.view.FansTextView
         android:id="@+id/team_name"
-        android:layout_width="130dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="JUVENTUS" />
+        android:layout_gravity="center"
+        android:layout_marginLeft="3dp"
+        android:layout_weight="1"
+        android:maxLines="1"
+        android:text="JUVENTUS"
+        />
 
     <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="15dp"
         android:gravity="right"
-        android:layout_height="wrap_content">
+        >
 
 
-        <TextView
+        <helpers.view.FansTextView
             android:id="@+id/wins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:text="55" />
+            android:text="55"
+            />
 
-        <TextView
+        <helpers.view.FansTextView
             android:id="@+id/draws"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
-            android:text="33" />
+            android:text="33"
+            />
 
-        <TextView
+        <helpers.view.FansTextView
             android:id="@+id/loses"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="25dp"
-            android:text="33" />
+            android:text="33"
+            />
 
-        <TextView
+        <helpers.view.FansTextView
             android:id="@+id/points"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="22" />
+            android:text="22"
+            />
 
     </LinearLayout>
 
