@@ -75,7 +75,7 @@ public class FragmentProfile extends Fragment {
         Glide.with(this)
                 .load(AppController.getUser().getPhotoUrl())
                 .error(R.drawable.profile_bcg)
-                .bitmapTransform(new BlurTransformation(getContext(), 10))
+                .bitmapTransform(new BlurTransformation(getContext(), 3))
                 .into((ImageView) rootView.findViewById(R.id.image_blur));
 
         Glide.with(this)

@@ -8,56 +8,60 @@
     android:layout_marginBottom="10dp"
     android:background="@color/main_color_light"
     android:orientation="vertical"
-    android:paddingTop="5dp"
     >
 
-    <helpers.view.FansTextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:layout_toRightOf="@+id/avatar"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:lineSpacingExtra="7sp"
-        android:text="Something something else Something something else Something something else"
-        android:textSize="18sp"
-        />
-
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/article_image"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="20dp"
         >
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/publisher_icon"
-            android:layout_width="17dp"
-            android:layout_height="17dp"
-            android:background="@drawable/circle_bcg"
-            android:scaleType="centerCrop"
-            />
         <helpers.view.FansTextView
-            android:id="@+id/publisher_name_and_time"
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="Juventus.com"
-            android:textColor="@color/main_color_dark"
-            android:textSize="13sp"
+            android:layout_marginBottom="15dp"
+            android:layout_toRightOf="@+id/avatar"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:lineSpacingExtra="5dp"
+            android:text="Something something else Something something else Somet else"
+            android:textSize="20dp"
+            app:font_style="light"
             />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/article_image"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            >
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/publisher_icon"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:background="@drawable/circle_bcg"
+                android:scaleType="centerCrop"
+                />
+            <helpers.view.FansTextView
+                android:id="@+id/publisher_name_and_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Juventus.com"
+                android:textColor="#e1c747"
+                android:textSize="13sp"
+                />
+        </LinearLayout>
     </LinearLayout>
+
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="230dp"
-        android:layout_marginTop="10dp"
         android:scaleType="centerCrop"
         android:visibility="visible"
         />
@@ -68,8 +72,8 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/message"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="15dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -139,6 +143,8 @@
         android:layout_below="@+id/message"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         >
 
         <LinearLayout

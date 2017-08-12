@@ -70,7 +70,6 @@
                         android:layout_marginRight="5dp"
                         android:text="vs"
                         android:textSize="18dp"
-                        android:textStyle="bold"
                         />
 
                     <helpers.view.FansTextView
@@ -80,7 +79,6 @@
                         android:layout_gravity="center"
                         android:text="Real Madric CG"
                         android:textSize="18dp"
-                        android:textStyle="bold"
                         />
 
                     <ImageView
@@ -553,16 +551,16 @@
                     android:textSize="@dimen/column_title_text_size"
                     />
             </LinearLayout>
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/league_table_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/main_column_margin_left"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="15dp"
-                >
+          <android.support.v7.widget.RecyclerView
+              android:id="@+id/league_table_recycler"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_marginLeft="@dimen/main_column_margin_left"
+              android:layout_marginRight="@dimen/main_column_margin_left"
+              android:layout_marginTop="15dp"
+              >
 
-            </android.support.v7.widget.RecyclerView>
+          </android.support.v7.widget.RecyclerView>
 
         </LinearLayout>
 

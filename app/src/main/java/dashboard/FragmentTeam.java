@@ -187,11 +187,17 @@ public class FragmentTeam extends Fragment {
     }
 
     private void initializeLeagueTableAdapter(Response<LeagueTable> response) {
+
+        //crash
+        if (response.body() == null)
+            return;
+
         LeagueTableAdapter leagueTableAdapter = new LeagueTableAdapter(getContext(), response.body());
         leagueTableRecycler.setAdapter(leagueTableAdapter);
     }
 
     private void getTeamFixtures() {
+
         TeamAPI.service.getTeamFixtures().enqueue(new Callback<Fixtures>() {
             @Override
             public void onResponse(Call<Fixtures> call, Response<Fixtures> response) {
@@ -207,6 +213,10 @@ public class FragmentTeam extends Fragment {
     }
 
     private void findNextMatch(Response<Fixtures> response) {
+
+        //crash
+        if (response.body() == null)
+            return;
 
         ArrayList<Fixture> fixtures = response.body().getFixtures();
 
@@ -226,7 +236,9 @@ public class FragmentTeam extends Fragment {
             setSecondPastMatchUnknown();
 
             getTeamData(Integer.parseInt(awayTeamId));
+
         } else {
+
             for (int i = 0; i < response.body().getFixtures().size(); i++) {
 
                 if (fixtures.get(i).getStatus().equals("TIMED")) {
