@@ -7,14 +7,16 @@
     android:layout_marginBottom="5dp"
     android:layout_marginTop="5dp"
     android:background="@color/main_color_light"
-    android:paddingTop="15dp"
     android:orientation="vertical"
+    android:paddingTop="20dp"
     >
 
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:orientation="horizontal"
+      android:paddingLeft="5dp"
+      android:paddingRight="5dp"
       >
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/avatar"
@@ -63,12 +65,13 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_below="@+id/avatar"
-      android:layout_marginLeft="15dp"
-      android:layout_marginRight="15dp"
+      android:layout_marginLeft="20dp"
+      android:layout_marginRight="20dp"
       android:layout_marginTop="15dp"
       android:lineSpacingExtra="4sp"
-      android:text="Juventus Stadium, sometimes simply known in Italy as the Stadium, is an all-seater football stadium in the Vallette borough of Turin, Italy, and the home of Serie A club Juventus Football Club."
+      android:text="Juventus Stadium is a home of Serie A club Juventus Football Club."
       android:textSize="15sp"
+      app:font_style="light"
       />
 
   <ImageView
@@ -123,7 +126,7 @@
           android:maxLines="2"
           android:text="Juve made history! Juve won 35th Seria A trophy nad made new record!"
           android:textColor="@color/white"
-          android:textSize="18sp"
+          android:textSize="19dp"
           />
       <LinearLayout
           android:layout_width="match_parent"
@@ -159,8 +162,8 @@
       android:layout_height="match_parent"
       android:layout_below="@+id/message"
       android:layout_marginBottom="5dp"
-      android:layout_marginLeft="15dp"
-      android:layout_marginRight="15dp"
+      android:layout_marginLeft="20dp"
+      android:layout_marginRight="20dp"
       android:layout_marginTop="15dp"
       android:gravity="center_vertical"
       android:orientation="horizontal"
@@ -230,6 +233,8 @@
       android:layout_below="@+id/message"
       android:gravity="center_vertical"
       android:orientation="horizontal"
+      android:paddingLeft="5dp"
+      android:paddingRight="5dp"
       >
 
     <LinearLayout

@@ -8,7 +8,7 @@
 
   <RelativeLayout
       android:layout_width="match_parent"
-      android:layout_height="200dp"
+      android:layout_height="290dp"
       >
 
     <ImageView
@@ -21,22 +21,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.5"
-        android:background="@color/black"
+        android:background="@color/colorAccent"
         android:orientation="vertical"
         >
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/asd"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="false"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         >
       <de.hdodenhof.circleimageview.CircleImageView
           android:id="@+id/avatar"
-          android:layout_width="70dp"
-          android:layout_height="70dp"
+          android:layout_width="100dp"
+          android:layout_height="100dp"
           android:layout_centerInParent="false"
+          android:layout_marginTop="30dp"
           android:src="@drawable/avatar"
           app:civ_border_color="@color/light_gray_ultra"
           app:civ_border_width="2dp"
@@ -55,10 +57,109 @@
           android:id="@+id/user_email"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_weight="1"
           android:text="haris.lamb@gmail.com"
           android:textColor="@color/colorPrimary"
           android:textSize="12sp"
           />
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/asd"
+          android:orientation="horizontal"
+          >
+        <LinearLayout
+            android:id="@+id/posts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/asd"
+            android:layout_centerInParent="true"
+            android:layout_weight="1"
+            android:background="@color/semi_transparent_blue"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="8dp"
+            >
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center"
+              android:orientation="horizontal"
+              >
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:srcCompat="@drawable/logo"
+                />
+            <helpers.view.FansTextView
+                android:id="@+id/user_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="46"
+                android:textColor="@color/colorPrimary"
+                android:textSize="30dp"
+                />
+          </LinearLayout>
+          <helpers.view.FansTextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="3dp"
+              android:text="Number of posts"
+              android:textColor="@color/colorPrimary"
+              android:textSize="12dp"
+              android:textStyle="bold"
+              />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/posts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/asd"
+            android:layout_centerInParent="true"
+            android:layout_weight="1"
+            android:background="@color/semi_transparent_blue_one"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="8dp"
+            >
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center"
+              android:orientation="horizontal"
+              >
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/circle_bcg"
+                android:tint="@android:color/holo_orange_light"
+                app:srcCompat="@drawable/ic_star"
+                />
+            <helpers.view.FansTextView
+                android:id="@+id/user_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:text="Gold"
+                android:textColor="@color/colorPrimary"
+                android:textSize="30dp"
+                />
+          </LinearLayout>
+          <helpers.view.FansTextView
+              android:id="@+id/fansTextView"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="3dp"
+              android:text="Fans overall ranking"
+              android:textColor="@color/colorPrimary"
+              android:textSize="12dp"
+              android:textStyle="bold"
+              />
+        </LinearLayout>
+      </LinearLayout>
     </LinearLayout>
   </RelativeLayout>
   <helpers.view.FansTextView
