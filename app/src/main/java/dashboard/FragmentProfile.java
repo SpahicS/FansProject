@@ -14,6 +14,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -24,6 +28,7 @@ import helpers.main.AppHelper;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import listeners.OnCountrySelectorClickListener;
 import models.news.Country;
+import models.news.FeedItem;
 
 /**
  * Created by unexpected_err on 29/04/2017.
@@ -38,6 +43,7 @@ public class FragmentProfile extends Fragment {
     private RelativeLayout mSelector;
     private ArrayList<Country> mCountryList;
     private LinearLayoutManager mLayoutManager;
+    private DatabaseReference mFeedRef;
 
     public FragmentProfile() {
     }
@@ -57,17 +63,46 @@ public class FragmentProfile extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
-
         initializeViews(rootView);
         bindProfileHeader(rootView);
 
         initializeCountryList();
         initializeRecyclerView();
 
+        getNumberOfPosts(rootView);
+
         mSelector.setOnClickListener(new OnCountrySelectorClickListener(mCountryCodesRecycler,
                 mCountryList, mLayoutManager));
 
         return rootView;
+    }
+
+    private void getNumberOfPosts(View rootView) {
+
+        final ArrayList<FeedItem> feedItems = new ArrayList<>();
+        final TextView numberOfPosts = (TextView) rootView.findViewById(R.id.number_of_posts);
+
+        mFeedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int numOfPosts = 0;
+                feedItems.clear();
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    feedItems.add(data.getValue(FeedItem.class));
+                }
+                for (int i = 0; i < feedItems.size(); i++) {
+                    if (feedItems.get(i).getUserId().equals(AppController.getUser().getUid())) {
+                        numOfPosts++;
+                    }
+                }
+                numberOfPosts.setText(String.valueOf(numOfPosts));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void bindProfileHeader(View rootView) {
@@ -137,6 +172,7 @@ public class FragmentProfile extends Fragment {
         mCountryCodesRecycler = (RecyclerView) rootView.findViewById(R.id.country_codes_recycler);
         mCountryName = (TextView) rootView.findViewById(R.id.country_name);
         mSelector = (RelativeLayout) rootView.findViewById(R.id.country_selector);
+        mFeedRef = AppController.getFirebaseDatabase().child("feed");
     }
 
 }

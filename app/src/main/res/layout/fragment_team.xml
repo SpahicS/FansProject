@@ -88,7 +88,6 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="5dp"
                         android:src="@android:drawable/ic_input_add"
-                        android:visibility="invisible"
                         />
                 </LinearLayout>
 
