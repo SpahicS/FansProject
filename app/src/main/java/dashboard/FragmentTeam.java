@@ -18,8 +18,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.model.StreamEncoder;
 import com.bumptech.glide.load.resource.file.FileToStreamDecoder;
 import com.caverock.androidsvg.SVG;
-
 import com.txusballesteros.widgets.FitChart;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -32,6 +32,7 @@ import models.team_data.Fixture;
 import models.team_data.Fixtures;
 import models.team_data.LeagueTable;
 import models.team_data.TeamInfo;
+import models.team_data.TeamStanding;
 import networking.TeamAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,6 +45,10 @@ import retrofit2.Response;
 public class FragmentTeam extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final String API_KEY = "1968a7f095be48269a20d2bd89f6e930";
+    private Call<LeagueTable> leagueTableCall;
+    private Call<TeamInfo> teamInfoCall;
+    private Call<Fixtures> teamFixturesCall;
     private RecyclerView leagueTableRecycler;
     private TextView awayTeamName;
     private TextView homeTeamPastMatch;
@@ -55,10 +60,11 @@ public class FragmentTeam extends Fragment {
     private TextView homeTeam2PastMatchGoals;
     private TextView awayTeam2PastMatchGoals;
     private TextView matchDate;
-    private ImageView awayTeamLogo;
     private GenericRequestBuilder<Uri, InputStream, SVG, PictureDrawable> requestBuilder;
+    private View rootView;
 
-    public FragmentTeam() {}
+    public FragmentTeam() {
+    }
 
     public static FragmentTeam newInstance(int sectionNumber) {
 
@@ -73,15 +79,13 @@ public class FragmentTeam extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_team, container, false);
+        rootView = inflater.inflate(R.layout.fragment_team, container, false);
 
         initializeViews(rootView);
 
         initializeSVGHelper();
 
-        initializeOverView(rootView);
-
-        initializeRecyclerView(rootView);
+        initializeLeagueTableRecyclerView(rootView);
 
         getLeagueTable();
 
@@ -91,7 +95,6 @@ public class FragmentTeam extends Fragment {
     }
 
     private void initializeViews(View rootView) {
-        awayTeamLogo = (ImageView) rootView.findViewById(R.id.away_team_logo);
         homeTeamPastMatch = (TextView) rootView.findViewById(R.id.home_team_past_matches);
         awayTeamPastMatch = (TextView) rootView.findViewById(R.id.away_team_past_matches);
         homeTeamPastMatchGoals = (TextView) rootView.findViewById(R.id.home_team_past_matches_points);
@@ -119,19 +122,19 @@ public class FragmentTeam extends Fragment {
                 .listener(new SvgSoftwareLayerSetter<Uri>());
     }
 
-    private void initializeOverView(View rootView) {
+    private void bindOverViewData(View rootView, TeamStanding teamStanding) {
 
         setChartValue((FitChart) rootView.findViewById(R.id.chart_matches),
-            (TextView) rootView.findViewById(R.id.number_of_matches), 0f, 38f, 32f);
+                (TextView) rootView.findViewById(R.id.number_of_matches), 0f, 38f, teamStanding.getPlayedGames());
 
         setChartValue((FitChart) rootView.findViewById(R.id.chart_win),
-            (TextView) rootView.findViewById(R.id.number_win), 0f, 38f, 18f);
+                (TextView) rootView.findViewById(R.id.number_win), 0f, 38f, teamStanding.getWins());
 
         setChartValue((FitChart) rootView.findViewById(R.id.chart_lost),
-            (TextView) rootView.findViewById(R.id.number_lost), 0f, 38f, 4f);
+                (TextView) rootView.findViewById(R.id.number_lost), 0f, 38f, teamStanding.getLoses());
 
         setChartValue((FitChart) rootView.findViewById(R.id.chart_draw),
-            (TextView) rootView.findViewById(R.id.number_draw), 0f, 38f, 10f);
+                (TextView) rootView.findViewById(R.id.number_draw), 0f, 38f, teamStanding.getDraws());
     }
 
     private void setChartValue(FitChart chart, TextView number, float min, float max, float value) {
@@ -144,14 +147,19 @@ public class FragmentTeam extends Fragment {
 
     }
 
-    private void initializeRecyclerView(View rootView) {
+    private void initializeLeagueTableRecyclerView(View rootView) {
         leagueTableRecycler = (RecyclerView) rootView.findViewById(R.id.league_table_recycler);
         leagueTableRecycler.setNestedScrollingEnabled(false);
+        leagueTableRecycler.setFocusable(false);
         leagueTableRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     private void getTeamData(int teamId) {
-        TeamAPI.service.getTeamData(teamId).enqueue(new Callback<TeamInfo>() {
+
+        final ImageView awayTeamLogo = (ImageView) rootView.findViewById(R.id.away_team_logo);
+        teamInfoCall = TeamAPI.service.getTeamData(teamId, API_KEY);
+
+        teamInfoCall.enqueue(new Callback<TeamInfo>() {
             @Override
             public void onResponse(Call<TeamInfo> call, Response<TeamInfo> response) {
                 Uri uri = Uri.parse(response.body().getCrestUrl());
@@ -170,11 +178,21 @@ public class FragmentTeam extends Fragment {
     }
 
     private void getLeagueTable() {
-        TeamAPI.service.getLeagueTable().enqueue(new Callback<LeagueTable>() {
+
+        leagueTableCall = TeamAPI.service.getLeagueTable(API_KEY);
+
+        leagueTableCall.enqueue(new Callback<LeagueTable>() {
             @Override
             public void onResponse(Call<LeagueTable> call, Response<LeagueTable> response) {
 
                 initializeLeagueTableAdapter(response);
+
+                for (int i = 0; i < response.body().getStanding().size(); i++) {
+                    if (response.body().getStanding().get(i).getTeamName().contains("Juventus")) {
+                        bindOverViewData(rootView, response.body().getStanding().get(i));
+                        break;
+                    }
+                }
 
                 /*TextView matchDay = (TextView) getActivity().findViewById(R.id.match_day);
                 matchDay.setText(" (Match day " + String.valueOf(response.body().getMatchDay()) + ")");*/
@@ -198,7 +216,9 @@ public class FragmentTeam extends Fragment {
 
     private void getTeamFixtures() {
 
-        TeamAPI.service.getTeamFixtures().enqueue(new Callback<Fixtures>() {
+        teamFixturesCall = TeamAPI.service.getTeamFixtures(API_KEY);
+
+        teamFixturesCall.enqueue(new Callback<Fixtures>() {
             @Override
             public void onResponse(Call<Fixtures> call, Response<Fixtures> response) {
 
@@ -310,4 +330,17 @@ public class FragmentTeam extends Fragment {
         awayTeam2PastMatchGoals.setText("N/A");
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (leagueTableCall != null) {
+            leagueTableCall.cancel();
+        }
+        if (teamInfoCall != null) {
+            teamInfoCall.cancel();
+        }
+        if (teamFixturesCall != null) {
+            teamFixturesCall.cancel();
+        }
+    }
 }
