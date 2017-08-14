@@ -29,6 +29,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 import listeners.OnCountrySelectorClickListener;
 import models.news.Country;
 import models.news.FeedItem;
+import models.news.Post;
 
 /**
  * Created by unexpected_err on 29/04/2017.
@@ -43,7 +44,7 @@ public class FragmentProfile extends Fragment {
     private RelativeLayout mSelector;
     private ArrayList<Country> mCountryList;
     private LinearLayoutManager mLayoutManager;
-    private DatabaseReference mFeedRef;
+    private DatabaseReference mPostsRef;
 
     public FragmentProfile() {
     }
@@ -79,23 +80,17 @@ public class FragmentProfile extends Fragment {
 
     private void getNumberOfPosts(View rootView) {
 
-        final ArrayList<FeedItem> feedItems = new ArrayList<>();
+        final ArrayList<Post> posts = new ArrayList<>();
         final TextView numberOfPosts = (TextView) rootView.findViewById(R.id.number_of_posts);
 
-        mFeedRef.addValueEventListener(new ValueEventListener() {
+        mPostsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                int numOfPosts = 0;
-                feedItems.clear();
+                posts.clear();
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    feedItems.add(data.getValue(FeedItem.class));
+                    posts.add(data.getValue(Post.class));
                 }
-                for (int i = 0; i < feedItems.size(); i++) {
-                    if (feedItems.get(i).getUserId().equals(AppController.getUser().getUid())) {
-                        numOfPosts++;
-                    }
-                }
-                numberOfPosts.setText(String.valueOf(numOfPosts));
+                numberOfPosts.setText(String.valueOf(posts.size()));
             }
 
             @Override
@@ -172,7 +167,7 @@ public class FragmentProfile extends Fragment {
         mCountryCodesRecycler = (RecyclerView) rootView.findViewById(R.id.country_codes_recycler);
         mCountryName = (TextView) rootView.findViewById(R.id.country_name);
         mSelector = (RelativeLayout) rootView.findViewById(R.id.country_selector);
-        mFeedRef = AppController.getFirebaseDatabase().child("feed");
+        mPostsRef = AppController.getFirebaseDatabase().child("posts").child(AppController.getUser().getUid());
     }
 
 }

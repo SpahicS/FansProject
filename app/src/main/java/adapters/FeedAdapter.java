@@ -44,6 +44,7 @@ import listeners.OnLikeClickListener;
 import listeners.OnPostCommentListener;
 import models.news.FeedItem;
 import models.news.MetaTag;
+import models.news.Post;
 import viewholders.FeedItemViewHolder;
 import viewholders.NewMessageViewHolder;
 
@@ -392,7 +393,16 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 if (!TextUtils.isEmpty(item.getImageUrl()))
                     feedItemToPost.setImageUrl(item.getImageUrl());
 
-                mFeedDatabase.push().setValue(feedItemToPost);
+                String postId = mFeedDatabase.push().getKey();
+
+                Post post = new Post();
+                post.setUserName(AppController.getUser().getDisplayName());
+                post.setPostId(postId);
+
+                DatabaseReference mPostsRef = AppController.getFirebaseDatabase().child("posts");
+                mPostsRef.child(AppController.getUser().getUid()).child(postId).setValue(post);
+
+                mFeedDatabase.child(postId).setValue(feedItemToPost);
 
                 holder.message.setText("");
 
