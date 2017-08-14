@@ -80,17 +80,19 @@ public class FragmentProfile extends Fragment {
 
     private void getNumberOfPosts(View rootView) {
 
-        final ArrayList<Post> posts = new ArrayList<>();
-        final TextView numberOfPosts = (TextView) rootView.findViewById(R.id.number_of_posts);
+        final TextView numberOfPostsTextView = (TextView) rootView.findViewById(R.id.number_of_posts);
+        //final ArrayList<Post> posts = new ArrayList<>();
 
         mPostsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                posts.clear();
+                int numberOfPosts = 1;
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    posts.add(data.getValue(Post.class));
+                    //posts.add(data.getValue(Post.class));
+                    numberOfPosts++;
                 }
-                numberOfPosts.setText(String.valueOf(posts.size()));
+                //numberOfPostsTextView.setText(String.valueOf(posts.size()));
+                numberOfPostsTextView.setText(String.valueOf(numberOfPosts));
             }
 
             @Override
