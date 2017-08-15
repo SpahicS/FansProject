@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import helpers.other.Rank;
 import java.util.ArrayList;
 
 import adapters.CountryCodesAdapter;
@@ -44,7 +46,6 @@ public class FragmentProfile extends Fragment {
     private RelativeLayout mSelector;
     private ArrayList<Country> mCountryList;
     private LinearLayoutManager mLayoutManager;
-    private DatabaseReference mPostsRef;
 
     public FragmentProfile() {
     }
@@ -72,27 +73,47 @@ public class FragmentProfile extends Fragment {
 
         getNumberOfPosts(rootView);
 
-        mSelector.setOnClickListener(new OnCountrySelectorClickListener(mCountryCodesRecycler,
-                mCountryList, mLayoutManager));
+        mSelector.setOnClickListener(new OnCountrySelectorClickListener
+            (mCountryCodesRecycler, mCountryList, mLayoutManager));
 
         return rootView;
     }
 
-    private void getNumberOfPosts(View rootView) {
+    private void getNumberOfPosts(final View rootView) {
 
-        final TextView numberOfPostsTextView = (TextView) rootView.findViewById(R.id.number_of_posts);
         //final ArrayList<Post> posts = new ArrayList<>();
 
-        mPostsRef.addValueEventListener(new ValueEventListener() {
+        AppController.getFirebaseDatabase(getContext()).child("posts").child(AppController.getUser()
+            .getUid()).addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 int numberOfPosts = 1;
+
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     //posts.add(data.getValue(Post.class));
                     numberOfPosts++;
                 }
                 //numberOfPostsTextView.setText(String.valueOf(posts.size()));
+
+                TextView numberOfPostsTextView = (TextView)
+                    rootView.findViewById(R.id.number_of_posts);
+
                 numberOfPostsTextView.setText(String.valueOf(numberOfPosts));
+
+                Rank rank = Rank.getRank(numberOfPosts);
+
+                TextView rankLabel = (TextView)
+                    rootView.findViewById(R.id.rank_label);
+
+                rankLabel.setText(String.valueOf(rank.getRankLabel()));
+
+                ImageView rankBadge = (ImageView)
+                    rootView.findViewById(R.id.rank_badge);
+
+                rankBadge.setColorFilter(ContextCompat.getColor(getContext(), rank.getRankBadgeColor()));
+
             }
 
             @Override
@@ -169,7 +190,7 @@ public class FragmentProfile extends Fragment {
         mCountryCodesRecycler = (RecyclerView) rootView.findViewById(R.id.country_codes_recycler);
         mCountryName = (TextView) rootView.findViewById(R.id.country_name);
         mSelector = (RelativeLayout) rootView.findViewById(R.id.country_selector);
-        mPostsRef = AppController.getFirebaseDatabase().child("posts").child(AppController.getUser().getUid());
+
     }
 
 }

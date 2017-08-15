@@ -69,7 +69,7 @@ public class FragmentNews extends Fragment {
 
         initializeViews(rootView);
 
-        getNewsList(AppConfig.TEAM);
+        getNewsList(AppConfig.getNewsQuery(getContext()));
 
         initializeNewsRecycler();
 

@@ -1,4 +1,4 @@
-package SvgHelper;
+package helpers.svg;
 
 import android.graphics.Picture;
 import android.graphics.drawable.PictureDrawable;

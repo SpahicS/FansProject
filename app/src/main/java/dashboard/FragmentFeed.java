@@ -30,8 +30,6 @@ public class FragmentFeed extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private RelativeLayout mCommentsCont;
 
-    private DatabaseReference mDatabase;
-
     public static FragmentFeed newInstance(int sectionNumber) {
 
         FragmentFeed fragment = new FragmentFeed();
@@ -43,8 +41,6 @@ public class FragmentFeed extends Fragment {
 
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mDatabase = AppController.getFirebaseDatabase();
 
     }
 
@@ -61,8 +57,8 @@ public class FragmentFeed extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         AppBarLayout appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.appbar);
 
-        mAdapter = new FeedAdapter(getActivity(), mDatabase.child("feed"), mCommentsCont,
-                appBarLayout);
+        mAdapter = new FeedAdapter(getActivity(), AppController.getFirebaseDatabase
+            (getContext()).child("feed"), mCommentsCont, appBarLayout);
 
         mRecyclerView.setAdapter(mAdapter);
 

@@ -57,7 +57,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initializeMainView() {
 
-        ((TextView) findViewById(R.id.app_name)).setText(AppConfig.TEAM + " Fans");
+        ((TextView) findViewById(R.id.app_name))
+            .setText(getResources().getString(R.string.app_name));
     }
 
     private void initializeFirebaseAuthentication() {
@@ -106,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (mUser != null) {
 
                     AppController.setUser(mUser);
-                    AppController.initializeFirebaseDatabase();
+                    AppController.initializeFirebaseDatabase(LoginActivity.this);
 
                     Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
                     startActivity(intent);

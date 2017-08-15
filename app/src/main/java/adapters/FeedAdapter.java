@@ -399,7 +399,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 post.setUserName(AppController.getUser().getDisplayName());
                 post.setPostId(postId);
 
-                DatabaseReference mPostsRef = AppController.getFirebaseDatabase().child("posts");
+                DatabaseReference mPostsRef = AppController
+                    .getFirebaseDatabase(mActivity).child("posts");
+
                 mPostsRef.child(AppController.getUser().getUid()).child(postId).setValue(post);
 
                 mFeedDatabase.child(postId).setValue(feedItemToPost);

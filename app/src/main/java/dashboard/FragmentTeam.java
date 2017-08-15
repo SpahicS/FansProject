@@ -20,12 +20,13 @@ import com.bumptech.glide.load.resource.file.FileToStreamDecoder;
 import com.caverock.androidsvg.SVG;
 import com.txusballesteros.widgets.FitChart;
 
+import helpers.main.AppConfig;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import SvgHelper.SvgDecoder;
-import SvgHelper.SvgDrawableTranscoder;
-import SvgHelper.SvgSoftwareLayerSetter;
+import helpers.svg.SvgDecoder;
+import helpers.svg.SvgDrawableTranscoder;
+import helpers.svg.SvgSoftwareLayerSetter;
 import adapters.LeagueTableAdapter;
 import digitalbath.fansproject.R;
 import models.team_data.Fixture;
@@ -46,6 +47,7 @@ public class FragmentTeam extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String API_KEY = "1968a7f095be48269a20d2bd89f6e930";
+
     private Call<LeagueTable> leagueTableCall;
     private Call<TeamInfo> teamInfoCall;
     private Call<Fixtures> teamFixturesCall;
@@ -95,6 +97,7 @@ public class FragmentTeam extends Fragment {
     }
 
     private void initializeViews(View rootView) {
+
         homeTeamPastMatch = (TextView) rootView.findViewById(R.id.home_team_past_matches);
         awayTeamPastMatch = (TextView) rootView.findViewById(R.id.away_team_past_matches);
         homeTeamPastMatchGoals = (TextView) rootView.findViewById(R.id.home_team_past_matches_points);
@@ -108,6 +111,7 @@ public class FragmentTeam extends Fragment {
     }
 
     private void initializeSVGHelper() {
+
         requestBuilder = Glide.with(getContext())
                 .using(Glide.buildStreamModelLoader(Uri.class, getContext()), InputStream.class)
                 .from(Uri.class)
@@ -148,16 +152,19 @@ public class FragmentTeam extends Fragment {
     }
 
     private void initializeLeagueTableRecyclerView(View rootView) {
+
         leagueTableRecycler = (RecyclerView) rootView.findViewById(R.id.league_table_recycler);
         leagueTableRecycler.setNestedScrollingEnabled(false);
         leagueTableRecycler.setFocusable(false);
         leagueTableRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+
     }
 
     private void getTeamData(int teamId) {
 
         final ImageView awayTeamLogo = (ImageView) rootView.findViewById(R.id.away_team_logo);
-        teamInfoCall = TeamAPI.service.getTeamData(teamId, API_KEY);
+
+        teamInfoCall = TeamAPI.service.getTeamData(AppConfig.getTeamId(getContext()), API_KEY);
 
         teamInfoCall.enqueue(new Callback<TeamInfo>() {
             @Override
@@ -172,14 +179,13 @@ public class FragmentTeam extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<TeamInfo> call, Throwable t) {
-            }
+            public void onFailure(Call<TeamInfo> call, Throwable t) {}
         });
     }
 
     private void getLeagueTable() {
 
-        leagueTableCall = TeamAPI.service.getLeagueTable(API_KEY);
+        leagueTableCall = TeamAPI.service.getLeagueTable(AppConfig.getTeamLeagueId(getContext()), API_KEY);
 
         leagueTableCall.enqueue(new Callback<LeagueTable>() {
             @Override

@@ -1,4 +1,4 @@
-package persistance;
+package helpers.other;
 
 import com.google.firebase.database.DatabaseReference;
 
@@ -16,9 +16,9 @@ public class NewsItemDataService {
     private final DatabaseReference mNewsRef;
 
 
-    public NewsItemDataService() {
+    public NewsItemDataService(DatabaseReference newsRef) {
 
-        mNewsRef = AppController.getFirebaseDatabase().child("news");
+        this.mNewsRef = newsRef;
 
     }
 

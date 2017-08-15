@@ -1,6 +1,7 @@
 package helpers.main;
 
 import android.app.Application;
+import android.content.Context;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -18,18 +19,18 @@ public class AppController extends Application {
         super.onCreate();
     }
 
-    public static void initializeFirebaseDatabase() {
+    public static void initializeFirebaseDatabase(Context context) {
 
         mDatabase = FirebaseDatabase.getInstance()
-            .getReference().child(AppConfig.TEAM);
+            .getReference().child(AppConfig.getDatabaseQuery(context));
 
     }
 
-    public static DatabaseReference getFirebaseDatabase() {
+    public static DatabaseReference getFirebaseDatabase(Context context) {
 
         if (mDatabase == null)
             mDatabase = FirebaseDatabase.getInstance()
-                .getReference().child(AppConfig.TEAM);
+                .getReference().child(AppConfig.getDatabaseQuery(context));
 
         return mDatabase;
 

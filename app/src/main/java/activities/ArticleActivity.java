@@ -6,6 +6,7 @@ import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
+import android.webkit.WebViewClient;
 import digitalbath.fansproject.R;
 
 
@@ -24,7 +25,7 @@ public class ArticleActivity extends AppCompatActivity {
     private void loadWebView(String url) {
         WebView webView = (WebView) findViewById(R.id.article_web_view);
         webView.setWebViewClient(new WebViewClient());
-        webView.setWebChromeClient(new WebChromeClient());
+        webView.setWebChromeClient(new CustomWebChromeClient());
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(url);
     }
@@ -35,12 +36,13 @@ public class ArticleActivity extends AppCompatActivity {
         return super.onSupportNavigateUp();
     }
 
-    private class WebViewClient extends android.webkit.WebViewClient {
+    private class CustomWebChromeClient extends WebChromeClient {
 
-        @Override
-        public void onPageFinished(WebView view, String url) {
-            super.onPageFinished(view, url);
-            findViewById(R.id.progress_bar).setVisibility(View.GONE);
+        @Override public void onProgressChanged(WebView view, int newProgress) {
+            super.onProgressChanged(view, newProgress);
+            if (newProgress > 70)
+                findViewById(R.id.progress_bar).setVisibility(View.GONE);
+
         }
     }
 }

@@ -18,9 +18,9 @@ import com.caverock.androidsvg.SVG;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import SvgHelper.SvgDecoder;
-import SvgHelper.SvgDrawableTranscoder;
-import SvgHelper.SvgSoftwareLayerSetter;
+import helpers.svg.SvgDecoder;
+import helpers.svg.SvgDrawableTranscoder;
+import helpers.svg.SvgSoftwareLayerSetter;
 import digitalbath.fansproject.R;
 import models.team_data.LeagueTable;
 import models.team_data.TeamStanding;

@@ -21,8 +21,8 @@ public interface TeamAPI {
     @GET("teams/{id}")
     Call<TeamInfo> getTeamData(@Path("id") int id, @Header("X-Auth-Token") String apiKey);
 
-    @GET("competitions/456/leagueTable")
-    Call<LeagueTable> getLeagueTable(@Header("X-Auth-Token") String apiKey);
+    @GET("competitions/{id}/leagueTable")
+    Call<LeagueTable> getLeagueTable(@Path("id") int id, @Header("X-Auth-Token") String apiKey);
 
     @GET("teams/109/fixtures")
     Call<Fixtures> getTeamFixtures(@Header("X-Auth-Token") String apiKey);

@@ -1,4 +1,4 @@
-package SvgHelper;
+package helpers.svg;
 
 
 import android.annotation.TargetApi;

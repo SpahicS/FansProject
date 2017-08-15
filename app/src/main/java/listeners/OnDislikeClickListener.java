@@ -10,7 +10,7 @@ import java.util.Map;
 import helpers.main.AppController;
 import models.news.FeedItem;
 import models.news.NewsItem;
-import persistance.NewsItemDataService;
+import helpers.other.NewsItemDataService;
 
 /**
  * Created by Spaja on 27-Jul-17.

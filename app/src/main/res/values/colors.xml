@@ -28,4 +28,9 @@
   <color name="fragment_bcg">#f6f6f6</color>
   <color name="overview_icons">#bfbfbf</color>
 
+  <color name="bronze">#CD7F32</color>
+  <color name="silver">#C0C0C0</color>
+  <color name="gold">#dabd21</color>
+  <color name="platinum">#d7d5cf</color>
+
 </resources>

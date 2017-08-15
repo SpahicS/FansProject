@@ -41,7 +41,7 @@ import listeners.OnLikeClickListener;
 import listeners.OnPostCommentListener;
 import models.news.MetaTag;
 import models.news.NewsItem;
-import persistance.NewsItemDataService;
+import helpers.other.NewsItemDataService;
 import viewholders.ArticleViewHolder;
 
 /**
@@ -60,14 +60,17 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
     private CommentsAdapter mCommentsAdapter;
     private RelativeLayout mCommentsCont;
 
-    public NewsAdapter(Activity activity, final ArrayList<NewsItem> mDataSet, RelativeLayout mCommentsCont) {
+    public NewsAdapter(Activity activity, final ArrayList<NewsItem> mDataSet,
+        RelativeLayout mCommentsCont) {
 
         this.mDataSet = mDataSet;
         this.mActivity = activity;
         this.mCommentsCont = mCommentsCont;
-        this.newsItemDataService = new NewsItemDataService();
 
-        mNewsRef = AppController.getFirebaseDatabase().child("news");
+        mNewsRef = AppController.getFirebaseDatabase(mActivity).child("news");
+
+        this.newsItemDataService = new NewsItemDataService(mNewsRef);
+
 
         new Handler().postDelayed(new Runnable() {
             @Override public void run() {
