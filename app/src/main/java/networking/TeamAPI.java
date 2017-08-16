@@ -24,8 +24,8 @@ public interface TeamAPI {
     @GET("competitions/{id}/leagueTable")
     Call<LeagueTable> getLeagueTable(@Path("id") int id, @Header("X-Auth-Token") String apiKey);
 
-    @GET("teams/109/fixtures")
-    Call<Fixtures> getTeamFixtures(@Header("X-Auth-Token") String apiKey);
+    @GET("teams/{id}/fixtures")
+    Call<Fixtures> getTeamFixtures(@Path("id") int id, @Header("X-Auth-Token") String apiKey);
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)

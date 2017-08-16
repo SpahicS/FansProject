@@ -89,7 +89,7 @@ public class FragmentProfile extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                int numberOfPosts = 1;
+                int numberOfPosts = 0;
 
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     //posts.add(data.getValue(Post.class));

@@ -21,6 +21,7 @@ import com.caverock.androidsvg.SVG;
 import com.txusballesteros.widgets.FitChart;
 
 import helpers.main.AppConfig;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -62,6 +63,7 @@ public class FragmentTeam extends Fragment {
     private TextView homeTeam2PastMatchGoals;
     private TextView awayTeam2PastMatchGoals;
     private TextView matchDate;
+    private TextView leagueName;
     private GenericRequestBuilder<Uri, InputStream, SVG, PictureDrawable> requestBuilder;
     private View rootView;
 
@@ -108,6 +110,7 @@ public class FragmentTeam extends Fragment {
         awayTeam2PastMatchGoals = (TextView) rootView.findViewById(R.id.away_team2_past_matches_points);
         awayTeamName = (TextView) rootView.findViewById(R.id.away_team);
         matchDate = (TextView) rootView.findViewById(R.id.match_date_time);
+        leagueName = (TextView) rootView.findViewById(R.id.league_name);
     }
 
     private void initializeSVGHelper() {
@@ -179,7 +182,8 @@ public class FragmentTeam extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<TeamInfo> call, Throwable t) {}
+            public void onFailure(Call<TeamInfo> call, Throwable t) {
+            }
         });
     }
 
@@ -193,8 +197,11 @@ public class FragmentTeam extends Fragment {
 
                 initializeLeagueTableAdapter(response);
 
+                leagueName.setText(response.body().getLeagueCaption());
+
                 for (int i = 0; i < response.body().getStanding().size(); i++) {
-                    if (response.body().getStanding().get(i).getTeamName().contains("Juventus")) {
+                    if (response.body().getStanding().get(i).getTeamName()
+                            .contains(AppConfig.getTeamName(AppConfig.getTeamId(getContext())))) {
                         bindOverViewData(rootView, response.body().getStanding().get(i));
                         break;
                     }
@@ -222,7 +229,7 @@ public class FragmentTeam extends Fragment {
 
     private void getTeamFixtures() {
 
-        teamFixturesCall = TeamAPI.service.getTeamFixtures(API_KEY);
+        teamFixturesCall = TeamAPI.service.getTeamFixtures(AppConfig.getTeamId(getContext()), API_KEY);
 
         teamFixturesCall.enqueue(new Callback<Fixtures>() {
             @Override
@@ -251,7 +258,8 @@ public class FragmentTeam extends Fragment {
             String awayTeamId = fixtures.get(0).getLinks().getAwayTeam().getHref().split("teams/")[1];
             matchDate.setText(fixtures.get(0).getDate());
 
-            if (!fixtures.get(0).getAwayTeamName().contains("Juventus")) {
+            if (!fixtures.get(0).getAwayTeamName()
+                    .contains(AppConfig.getTeamName(AppConfig.getTeamId(getContext())))) {
                 awayTeamName.setText(fixtures.get(0).getAwayTeamName());
             } else {
                 awayTeamName.setText(fixtures.get(0).getHomeTeamName());
@@ -267,15 +275,18 @@ public class FragmentTeam extends Fragment {
 
             for (int i = 0; i < response.body().getFixtures().size(); i++) {
 
-                if (fixtures.get(i).getStatus().equals("TIMED")) {
+                if (fixtures.get(i).getStatus().equals("TIMED") || fixtures.get(i).getStatus().equals("SCHEDULED")) {
 
                     matchDate.setText(fixtures.get(i).getDate());
                     String awayTeamId;
 
-                    if (!fixtures.get(i).getAwayTeamName().contains("Juventus")) {
+                    if (!fixtures.get(i).getAwayTeamName()
+                            .contains(AppConfig.getTeamName(AppConfig.getTeamId(getContext())))) {
                         awayTeamId = fixtures.get(i).getLinks().getAwayTeam().getHref().split("teams/")[1];
+                        awayTeamName.setText(fixtures.get(i).getAwayTeamName());
                     } else {
                         awayTeamId = fixtures.get(i).getLinks().getHomeTeam().getHref().split("teams/")[1];
+                        awayTeamName.setText(fixtures.get(i).getHomeTeamName());
                     }
 
                     getTeamData(Integer.parseInt(awayTeamId));
@@ -288,6 +299,8 @@ public class FragmentTeam extends Fragment {
                         setFirstPastMatchUnknown();
 
                         setSecondPastMatchUnknown();
+
+                        break;
                     }
 
                     if (isSecondMatch) {
@@ -295,6 +308,8 @@ public class FragmentTeam extends Fragment {
                         getFirstPastMatch(fixtures, i);
 
                         setSecondPastMatchUnknown();
+
+                        break;
                     }
 
                     if (i > 1) {
@@ -302,6 +317,8 @@ public class FragmentTeam extends Fragment {
                         getFirstPastMatch(fixtures, i);
 
                         getSecondPastMatch(fixtures, i);
+
+                        break;
                     }
                 }
             }

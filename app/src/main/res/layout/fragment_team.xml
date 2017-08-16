@@ -93,10 +93,10 @@
                 </LinearLayout>
 
                 <helpers.view.FansTextView
+                    android:id="@+id/league_name"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="3dp"
-                    android:text="Italian Seria A"
                     android:textColor="@color/light_gray"
                     android:textSize="12sp"
                     />

@@ -77,12 +77,20 @@ public class LeagueTableAdapter extends RecyclerView.Adapter<LeagueTableViewHold
 
         if (standing.get(position).getCrestURI() != null) {
 
-            Uri uri = Uri.parse(standing.get(position).getCrestURI());
+            if (standing.get(position).getCrestURI().endsWith(".svg")) {
 
-            requestBuilder
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .load(uri)
-                    .into(holder.teamLogoMini);
+                Uri uri = Uri.parse(standing.get(position).getCrestURI());
+
+                requestBuilder
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .load(uri)
+                        .into(holder.teamLogoMini);
+            } else {
+                Glide.with(mContext)
+                        .load(standing.get(position).getCrestURI())
+                        .dontAnimate()
+                        .into(holder.teamLogoMini);
+            }
         }
     }
 
