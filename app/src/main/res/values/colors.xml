@@ -13,7 +13,8 @@
   <color name="semi_transparent_blue">#8071bad4</color>
   <color name="semi_transparent_blue_one">#8045b0ca</color>
 
-  <color name="tab_selected">#16a4e6</color>
+  <color name="tab_selected">#39b1e9</color>
+  <color name="tab_indicator_color">#54b7e6</color>
   <color name="tab_unselected">#acacac</color>
 
   <color name="main_color_dark">#686868</color>

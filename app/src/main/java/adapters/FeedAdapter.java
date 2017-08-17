@@ -259,8 +259,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             holder.articleCont.setVisibility(View.VISIBLE);
 
-            holder.articleCont.setOnClickListener(new OnArticleClickListener
-                    (mActivity, item.getArticleUrl()));
+            //holder.articleCont.setOnClickListener(new OnArticleClickListener(mActivity, item));
 
             holder.articleTitle.setText(item.getArticleTitle());
 

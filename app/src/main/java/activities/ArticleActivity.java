@@ -1,14 +1,52 @@
 package activities;
 
+import adapters.NewsAdapter;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
+import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
+import android.view.GestureDetector;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import de.hdodenhof.circleimageview.CircleImageView;
 import digitalbath.fansproject.R;
-
+import helpers.main.AppHelper;
+import helpers.other.GetMetaDataFromUrl;
+import helpers.view.FansTextView;
+import models.ArticleData;
+import models.news.NewsItem;
+import models.team_data.TeamInfo;
+import networking.ArticleAPI;
+import networking.TeamAPI;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.TextNode;
+import org.jsoup.parser.Parser;
+import org.jsoup.select.Elements;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ArticleActivity extends AppCompatActivity {
 
@@ -17,12 +55,186 @@ public class ArticleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
 
-        String url = getIntent().getStringExtra("URL");
+        NewsItem article = (NewsItem) getIntent().getSerializableExtra("article");
 
-        loadWebView(url);
+        //loadWebView(url);
+
+        Call<ArticleData> call = ArticleAPI.service.getArticleData(article.getLink()
+            .split("url=")[1], "sx2E9aIbmK9NFgaqnAwa1OHWXjTxg6ehBIYBM4xO");
+
+        call.enqueue(new Callback<ArticleData>() {
+            @Override
+            public void onResponse(Call<ArticleData> call, Response<ArticleData> response) {
+
+                initializeSimplified(response.body().getContent());
+            }
+
+            @Override
+            public void onFailure(Call<ArticleData> call, Throwable t) {}
+        });
+
+        ImageView image = (ImageView) findViewById(R.id.image);
+        TextView title = (TextView) findViewById(R.id.title);
+        final CircleImageView publisherIcon = (CircleImageView) findViewById(R.id.publisher_icon);
+        TextView publisherNameAndTime = (TextView) findViewById(R.id.publisher_name_and_time);
+
+        title.setText(article.getTitle());
+
+        String url = article.getLink().split("url=")[1];
+
+        if (TextUtils.isEmpty(article.getImageUrl())) {
+
+            image.setVisibility(View.GONE);
+
+        } else {
+
+            loadImage(image, article.getImageUrl(), false);
+
+        }
+
+        String domain = AppHelper.getDomainName(url);
+
+        publisherNameAndTime.setText(domain + " · " + AppHelper
+            .getTimeDifference(article.getPubDate()));
+
+        SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
+
+            @Override
+            public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
+
+                publisherIcon.setImageBitmap(bitmap);
+
+            }
+
+            @Override
+            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                super.onLoadFailed(e, errorDrawable);
+
+                publisherIcon.setImageResource(R.drawable.publisher_icon);
+            }
+        };
+
+        Glide.with(ArticleActivity.this)
+            .load("http://www." + domain + "/favicon.ico")
+            .asBitmap()
+            .into(target);
+
+    }
+
+
+    private void loadImage(final ImageView image, String imageUrl, final boolean animate) {
+
+        SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
+
+            @Override
+            public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
+
+                if (animate) {
+
+                    TransitionDrawable td = new TransitionDrawable(new Drawable[]{
+                        new ColorDrawable(Color.TRANSPARENT),
+                        new BitmapDrawable(ArticleActivity.this.getResources(), bitmap)
+                    });
+
+                    image.setImageDrawable(td);
+
+                    td.startTransition(300);
+
+                } else {
+
+                    image.setImageBitmap(bitmap);
+                }
+            }
+
+            @Override
+            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                super.onLoadFailed(e, errorDrawable);
+
+                image.setVisibility(View.GONE);
+
+            }
+        };
+
+        Glide.with(ArticleActivity.this)
+            .load(imageUrl)
+            .asBitmap()
+            .into(target);
+
+    }
+
+    private void initializeSimplified(String content) {
+
+        LinearLayout articleContent = (LinearLayout) findViewById(R.id.article_content_cont);
+
+        findViewById(R.id.article_content_loader).setVisibility(View.GONE);
+
+        Document document = Jsoup.parse(content, "", Parser.htmlParser());
+
+        final Elements elements = document.body().select("span, p, h1, h2, h3, img, tr");
+
+        if (elements != null && elements.size() > 1 && elements.get(0).tag().getName().equals("tr") &&
+            elements.get(0).getAllElements() != null && elements.get(0).getAllElements().size() > 0 &&
+            elements.get(0).getAllElements().get(0) != null && elements.get(0).getAllElements().get(0).tag().getName().equals("tr"))
+            elements.remove(0);
+
+        for (int i = 0; i < elements.size(); i++) {
+
+            if (elements.get(i).tag().getName().equals("p") || elements.get(i).tag().getName().equals("h1")
+                || elements.get(i).tag().getName().equals("h2") || elements.get(i).tag().getName().equals("h3")
+                || elements.get(i).tag().getName().equals("tr")) {
+
+                Elements pElements = elements.get(i).getAllElements();
+
+
+                if (!(pElements.size() == 2 && (pElements.get(1).tag().getName().equals("img") || pElements.get(1).tag().getName().equals("p")))
+                        && !elements.get(i).html().equals("") && !String.valueOf(Html.fromHtml(elements.get(i).html())).equals("")) {
+
+                    FansTextView textView = new FansTextView(this, "light");
+
+                    textView.setTextColor(Color.BLACK);
+                    textView.setLineSpacing(1.4f, 1.4f);
+                    textView.setTextIsSelectable(true);
+
+                    String text = String.valueOf(elements.get(i).html());
+
+                    if (elements.get(i).nextSibling() != null && elements.get(i).nextSibling() instanceof TextNode) {
+                        String nextSibling = elements.get(i).nextSibling().toString();
+                        text = text + " " + nextSibling;
+                    }
+
+                    textView.setText(Html.fromHtml(text));
+
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                    lp.setMargins((int) getResources().getDimension(R.dimen.simplified_paragraph_other_margin),
+                        (int) getResources().getDimension(R.dimen.simplified_paragraph_top_margin),
+                        (int) getResources().getDimension(R.dimen.simplified_paragraph_other_margin),
+                        (int) getResources().getDimension(R.dimen.simplified_paragraph_other_margin));
+                    textView.setLayoutParams(lp);
+
+                    if (elements.get(i).tag().getName().equals("p"))
+                        textView.setTag(0);
+                    else if (elements.get(i).tag().getName().equals("tr"))
+                        textView.setTag(0);
+                    else if (elements.get(i).tag().getName().equals("h1"))
+                        textView.setTag(6);
+                    else if (elements.get(i).tag().getName().equals("h2"))
+                        textView.setTag(4);
+                    else if (elements.get(i).tag().getName().equals("h3"))
+                        textView.setTag(2);
+
+                    textView.setMovementMethod(LinkMovementMethod.getInstance());
+                    textView.setAutoLinkMask(Linkify.ALL);
+
+                    articleContent.addView(textView);
+                }
+            }
+        }
     }
 
     private void loadWebView(String url) {
+
         WebView webView = (WebView) findViewById(R.id.article_web_view);
         webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new CustomWebChromeClient());

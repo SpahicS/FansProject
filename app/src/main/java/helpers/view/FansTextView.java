@@ -39,6 +39,12 @@ public class FansTextView extends android.support.v7.widget.AppCompatTextView {
         init(context);
     }
 
+    public FansTextView(Context context, String fontStyle) {
+        super(context);
+        this.fontStyle = fontStyle;
+        init(context);
+    }
+
     private void init(Context context) {
 
         switch (fontStyle) {

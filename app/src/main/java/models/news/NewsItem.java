@@ -1,5 +1,6 @@
 package models.news;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,7 +10,7 @@ import java.util.Map;
  * Created by Spaja on 10-Jun-17.
  */
 
-public class NewsItem {
+public class NewsItem implements Serializable {
 
     private String id;
     private HashMap<String, Boolean> likes = new HashMap<>();

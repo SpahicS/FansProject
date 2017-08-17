@@ -9,9 +9,18 @@
       android:id="@+id/article_web_view"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:visibility="gone"
+      >
+  </WebView>
+
+  <WebView
+      android:id="@+id/article_web_view_1"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
       >
 
   </WebView>
+
   <com.wang.avi.AVLoadingIndicatorView
       android:id="@+id/progress_bar"
       android:layout_width="40dp"
@@ -20,5 +29,98 @@
       app:indicatorColor="@color/colorAccent"
       app:indicatorName="BallScaleMultipleIndicator"
       />
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@color/white"
+      android:fillViewport="true"
+      >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+      <ImageView
+          android:id="@+id/image"
+          android:layout_width="match_parent"
+          android:layout_height="270dp"
+          android:scaleType="centerCrop"
+          android:visibility="visible"
+          />
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:paddingBottom="5dp"
+          android:paddingLeft="20dp"
+          android:paddingRight="20dp"
+          android:paddingTop="20dp"
+          >
+        <helpers.view.FansTextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_toRightOf="@+id/avatar"
+            android:gravity="center_vertical"
+            android:lineSpacingExtra="5dp"
+            android:text="Something something else Something something else Somet else"
+            android:textSize="22dp"
+            app:font_style="light"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/article_image"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            >
+          <de.hdodenhof.circleimageview.CircleImageView
+              android:id="@+id/publisher_icon"
+              android:layout_width="17dp"
+              android:layout_height="17dp"
+              android:background="@drawable/circle_bcg"
+              android:scaleType="centerCrop"
+              />
+          <helpers.view.FansTextView
+              android:id="@+id/publisher_name_and_time"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="5dp"
+              android:ellipsize="end"
+              android:maxLines="1"
+              android:text="Juventus.com"
+              android:textColor="#e1c747"
+              android:textSize="13sp"
+              />
+        </LinearLayout>
+      </LinearLayout>
+      <LinearLayout
+          android:id="@+id/article_content_cont"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          >
+      </LinearLayout>
+      <LinearLayout
+          android:id="@+id/article_content_loader"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:gravity="center"
+          android:orientation="horizontal"
+          >
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/AVLoadingIndicatorView2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            app:indicatorColor="@color/colorAccent"
+            app:indicatorName="BallScaleMultipleIndicator"
+            />
+      </LinearLayout>
+
+    </LinearLayout>
+  </ScrollView>
 
 </RelativeLayout>

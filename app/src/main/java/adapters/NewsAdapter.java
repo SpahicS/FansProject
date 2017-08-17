@@ -39,6 +39,9 @@ import listeners.OnArticleClickListener;
 import listeners.OnDislikeClickListener;
 import listeners.OnLikeClickListener;
 import listeners.OnPostCommentListener;
+import me.angrybyte.goose.Article;
+import me.angrybyte.goose.Configuration;
+import me.angrybyte.goose.ContentExtractor;
 import models.news.MetaTag;
 import models.news.NewsItem;
 import helpers.other.NewsItemDataService;
@@ -71,7 +74,6 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
 
         this.newsItemDataService = new NewsItemDataService(mNewsRef);
 
-
         new Handler().postDelayed(new Runnable() {
             @Override public void run() {
                 shouldAnimateListItems = false;
@@ -93,6 +95,7 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
     public void onBindViewHolder(final ArticleViewHolder holder, final int position) {
 
         final NewsItem item = mDataSet.get(position);
+
         final String uid = AppController.getUser().getUid();
 
         bindArticleItem(holder, position, item, mActivity);
@@ -231,7 +234,7 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
             .asBitmap()
             .into(target);
 
-        holder.image.setOnClickListener(new OnArticleClickListener(mActivity, url));
+        holder.image.setOnClickListener(new OnArticleClickListener(mActivity, articleItem));
     }
 
     private void loadImage(final ImageView image, String imageUrl, final boolean animate) {
