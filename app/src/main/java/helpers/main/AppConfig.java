@@ -1,6 +1,7 @@
 package helpers.main;
 
 import android.content.Context;
+
 import digitalbath.fansproject.R;
 
 /**
@@ -49,7 +50,7 @@ public enum AppConfig {
                 return ARSENAL;
             case "Liverpool Fans":
                 return LIVERPOOL;
-            case "Manchester United Fans":
+            case "ManUtd Fans":
                 return MANUTD;
             case "Real Madrid Fans":
                 return REALMADRID;
@@ -79,5 +80,41 @@ public enum AppConfig {
 
         return getTeamConfig(context).mTeamLeagueId;
 
+    }
+
+    public static String getTeamName(int teamId) {
+        switch (teamId) {
+            case 109:
+                return "Juventus";
+            case 108:
+                return "Inter";
+            case 98:
+                return "Milan";
+            case 57:
+                return "Arsenal";
+            case 64:
+                return "Liverpool";
+            case 66:
+                return "Manchester";
+            case 81:
+                return "Barcelona";
+            case 86:
+                return "Real";
+            default:
+                return "Juventus";
+        }
+    }
+
+    public static String getLeagueName(int leagueId) {
+        switch (leagueId) {
+            case 456:
+                return "Serie A";
+            case 445:
+                return "Premiere League";
+            case 457:
+                return "Primera Division";
+            default:
+                return "Unknown League";
+        }
     }
 }
