@@ -1,25 +1,19 @@
 package activities;
 
-import adapters.NewsAdapter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
-import android.view.GestureDetector;
-import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import android.webkit.WebViewClient;
@@ -32,13 +26,10 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import de.hdodenhof.circleimageview.CircleImageView;
 import digitalbath.fansproject.R;
 import helpers.main.AppHelper;
-import helpers.other.GetMetaDataFromUrl;
 import helpers.view.FansTextView;
 import models.ArticleData;
-import models.news.NewsItem;
-import models.team_data.TeamInfo;
+import models.news.ArticleItem;
 import networking.ArticleAPI;
-import networking.TeamAPI;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.TextNode;
@@ -55,12 +46,20 @@ public class ArticleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
 
-        NewsItem article = (NewsItem) getIntent().getSerializableExtra("article");
+        ArticleItem article = (ArticleItem) getIntent().getSerializableExtra("article");
 
         //loadWebView(url);
 
-        Call<ArticleData> call = ArticleAPI.service.getArticleData(article.getLink()
-            .split("url=")[1], "sx2E9aIbmK9NFgaqnAwa1OHWXjTxg6ehBIYBM4xO");
+        fetchArticleMainContent(article.getArticleUrl());
+
+        bindHeaderView(article);
+
+    }
+
+    private void fetchArticleMainContent(String articleUrl) {
+
+        Call<ArticleData> call = ArticleAPI.service.getArticleData(articleUrl,
+            "sx2E9aIbmK9NFgaqnAwa1OHWXjTxg6ehBIYBM4xO");
 
         call.enqueue(new Callback<ArticleData>() {
             @Override
@@ -73,14 +72,20 @@ public class ArticleActivity extends AppCompatActivity {
             public void onFailure(Call<ArticleData> call, Throwable t) {}
         });
 
+
+    }
+
+    private void bindHeaderView(ArticleItem article) {
+
         ImageView image = (ImageView) findViewById(R.id.image);
         TextView title = (TextView) findViewById(R.id.title);
-        final CircleImageView publisherIcon = (CircleImageView) findViewById(R.id.publisher_icon);
         TextView publisherNameAndTime = (TextView) findViewById(R.id.publisher_name_and_time);
+
+        final CircleImageView publisherIcon = (CircleImageView) findViewById(R.id.publisher_icon);
 
         title.setText(article.getTitle());
 
-        String url = article.getLink().split("url=")[1];
+        String url = article.getArticleUrl();
 
         if (TextUtils.isEmpty(article.getImageUrl())) {
 
@@ -118,9 +123,7 @@ public class ArticleActivity extends AppCompatActivity {
             .load("http://www." + domain + "/favicon.ico")
             .asBitmap()
             .into(target);
-
     }
-
 
     private void loadImage(final ImageView image, String imageUrl, final boolean animate) {
 

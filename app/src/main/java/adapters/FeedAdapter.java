@@ -44,6 +44,7 @@ import listeners.OnLikeClickListener;
 import listeners.OnPostCommentListener;
 import models.news.FeedItem;
 import models.news.MetaTag;
+import models.news.ArticleItem;
 import models.news.Post;
 import viewholders.FeedItemViewHolder;
 import viewholders.NewMessageViewHolder;
@@ -68,7 +69,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private CommentsAdapter mCommentsAdapter;
     private AppBarLayout appBarLayout;
 
-    public FeedAdapter(Activity activity, DatabaseReference database, RelativeLayout commentsCont, AppBarLayout appBarLayout) {
+    public FeedAdapter(Activity activity, DatabaseReference database,
+        RelativeLayout commentsCont, AppBarLayout appBarLayout) {
 
         mDataSet = new ArrayList<>();
 
@@ -218,14 +220,17 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         }
 
-        mDataSet.get(position).setArticleTitle(metaTag.getTitle());
-        mDataSet.get(position).setArticleImageUrl(metaTag.getImageUrl());
-        mDataSet.get(position).setArticleUrl(metaTag.getArticleUrl());
-        mDataSet.get(position).setIsArticleItem(true);
+        ArticleItem articleItem = new ArticleItem();
+        articleItem.setTitle(metaTag.getTitle());
+        articleItem.setImageUrl(metaTag.getImageUrl());
+        articleItem.setArticleUrl(metaTag.getArticleUrl());
+
+        mDataSet.get(position).setArticle(articleItem);
 
         isPreviewCreated = true;
     }
 
+    //region feed item
     private void bindFeedItem(final FeedItemViewHolder holder, final int position) {
 
         final FeedItem item = mDataSet.get(position);
@@ -255,54 +260,14 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.image.setBackground(null);
         }
 
-        if (item.isArticleItem()) {
+        if (item.getArticle() != null) {
 
-            holder.articleCont.setVisibility(View.VISIBLE);
-
-            //holder.articleCont.setOnClickListener(new OnArticleClickListener(mActivity, item));
-
-            holder.articleTitle.setText(item.getArticleTitle());
-
-            if (item.getArticleImageUrl() != null) {
-
-                Glide.with(mActivity)
-                        .load(item.getArticleImageUrl())
-                        .into(holder.articleImage);
-
-            }
-
-            if (item.getArticleUrl() != null) {
-
-                String domain = AppHelper.getDomainName(item.getArticleUrl());
-
-                holder.articlePublisher.setText(domain);
-
-                SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
-
-                    @Override
-                    public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
-
-                        holder.articlePublisherIcon.setImageBitmap(bitmap);
-
-                    }
-
-                    @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        super.onLoadFailed(e, errorDrawable);
-
-                        holder.articlePublisherIcon.setImageResource(R.drawable.publisher_icon);
-                    }
-                };
-
-                Glide.with(mActivity)
-                        .load("http://www." + domain + "/favicon.ico")
-                        .asBitmap()
-                        .into(target);
-
-            }
+            bindArticleCont(holder, item);
 
         } else {
+
             holder.articleCont.setVisibility(View.GONE);
+
         }
 
         holder.numberOfLikes.setText(Integer.toString(item.getLikes().size()) + " thumbs up");
@@ -343,6 +308,55 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         });
     }
 
+    private void bindArticleCont(final FeedItemViewHolder holder, FeedItem item) {
+
+        holder.articleCont.setVisibility(View.VISIBLE);
+
+        holder.itemView.setOnClickListener(new OnArticleClickListener(mActivity, item.getArticle()));
+
+        holder.articleTitle.setText(item.getArticle().getTitle());
+
+        if (item.getArticle().getImageUrl() != null) {
+
+            Glide.with(mActivity)
+                .load(item.getArticle().getImageUrl())
+                .into(holder.articleImage);
+
+        }
+
+        if (item.getArticle().getArticleUrl() != null) {
+
+            String domain = AppHelper.getDomainName(item.getArticle().getArticleUrl());
+
+            holder.articlePublisher.setText(domain);
+
+            SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
+
+                @Override
+                public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
+
+                    holder.articlePublisherIcon.setImageBitmap(bitmap);
+
+                }
+
+                @Override
+                public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                    super.onLoadFailed(e, errorDrawable);
+
+                    holder.articlePublisherIcon.setImageResource(R.drawable.publisher_icon);
+                }
+            };
+
+            Glide.with(mActivity)
+                .load("http://www." + domain + "/favicon.ico")
+                .asBitmap()
+                .into(target);
+
+        }
+    }
+    //endregion
+
+    //region new message
     private void bindNewMessageItem(final NewMessageViewHolder holder) {
 
         final FeedItem item = mDataSet.get(0);
@@ -358,16 +372,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             @Override
             public void onClick(View view) {
 
-                holder.title.setText(AppController.getUser().getDisplayName());
-
-                holder.avatar.animate().scaleY(0.8f).start();
-                holder.avatar.animate().scaleX(0.8f).start();
-
-                holder.message.setTypeface(AppHelper.getRobotoLight(mActivity));
-
-                holder.actions.setVisibility(View.VISIBLE);
-                holder.message.setVisibility(View.VISIBLE);
-
+                expandNewMessageItem(holder);
 
             }
         });
@@ -376,48 +381,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             @Override
             public void onClick(View v) {
 
-                FeedItem feedItemToPost = new FeedItem();
-                feedItemToPost.setUsername(AppController.getUser().getDisplayName());
-                feedItemToPost.setUserId(AppController.getUser().getUid());
-                feedItemToPost.setMessage(holder.message.getText().toString());
-                feedItemToPost.setDate(new Date().toString());
-                feedItemToPost.setAvatar(AppController.getUser().getPhotoUrl().toString());
+                postNewFeedItem(holder, item);
 
-                feedItemToPost.setArticleTitle(item.getArticleTitle());
-                feedItemToPost.setArticleImageUrl(item.getArticleImageUrl());
-                feedItemToPost.setArticlePublisher(item.getArticlePublisher());
-                feedItemToPost.setIsArticleItem(item.isArticleItem());
-                feedItemToPost.setArticleUrl(item.getArticleUrl());
-
-                if (!TextUtils.isEmpty(item.getImageUrl()))
-                    feedItemToPost.setImageUrl(item.getImageUrl());
-
-                String postId = mFeedDatabase.push().getKey();
-
-                Post post = new Post();
-                post.setUserName(AppController.getUser().getDisplayName());
-                post.setPostId(postId);
-
-                DatabaseReference mPostsRef = AppController
-                    .getFirebaseDatabase(mActivity).child("posts");
-
-                mPostsRef.child(AppController.getUser().getUid()).child(postId).setValue(post);
-
-                mFeedDatabase.child(postId).setValue(feedItemToPost);
-
-                holder.message.setText("");
-
-                AppHelper.hide(holder.post, mActivity);
-
-                AppHelper.hide(holder.message, mActivity);
-
-                holder.title.setText("Write a new post :)");
-                holder.title.startAnimation(AppHelper.getAnimationUp(mActivity));
-
-                holder.avatar.animate().scaleY(1f).start();
-                holder.avatar.animate().scaleX(1f).start();
-
-                isPreviewCreated = false;
             }
         });
 
@@ -425,19 +390,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             @Override
             public void onClick(View v) {
 
-                holder.title.setText("Write a new post :)");
-                holder.message.setText("");
+                discardNewMessage(holder);
 
-                holder.avatar.animate().scaleY(1f).start();
-                holder.avatar.animate().scaleX(1f).start();
-
-                holder.message.setVisibility(View.GONE);
-                holder.actions.setVisibility(View.GONE);
-                holder.image.setVisibility(View.GONE);
-                holder.articlePreview.setVisibility(View.GONE);
-                holder.progressBar.setVisibility(View.GONE);
-                isPreviewCreated = false;
-                appBarLayout.setExpanded(true, true);
             }
         });
 
@@ -470,6 +424,84 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         });
     }
 
+    private void postNewFeedItem(NewMessageViewHolder holder, FeedItem item) {
+
+        FeedItem feedItemToPost = new FeedItem();
+        feedItemToPost.setUsername(AppController.getUser().getDisplayName());
+        feedItemToPost.setUserId(AppController.getUser().getUid());
+        feedItemToPost.setMessage(holder.message.getText().toString());
+        feedItemToPost.setDate(new Date().toString());
+        feedItemToPost.setAvatar(AppController.getUser().getPhotoUrl().toString());
+
+        feedItemToPost.setArticle(item.getArticle());
+
+                /*feedItemToPost.setArticleImageUrl(item.getArticleImageUrl());
+                feedItemToPost.setArticlePublisher(item.getArticlePublisher());
+                feedItemToPost.setIsArticleItem(item.isArticleItem());
+                feedItemToPost.setArticleUrl(item.getArticleUrl());*/
+
+        if (!TextUtils.isEmpty(item.getImageUrl()))
+            feedItemToPost.setImageUrl(item.getImageUrl());
+
+        String postId = mFeedDatabase.push().getKey();
+
+        Post post = new Post();
+        post.setUserName(AppController.getUser().getDisplayName());
+        post.setPostId(postId);
+
+        DatabaseReference mPostsRef = AppController
+            .getFirebaseDatabase(mActivity).child("posts");
+
+        mPostsRef.child(AppController.getUser().getUid()).child(postId).setValue(post);
+
+        mFeedDatabase.child(postId).setValue(feedItemToPost);
+
+        holder.message.setText("");
+
+        AppHelper.hide(holder.post, mActivity);
+
+        AppHelper.hide(holder.message, mActivity);
+
+        holder.title.setText("Write a new post :)");
+        holder.title.startAnimation(AppHelper.getAnimationUp(mActivity));
+
+        holder.avatar.animate().scaleY(1f).start();
+        holder.avatar.animate().scaleX(1f).start();
+
+        isPreviewCreated = false;
+    }
+
+    private void expandNewMessageItem(NewMessageViewHolder holder) {
+
+        holder.title.setText(AppController.getUser().getDisplayName());
+
+        holder.avatar.animate().scaleY(0.8f).start();
+        holder.avatar.animate().scaleX(0.8f).start();
+
+        holder.message.setTypeface(AppHelper.getRobotoLight(mActivity));
+
+        holder.actions.setVisibility(View.VISIBLE);
+        holder.message.setVisibility(View.VISIBLE);
+
+    }
+
+    private void discardNewMessage(NewMessageViewHolder holder) {
+
+        holder.title.setText("Write a new post :)");
+        holder.message.setText("");
+
+        holder.avatar.animate().scaleY(1f).start();
+        holder.avatar.animate().scaleX(1f).start();
+
+        holder.message.setVisibility(View.GONE);
+        holder.actions.setVisibility(View.GONE);
+        holder.image.setVisibility(View.GONE);
+        holder.articlePreview.setVisibility(View.GONE);
+        holder.progressBar.setVisibility(View.GONE);
+        isPreviewCreated = false;
+        appBarLayout.setExpanded(true, true);
+    }
+
     private void loadPreviewImage(final String url, final FeedItem item, final NewMessageViewHolder holder) {
 
         SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
@@ -498,8 +530,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             public void onLoadFailed(Exception e, Drawable errorDrawable) {
                 super.onLoadFailed(e, errorDrawable);
 
-                GetMetaDataFromUrl worker = new GetMetaDataFromUrl(mActivity, FeedAdapter.this,
-                        holder, 0, item, isPreviewCreated);
+                GetMetaDataFromUrl worker = new GetMetaDataFromUrl(mActivity, FeedAdapter.this, holder, 0);
 
                 worker.execute(url);
 
@@ -511,6 +542,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 .asBitmap()
                 .into(target);
     }
+    //endregion
 
     public void getComments(String itemId) {
 

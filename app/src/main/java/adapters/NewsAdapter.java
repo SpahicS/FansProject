@@ -39,11 +39,8 @@ import listeners.OnArticleClickListener;
 import listeners.OnDislikeClickListener;
 import listeners.OnLikeClickListener;
 import listeners.OnPostCommentListener;
-import me.angrybyte.goose.Article;
-import me.angrybyte.goose.Configuration;
-import me.angrybyte.goose.ContentExtractor;
 import models.news.MetaTag;
-import models.news.NewsItem;
+import models.news.ArticleItem;
 import helpers.other.NewsItemDataService;
 import viewholders.ArticleViewHolder;
 
@@ -58,12 +55,12 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
 
     private final NewsItemDataService newsItemDataService;
     private Activity mActivity;
-    private ArrayList<NewsItem> mDataSet;
+    private ArrayList<ArticleItem> mDataSet;
     private DatabaseReference mNewsRef;
     private CommentsAdapter mCommentsAdapter;
     private RelativeLayout mCommentsCont;
 
-    public NewsAdapter(Activity activity, final ArrayList<NewsItem> mDataSet,
+    public NewsAdapter(Activity activity, final ArrayList<ArticleItem> mDataSet,
         RelativeLayout mCommentsCont) {
 
         this.mDataSet = mDataSet;
@@ -94,7 +91,7 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
     @Override
     public void onBindViewHolder(final ArticleViewHolder holder, final int position) {
 
-        final NewsItem item = mDataSet.get(position);
+        final ArticleItem item = mDataSet.get(position);
 
         final String uid = AppController.getUser().getUid();
 
@@ -104,13 +101,13 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                NewsItem newsItem = dataSnapshot.getValue(NewsItem.class);
+                ArticleItem articleItem = dataSnapshot.getValue(ArticleItem.class);
 
-                if (newsItem != null) {
+                if (articleItem != null) {
 
-                    item.setLikes(newsItem.getLikes());
-                    item.setDislikes(newsItem.getDislikes());
-                    item.setCommentsMap(newsItem.getCommentsMap());
+                    item.setLikes(articleItem.getLikes());
+                    item.setDislikes(articleItem.getDislikes());
+                    item.setCommentsMap(articleItem.getCommentsMap());
 
                     if (item.getLikes().containsKey(uid))
                         holder.setLikeButtonOn(mActivity);
@@ -175,7 +172,7 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
 
         final ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
 
-        NewsItem articleItem = mDataSet.get(position);
+        ArticleItem articleItem = mDataSet.get(position);
 
         articleItem.setImageUrl(metatag.getImageUrl());
 
@@ -184,18 +181,28 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
     }
 
     private void bindArticleItem(final ArticleViewHolder holder, final int position,
-        final NewsItem articleItem, final Activity mActivity) {
+        final ArticleItem articleItem, final Activity mActivity) {
 
         holder.title.setText(articleItem.getTitle());
 
-        String url = articleItem.getLink().split("url=")[1];
+        String url = articleItem.getArticleUrl();
 
         if (articleItem.getImageUrl() == null) {
 
             holder.image.setVisibility(View.VISIBLE);
-            GetMetaDataFromUrl worker = new GetMetaDataFromUrl
-                (mActivity, NewsAdapter.this, holder, position, null, false);
+
+            GetMetaDataFromUrl worker = new GetMetaDataFromUrl(mActivity,
+                NewsAdapter.this, holder, position);
+
             worker.execute(url);
+
+            /*GooseArticleDataParser worker1 = new GooseArticleDataParser(mActivity);
+
+            worker1.execute(url);
+
+            BoilerpipeArticleDataParser worker2 = new BoilerpipeArticleDataParser(mActivity);
+
+            worker2.execute(url);*/
 
         } else if (TextUtils.isEmpty(articleItem.getImageUrl())) {
 
@@ -234,7 +241,7 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
             .asBitmap()
             .into(target);
 
-        holder.image.setOnClickListener(new OnArticleClickListener(mActivity, articleItem));
+        holder.itemView.setOnClickListener(new OnArticleClickListener(mActivity, articleItem));
     }
 
     private void loadImage(final ImageView image, String imageUrl, final boolean animate) {
