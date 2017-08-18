@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -19,14 +20,20 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.nineoldandroids.view.ViewHelper;
 import de.hdodenhof.circleimageview.CircleImageView;
 import digitalbath.fansproject.R;
 import helpers.main.AppHelper;
 import helpers.view.FansTextView;
+import java.util.ArrayList;
 import models.ArticleData;
 import models.news.ArticleItem;
 import networking.ArticleAPI;
@@ -41,6 +48,11 @@ import retrofit2.Response;
 
 public class ArticleActivity extends AppCompatActivity {
 
+    private int currentOffset;
+    private boolean fabHidden;
+
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +66,9 @@ public class ArticleActivity extends AppCompatActivity {
 
         bindHeaderView(article);
 
+        initializeToolbar();
+
+        initializeScrollView();
     }
 
     private void fetchArticleMainContent(String articleUrl) {
@@ -236,13 +251,62 @@ public class ArticleActivity extends AppCompatActivity {
         }
     }
 
+    private void initializeToolbar() {
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+    }
+
+    private void initializeScrollView() {
+
+        final ImageView image = (ImageView) findViewById(R.id.image);
+
+        ObservableScrollView readerViewCont = (ObservableScrollView) findViewById(R.id.scroll_view);
+
+        readerViewCont.setScrollViewCallbacks(new ObservableScrollViewCallbacks() {
+            @Override
+            public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
+
+                ViewHelper.setTranslationY(image, scrollY / 2);
+
+                if (scrollY > currentOffset && scrollY > 50) {
+                    if (!fabHidden) {
+                        toolbar.animate().alpha(0.1f);
+                        fabHidden = true;
+                    }
+                } else if (scrollY < currentOffset) {
+                    if (fabHidden) {
+                        toolbar.animate().alpha(1f);
+                        fabHidden = false;
+                    }
+                }
+
+                currentOffset = scrollY;
+            }
+
+            @Override
+            public void onDownMotionEvent() {
+                if (!fabHidden) {
+                    toolbar.animate().alpha(0.1f);
+                    fabHidden = true;
+                }
+            }
+
+            @Override
+            public void onUpOrCancelMotionEvent(ScrollState scrollState) {}
+        });
+    }
+
     private void loadWebView(String url) {
 
-        WebView webView = (WebView) findViewById(R.id.article_web_view);
+        /*WebView webView = (WebView) findViewById(R.id.article_web_view);
         webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new CustomWebChromeClient());
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl(url);
+        webView.loadUrl(url);*/
     }
 
     @Override
