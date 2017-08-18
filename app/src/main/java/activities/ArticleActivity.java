@@ -1,12 +1,15 @@
 package activities;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -18,6 +21,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -71,7 +75,30 @@ public class ArticleActivity extends AppCompatActivity {
         initializeScrollView();
     }
 
-    private void fetchArticleMainContent(String articleUrl) {
+    private void fetchArticleMainContent(final String articleUrl) {
+
+        final Handler handler = new Handler();
+
+        final Runnable runnable = new Runnable() {
+
+            @Override public void run() {
+
+                Button openInBrowser = (Button) findViewById(R.id.open_in_browser);
+                openInBrowser.setVisibility(View.VISIBLE);
+
+                openInBrowser.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                            Uri.parse(articleUrl));
+
+                        startActivity(browserIntent);
+                    }
+                });
+            }
+        };
+
+        handler.postDelayed(runnable, 3000);
 
         Call<ArticleData> call = ArticleAPI.service.getArticleData(articleUrl,
             "sx2E9aIbmK9NFgaqnAwa1OHWXjTxg6ehBIYBM4xO");
@@ -80,7 +107,13 @@ public class ArticleActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ArticleData> call, Response<ArticleData> response) {
 
-                initializeSimplified(response.body().getContent());
+                if (response.body() != null) {
+
+                    initializeSimplified(response.body().getContent());
+
+                }
+
+                handler.removeCallbacks(runnable);
             }
 
             @Override

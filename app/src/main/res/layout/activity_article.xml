@@ -117,8 +117,9 @@
           android:id="@+id/article_content_loader"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
+          android:animateLayoutChanges="true"
           android:gravity="center"
-          android:orientation="horizontal"
+          android:orientation="vertical"
           >
         <com.wang.avi.AVLoadingIndicatorView
             android:id="@+id/AVLoadingIndicatorView2"
@@ -127,6 +128,20 @@
             android:layout_centerInParent="true"
             app:indicatorColor="@color/colorAccent"
             app:indicatorName="BallScaleMultipleIndicator"
+            />
+
+        <Button
+            android:id="@+id/open_in_browser"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/background_outline"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:text="Loading slow? Open in browser!"
+            android:textColor="@color/colorAccent"
+            android:textSize="16dp"
+            android:visibility="gone"
             />
       </LinearLayout>
 
