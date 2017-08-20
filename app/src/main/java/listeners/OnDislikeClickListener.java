@@ -9,7 +9,7 @@ import java.util.Map;
 
 import helpers.main.AppController;
 import models.news.FeedItem;
-import models.news.NewsItem;
+import models.news.ArticleItem;
 import helpers.other.NewsItemDataService;
 
 /**
@@ -19,7 +19,7 @@ import helpers.other.NewsItemDataService;
 public class OnDislikeClickListener implements View.OnClickListener {
 
     private FeedItem mFeedItem;
-    private NewsItem mNewsItem;
+    private ArticleItem mArticleItem;
     private NewsItemDataService mNewsItemDataService;
     private DatabaseReference mDataBaseReference;
     private String uid;
@@ -30,8 +30,8 @@ public class OnDislikeClickListener implements View.OnClickListener {
         this.uid = AppController.getUser().getUid();
     }
 
-    public OnDislikeClickListener(NewsItem newsItem, NewsItemDataService newsItemDataService) {
-        this.mNewsItem = newsItem;
+    public OnDislikeClickListener(ArticleItem articleItem, NewsItemDataService newsItemDataService) {
+        this.mArticleItem = articleItem;
         this.mNewsItemDataService = newsItemDataService;
         this.uid = AppController.getUser().getUid();
     }
@@ -54,10 +54,10 @@ public class OnDislikeClickListener implements View.OnClickListener {
                         .child("dislikes").child(uid).removeValue();
             }
         } else {
-            if (mNewsItem.getDislikes().containsKey(uid)) {
-                mNewsItemDataService.removeDislike(mNewsItem.getId(), uid);
+            if (mArticleItem.getDislikes().containsKey(uid)) {
+                mNewsItemDataService.removeDislike(mArticleItem.getId(), uid);
             } else {
-                mNewsItemDataService.saveDislike(mNewsItem.getId(), uid);
+                mNewsItemDataService.saveDislike(mArticleItem.getId(), uid);
             }
         }
     }

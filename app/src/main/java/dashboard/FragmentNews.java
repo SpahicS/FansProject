@@ -23,7 +23,7 @@ import adapters.NewsAdapter;
 import digitalbath.fansproject.R;
 import helpers.main.AppHelper;
 import models.news.Item;
-import models.news.NewsItem;
+import models.news.ArticleItem;
 import models.news.ResponseData;
 import networking.NewsAPI;
 import retrofit2.Call;
@@ -98,8 +98,8 @@ public class FragmentNews extends Fragment {
             @Override
             public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
 
-                ArrayList<NewsItem> newsItems = getNewsItems(response.body().getChannel().getNewsList());
-                newsAdapter = new NewsAdapter(getActivity(), newsItems, mCommentsCont);
+                ArrayList<ArticleItem> articleItems = getNewsItems(response.body().getChannel().getNewsList());
+                newsAdapter = new NewsAdapter(getActivity(), articleItems, mCommentsCont);
                 newsRecycler.setAdapter(newsAdapter);
 
                 progressBar.setVisibility(View.GONE);
@@ -113,15 +113,15 @@ public class FragmentNews extends Fragment {
         });
     }
 
-    private ArrayList<NewsItem> getNewsItems(List<Item> newsList) {
+    private ArrayList<ArticleItem> getNewsItems(List<Item> newsList) {
 
-        ArrayList<NewsItem> newsItems = new ArrayList<>(newsList.size());
+        ArrayList<ArticleItem> articleItems = new ArrayList<>(newsList.size());
 
         for (int i = 0; i < newsList.size(); i++) {
-            newsItems.add(new NewsItem(newsList.get(i)));
+            articleItems.add(new ArticleItem(newsList.get(i)));
         }
 
-        return newsItems;
+        return articleItems;
     }
 
     private String getNewsEditionCode() {

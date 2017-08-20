@@ -24,19 +24,15 @@ public class GetMetaDataFromUrl extends AsyncTask<String, Void, Void> {
     private MetaTag metaTag;
     private RecyclerView.ViewHolder mHolder;
     private RecyclerView.Adapter mAdapter;
-    private FeedItem mFeedItem;
-    private boolean mIsPreviewCreated;
     private int mPosition;
 
     public GetMetaDataFromUrl(Activity activity, RecyclerView.Adapter adapter,
-        RecyclerView.ViewHolder holder, int position, FeedItem item, boolean isPreviewCreated) {
+        RecyclerView.ViewHolder holder, int position) {
 
         this.mActivity = activity;
         this.mAdapter = adapter;
         this.mHolder = holder;
-        this.mFeedItem = item;
         this.mPosition = position;
-        this.mIsPreviewCreated = isPreviewCreated;
 
     }
 

@@ -9,7 +9,7 @@ import java.util.Map;
 
 import helpers.main.AppController;
 import models.news.FeedItem;
-import models.news.NewsItem;
+import models.news.ArticleItem;
 import helpers.other.NewsItemDataService;
 
 /**
@@ -19,7 +19,7 @@ import helpers.other.NewsItemDataService;
 public class OnLikeClickListener implements View.OnClickListener {
 
     private FeedItem mFeedItem;
-    private NewsItem mNewsItem;
+    private ArticleItem mArticleItem;
     private NewsItemDataService mNewsItemDataService;
     private DatabaseReference mDatabaseReference;
     private String uid;
@@ -30,8 +30,8 @@ public class OnLikeClickListener implements View.OnClickListener {
         this.uid = AppController.getUser().getUid();
     }
 
-    public OnLikeClickListener(NewsItem newsItem, NewsItemDataService newsItemDataService) {
-        this.mNewsItem = newsItem;
+    public OnLikeClickListener(ArticleItem articleItem, NewsItemDataService newsItemDataService) {
+        this.mArticleItem = articleItem;
         this.mNewsItemDataService = newsItemDataService;
         this.uid = AppController.getUser().getUid();
     }
@@ -56,10 +56,10 @@ public class OnLikeClickListener implements View.OnClickListener {
             }
         } else {
 
-            if (mNewsItem.getLikes().containsKey(uid)) {
-                mNewsItemDataService.removeLike(mNewsItem.getId(), uid);
+            if (mArticleItem.getLikes().containsKey(uid)) {
+                mNewsItemDataService.removeLike(mArticleItem.getId(), uid);
             } else {
-                mNewsItemDataService.saveLike(mNewsItem.getId(), uid);
+                mNewsItemDataService.saveLike(mArticleItem.getId(), uid);
             }
         }
     }

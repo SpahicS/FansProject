@@ -10,6 +10,7 @@ android {
     versionCode 1
     versionName "1.0"
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    multiDexEnabled true
   }
   buildTypes {
     release {
@@ -51,8 +52,12 @@ dependencies {
   compile 'com.squareup.retrofit2:converter-gson:2.2.0'
   compile 'com.caverock:androidsvg:1.2.1'
   compile 'com.txusballesteros:FitChart:1.0'
+  compile 'me.angrybyte.goose:goose:1.6.1'
+  compile 'com.github.ksoichiro:android-observablescrollview:1.5.2'
+  compile 'com.nineoldandroids:library:2.4.0'
 
   testCompile 'junit:junit:4.12'
+  compile project(':boilerpipe')
 }
 
 apply plugin: 'com.google.gms.google-services'

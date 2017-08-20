@@ -40,8 +40,8 @@ import listeners.OnArticleClickListener;
 import listeners.OnDislikeClickListener;
 import listeners.OnLikeClickListener;
 import listeners.OnPostCommentListener;
+import models.news.ArticleItem;
 import models.news.MetaTag;
-import models.news.NewsItem;
 import viewholders.ArticleViewHolder;
 
 /**
@@ -51,17 +51,16 @@ import viewholders.ArticleViewHolder;
 public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
         implements MetaTagsLoad {
 
-    private boolean shouldAnimateListItems = true;
-
     private final NewsItemDataService newsItemDataService;
+    private boolean shouldAnimateListItems = true;
     private Activity mActivity;
-    private ArrayList<NewsItem> mDataSet;
+    private ArrayList<ArticleItem> mDataSet;
     private DatabaseReference mNewsRef;
     private CommentsAdapter mCommentsAdapter;
     private RelativeLayout mCommentsCont;
 
-    public NewsAdapter(Activity activity, final ArrayList<NewsItem> mDataSet,
-        RelativeLayout mCommentsCont) {
+    public NewsAdapter(Activity activity, final ArrayList<ArticleItem> mDataSet,
+                       RelativeLayout mCommentsCont) {
 
         this.mDataSet = mDataSet;
         this.mActivity = activity;
@@ -72,7 +71,8 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
         this.newsItemDataService = new NewsItemDataService(mNewsRef);
 
         new Handler().postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 shouldAnimateListItems = false;
             }
         }, 200);
@@ -91,7 +91,7 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
     @Override
     public void onBindViewHolder(final ArticleViewHolder holder, final int position) {
 
-        final NewsItem item = mDataSet.get(position);
+        final ArticleItem item = mDataSet.get(position);
 
         final String uid = AppController.getUser().getUid();
 
@@ -101,13 +101,13 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                NewsItem newsItem = dataSnapshot.getValue(NewsItem.class);
+                ArticleItem articleItem = dataSnapshot.getValue(ArticleItem.class);
 
-                if (newsItem != null) {
+                if (articleItem != null) {
 
-                    item.setLikes(newsItem.getLikes());
-                    item.setDislikes(newsItem.getDislikes());
-                    item.setCommentsMap(newsItem.getCommentsMap());
+                    item.setLikes(articleItem.getLikes());
+                    item.setDislikes(articleItem.getDislikes());
+                    item.setCommentsMap(articleItem.getCommentsMap());
 
                     if (item.getLikes().containsKey(uid))
                         holder.setLikeButtonOn(mActivity);
@@ -136,7 +136,8 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         });
 
         holder.likeCont.setOnClickListener(new OnLikeClickListener(item, newsItemDataService));
@@ -172,7 +173,7 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
 
         final ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
 
-        NewsItem articleItem = mDataSet.get(position);
+        ArticleItem articleItem = mDataSet.get(position);
 
         articleItem.setImageUrl(metatag.getImageUrl());
 
@@ -181,18 +182,28 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
     }
 
     private void bindArticleItem(final ArticleViewHolder holder, final int position,
-        final NewsItem articleItem, final Activity mActivity) {
+                                 final ArticleItem articleItem, final Activity mActivity) {
 
         holder.title.setText(articleItem.getTitle());
 
-        String url = articleItem.getLink().split("url=")[1];
+        String url = articleItem.getArticleUrl();
 
         if (articleItem.getImageUrl() == null) {
 
             holder.image.setVisibility(View.VISIBLE);
-            GetMetaDataFromUrl worker = new GetMetaDataFromUrl
-                (mActivity, NewsAdapter.this, holder, position, null, false);
+
+            GetMetaDataFromUrl worker = new GetMetaDataFromUrl(mActivity,
+                    NewsAdapter.this, holder, position);
+
             worker.execute(url);
+
+            /*GooseArticleDataParser worker1 = new GooseArticleDataParser(mActivity);
+
+            worker1.execute(url);
+
+            BoilerpipeArticleDataParser worker2 = new BoilerpipeArticleDataParser(mActivity);
+
+            worker2.execute(url);*/
 
         } else if (TextUtils.isEmpty(articleItem.getImageUrl())) {
 
@@ -207,7 +218,7 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
         String domain = AppHelper.getDomainName(url);
 
         holder.publisherNameAndTime.setText(domain + " · " + AppHelper
-            .getTimeDifference(articleItem.getPubDate()));
+                .getTimeDifference(articleItem.getPubDate()));
 
         SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
 
@@ -227,11 +238,11 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
         };
 
         Glide.with(mActivity)
-            .load("http://www." + domain + "/favicon.ico")
-            .asBitmap()
-            .into(target);
+                .load("http://www." + domain + "/favicon.ico")
+                .asBitmap()
+                .into(target);
 
-        holder.image.setOnClickListener(new OnArticleClickListener(mActivity, articleItem));
+        holder.itemView.setOnClickListener(new OnArticleClickListener(mActivity, articleItem));
     }
 
     private void loadImage(final ImageView image, String imageUrl, final boolean animate) {

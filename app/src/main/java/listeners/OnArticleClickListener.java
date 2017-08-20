@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import activities.ArticleActivity;
-import models.news.NewsItem;
+import models.news.ArticleItem;
 
 /**
  * Created by Spaja on 28-Apr-17.
@@ -15,9 +15,9 @@ import models.news.NewsItem;
 public class OnArticleClickListener implements View.OnClickListener {
 
     private Activity mActivity;
-    private NewsItem mArticle;
+    private ArticleItem mArticle;
 
-    public OnArticleClickListener(Activity mActivity, NewsItem article) {
+    public OnArticleClickListener(Activity mActivity, ArticleItem article) {
         this.mActivity = mActivity;
         this.mArticle = article;
     }

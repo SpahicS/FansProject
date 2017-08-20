@@ -21,14 +21,14 @@ public class FeedItem {
     private String videoUrl;
     private String date;
     private String avatar;
-    private String articleTitle;
-    private String articleImageUrl;
-    private String articlePublisher;
-    private String articleUrl;
-    private boolean articleItem;
+
+    private Map<String, ArticleItem> article = new HashMap<>();
+
     private HashMap<String, Boolean> likes = new HashMap<>();
     private HashMap<String, Boolean> dislikes = new HashMap<>();
     private HashMap<String, Comment> comments = new HashMap<>();
+
+    public FeedItem() {}
 
     public String getId() {
         return id;
@@ -102,44 +102,12 @@ public class FeedItem {
         return dislikes;
     }
 
-    public String getArticleTitle() {
-        return articleTitle;
+    public ArticleItem getArticle() {
+        return article.get("article");
     }
 
-    public void setArticleTitle(String articleTitle) {
-        this.articleTitle = articleTitle;
-    }
-
-    public String getArticleImageUrl() {
-        return articleImageUrl;
-    }
-
-    public void setArticleImageUrl(String articleImageUrl) {
-        this.articleImageUrl = articleImageUrl;
-    }
-
-    public String getArticlePublisher() {
-        return articlePublisher;
-    }
-
-    public void setArticlePublisher(String articlePublisher) {
-        this.articlePublisher = articlePublisher;
-    }
-
-    public boolean isArticleItem() {
-        return articleItem;
-    }
-
-    public void setIsArticleItem(boolean isArticleItem) {
-        articleItem = isArticleItem;
-    }
-
-    public String getArticleUrl() {
-        return articleUrl;
-    }
-
-    public void setArticleUrl(String articleUrl) {
-        this.articleUrl = articleUrl;
+    public void setArticle(ArticleItem articleItem) {
+        this.article.put("article", articleItem);
     }
 
     public ArrayList<Comment> getComments() {
