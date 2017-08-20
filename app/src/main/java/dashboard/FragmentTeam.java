@@ -19,6 +19,7 @@ import com.bumptech.glide.load.model.StreamEncoder;
 import com.bumptech.glide.load.resource.file.FileToStreamDecoder;
 import com.caverock.androidsvg.SVG;
 import com.txusballesteros.widgets.FitChart;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import helpers.main.AppConfig;
 
@@ -172,7 +173,6 @@ public class FragmentTeam extends Fragment {
         teamInfoCall.enqueue(new Callback<TeamInfo>() {
             @Override
             public void onResponse(Call<TeamInfo> call, Response<TeamInfo> response) {
-
                 Uri uri = Uri.parse(response.body().getCrestUrl());
 
                 requestBuilder
@@ -256,7 +256,6 @@ public class FragmentTeam extends Fragment {
 
         if (fixtures.get(0).getStatus() == null) {
 
-            String awayTeamId = fixtures.get(0).getLinks().getAwayTeam().getHref().split("teams/")[1];
             matchDate.setText(fixtures.get(0).getDate());
 
             if (!fixtures.get(0).getAwayTeamName()

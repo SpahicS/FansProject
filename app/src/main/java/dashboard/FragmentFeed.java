@@ -27,7 +27,7 @@ public class FragmentFeed extends Fragment {
 
     private RecyclerView mRecyclerView;
     private FeedAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private LinearLayoutManager mLayoutManager;
     private RelativeLayout mCommentsCont;
 
     public static FragmentFeed newInstance(int sectionNumber) {
@@ -58,7 +58,7 @@ public class FragmentFeed extends Fragment {
         AppBarLayout appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.appbar);
 
         mAdapter = new FeedAdapter(getActivity(), AppController.getFirebaseDatabase
-            (getContext()).child("feed"), mCommentsCont, appBarLayout);
+            (getContext()).child("feed"), mCommentsCont, appBarLayout, mRecyclerView.getLayoutManager());
 
         mRecyclerView.setAdapter(mAdapter);
 
