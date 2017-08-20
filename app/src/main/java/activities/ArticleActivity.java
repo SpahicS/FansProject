@@ -1,49 +1,42 @@
 package activities;
 
-import adapters.NewsAdapter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
-import android.view.GestureDetector;
-import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
-
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import de.hdodenhof.circleimageview.CircleImageView;
-import digitalbath.fansproject.R;
-import helpers.main.AppHelper;
-import helpers.other.GetMetaDataFromUrl;
-import helpers.view.FansTextView;
-import models.ArticleData;
-import models.news.NewsItem;
-import models.team_data.TeamInfo;
-import networking.ArticleAPI;
-import networking.TeamAPI;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import digitalbath.fansproject.R;
+import helpers.main.AppHelper;
+import helpers.view.FansTextView;
+import models.ArticleData;
+import models.news.NewsItem;
+import networking.ArticleAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -60,7 +53,7 @@ public class ArticleActivity extends AppCompatActivity {
         //loadWebView(url);
 
         Call<ArticleData> call = ArticleAPI.service.getArticleData(article.getLink()
-            .split("url=")[1], "sx2E9aIbmK9NFgaqnAwa1OHWXjTxg6ehBIYBM4xO");
+                .split("url=")[1], "sx2E9aIbmK9NFgaqnAwa1OHWXjTxg6ehBIYBM4xO");
 
         call.enqueue(new Callback<ArticleData>() {
             @Override
@@ -70,7 +63,8 @@ public class ArticleActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ArticleData> call, Throwable t) {}
+            public void onFailure(Call<ArticleData> call, Throwable t) {
+            }
         });
 
         ImageView image = (ImageView) findViewById(R.id.image);
@@ -95,7 +89,7 @@ public class ArticleActivity extends AppCompatActivity {
         String domain = AppHelper.getDomainName(url);
 
         publisherNameAndTime.setText(domain + " · " + AppHelper
-            .getTimeDifference(article.getPubDate()));
+                .getTimeDifference(article.getPubDate()));
 
         SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
 
@@ -115,9 +109,9 @@ public class ArticleActivity extends AppCompatActivity {
         };
 
         Glide.with(ArticleActivity.this)
-            .load("http://www." + domain + "/favicon.ico")
-            .asBitmap()
-            .into(target);
+                .load("http://www." + domain + "/favicon.ico")
+                .asBitmap()
+                .into(target);
 
     }
 
@@ -132,8 +126,8 @@ public class ArticleActivity extends AppCompatActivity {
                 if (animate) {
 
                     TransitionDrawable td = new TransitionDrawable(new Drawable[]{
-                        new ColorDrawable(Color.TRANSPARENT),
-                        new BitmapDrawable(ArticleActivity.this.getResources(), bitmap)
+                            new ColorDrawable(Color.TRANSPARENT),
+                            new BitmapDrawable(ArticleActivity.this.getResources(), bitmap)
                     });
 
                     image.setImageDrawable(td);
@@ -156,9 +150,9 @@ public class ArticleActivity extends AppCompatActivity {
         };
 
         Glide.with(ArticleActivity.this)
-            .load(imageUrl)
-            .asBitmap()
-            .into(target);
+                .load(imageUrl)
+                .asBitmap()
+                .into(target);
 
     }
 
@@ -173,15 +167,15 @@ public class ArticleActivity extends AppCompatActivity {
         final Elements elements = document.body().select("span, p, h1, h2, h3, img, tr");
 
         if (elements != null && elements.size() > 1 && elements.get(0).tag().getName().equals("tr") &&
-            elements.get(0).getAllElements() != null && elements.get(0).getAllElements().size() > 0 &&
-            elements.get(0).getAllElements().get(0) != null && elements.get(0).getAllElements().get(0).tag().getName().equals("tr"))
+                elements.get(0).getAllElements() != null && elements.get(0).getAllElements().size() > 0 &&
+                elements.get(0).getAllElements().get(0) != null && elements.get(0).getAllElements().get(0).tag().getName().equals("tr"))
             elements.remove(0);
 
         for (int i = 0; i < elements.size(); i++) {
 
             if (elements.get(i).tag().getName().equals("p") || elements.get(i).tag().getName().equals("h1")
-                || elements.get(i).tag().getName().equals("h2") || elements.get(i).tag().getName().equals("h3")
-                || elements.get(i).tag().getName().equals("tr")) {
+                    || elements.get(i).tag().getName().equals("h2") || elements.get(i).tag().getName().equals("h3")
+                    || elements.get(i).tag().getName().equals("tr")) {
 
                 Elements pElements = elements.get(i).getAllElements();
 
@@ -205,12 +199,12 @@ public class ArticleActivity extends AppCompatActivity {
                     textView.setText(Html.fromHtml(text));
 
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT);
                     lp.setMargins((int) getResources().getDimension(R.dimen.simplified_paragraph_other_margin),
-                        (int) getResources().getDimension(R.dimen.simplified_paragraph_top_margin),
-                        (int) getResources().getDimension(R.dimen.simplified_paragraph_other_margin),
-                        (int) getResources().getDimension(R.dimen.simplified_paragraph_other_margin));
+                            (int) getResources().getDimension(R.dimen.simplified_paragraph_top_margin),
+                            (int) getResources().getDimension(R.dimen.simplified_paragraph_other_margin),
+                            (int) getResources().getDimension(R.dimen.simplified_paragraph_other_margin));
                     textView.setLayoutParams(lp);
 
                     if (elements.get(i).tag().getName().equals("p"))
@@ -250,7 +244,8 @@ public class ArticleActivity extends AppCompatActivity {
 
     private class CustomWebChromeClient extends WebChromeClient {
 
-        @Override public void onProgressChanged(WebView view, int newProgress) {
+        @Override
+        public void onProgressChanged(WebView view, int newProgress) {
             super.onProgressChanged(view, newProgress);
             if (newProgress > 70)
                 findViewById(R.id.progress_bar).setVisibility(View.GONE);

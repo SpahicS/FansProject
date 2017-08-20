@@ -28,23 +28,20 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import helpers.other.GetMetaDataFromUrl;
 import java.util.ArrayList;
 
 import digitalbath.fansproject.R;
 import helpers.main.AppController;
 import helpers.main.AppHelper;
+import helpers.other.GetMetaDataFromUrl;
 import helpers.other.MetaTagsLoad;
+import helpers.other.NewsItemDataService;
 import listeners.OnArticleClickListener;
 import listeners.OnDislikeClickListener;
 import listeners.OnLikeClickListener;
 import listeners.OnPostCommentListener;
-import me.angrybyte.goose.Article;
-import me.angrybyte.goose.Configuration;
-import me.angrybyte.goose.ContentExtractor;
 import models.news.MetaTag;
 import models.news.NewsItem;
-import helpers.other.NewsItemDataService;
 import viewholders.ArticleViewHolder;
 
 /**
