@@ -78,7 +78,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="Real Madric CG"
-                        android:textSize="18dp"
+                        android:textSize="21dp"
                         />
 
                     <ImageView
@@ -416,8 +416,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
+                            android:layout_marginRight="5dp"
                             android:layout_toLeftOf="@+id/home_team_past_matches_points"
+                            android:maxLines="1"
                             android:text="juventus fc"
+                            android:ellipsize="end"
                             />
 
                         <helpers.view.FansTextView
@@ -427,6 +430,9 @@
                             android:layout_alignParentRight="true"
                             android:text="32"
                             android:textAlignment="viewEnd"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+
                             />
 
                         <helpers.view.FansTextView
@@ -435,8 +441,11 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_below="@id/home_team_past_matches"
+                            android:layout_marginRight="5dp"
                             android:layout_toLeftOf="@+id/away_team_past_matches_points"
-                            android:text="bologna FSC"
+                            android:maxLines="1"
+                            android:text="Manchester United"
+                            android:ellipsize="end"
                             />
 
                         <helpers.view.FansTextView
@@ -447,6 +456,8 @@
                             android:layout_below="@id/home_team_past_matches_points"
                             android:text="45"
                             android:textAlignment="viewEnd"
+                            android:maxLines="1"
+                            android:ellipsize="end"
                             />
 
                     </RelativeLayout>
@@ -476,6 +487,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
+                            android:layout_marginRight="5dp"
                             android:layout_toLeftOf="@+id/home_team2_past_matches_points"
                             android:text="juventus fc"
                             />
@@ -494,6 +506,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_below="@id/home_team2_past_matches"
+                            android:layout_marginRight="5dp"
                             android:layout_toLeftOf="@+id/away_team2_past_matches_points"
                             android:text="bologna FSC"
                             />
