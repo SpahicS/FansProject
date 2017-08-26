@@ -11,19 +11,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.RelativeLayout;
 
 import com.wang.avi.AVLoadingIndicatorView;
-import helpers.main.AppConfig;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import adapters.NewsAdapter;
 import digitalbath.fansproject.R;
+import helpers.main.AppConfig;
 import helpers.main.AppHelper;
-import models.news.Item;
 import models.news.ArticleItem;
+import models.news.Item;
 import models.news.ResponseData;
 import networking.NewsAPI;
 import retrofit2.Call;

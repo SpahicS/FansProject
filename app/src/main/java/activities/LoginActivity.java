@@ -11,8 +11,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -27,8 +27,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.wang.avi.AVLoadingIndicatorView;
+
 import digitalbath.fansproject.R;
-import helpers.main.AppConfig;
 import helpers.main.AppController;
 import helpers.main.AppHelper;
 
@@ -44,7 +44,8 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
 
 
-    @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -58,25 +59,25 @@ public class LoginActivity extends AppCompatActivity {
     private void initializeMainView() {
 
         ((TextView) findViewById(R.id.app_name))
-            .setText(getResources().getString(R.string.app_name));
+                .setText(getResources().getString(R.string.app_name));
     }
 
     private void initializeFirebaseAuthentication() {
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build();
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
 
         final GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
-            .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
-                @Override
-                public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                    int sd = 0;
-                }
-            })
-            .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-            .build();
+                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                        int sd = 0;
+                    }
+                })
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
 
         Button signInButton = (Button) findViewById(R.id.sign_in_button);
 
@@ -110,6 +111,9 @@ public class LoginActivity extends AppCompatActivity {
                     AppController.initializeFirebaseDatabase(LoginActivity.this);
 
                     Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intent);
 
                 } else {
@@ -132,32 +136,32 @@ public class LoginActivity extends AppCompatActivity {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
 
         mAuth.signInWithCredential(credential)
-            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
 
-                    if (!task.isSuccessful()) {
+                        if (!task.isSuccessful()) {
 
-                        LinearLayout loginCont = (LinearLayout) findViewById(R.id.login_cont);
-                        loginCont.setVisibility(View.VISIBLE);
-                        loginCont.startAnimation(AppHelper.getAnimationDown(LoginActivity.this));
+                            LinearLayout loginCont = (LinearLayout) findViewById(R.id.login_cont);
+                            loginCont.setVisibility(View.VISIBLE);
+                            loginCont.startAnimation(AppHelper.getAnimationDown(LoginActivity.this));
 
-                        AVLoadingIndicatorView progressBar = (AVLoadingIndicatorView) findViewById(R.id.progress_bar);
-                        progressBar.setVisibility(View.INVISIBLE);
-                        progressBar.startAnimation(AppHelper.getAnimationUp(LoginActivity.this));
+                            AVLoadingIndicatorView progressBar = (AVLoadingIndicatorView) findViewById(R.id.progress_bar);
+                            progressBar.setVisibility(View.INVISIBLE);
+                            progressBar.startAnimation(AppHelper.getAnimationUp(LoginActivity.this));
 
-                        AppHelper.showToast(LoginActivity.this, "Something went wrong");
+                            AppHelper.showToast(LoginActivity.this, "Something went wrong");
+                        }
+
                     }
-
-                }
-            });
+                });
     }
 
     private void initializeStatusBar() {
 
         getWindow().getDecorView()
-            .setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                .setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
         Window win = getWindow();
         WindowManager.LayoutParams winParams = win.getAttributes();

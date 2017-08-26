@@ -1,17 +1,17 @@
 package activities;
 
-import adapters.DashboardPagerAdapter;
-
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
-
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import adapters.DashboardPagerAdapter;
 import digitalbath.fansproject.R;
+import helpers.main.AppHelper;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -19,6 +19,7 @@ public class DashboardActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private AppBarLayout appBarLayout;
+    private boolean exit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,5 +125,21 @@ public class DashboardActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (exit) {
+            finish();
+        } else {
+            AppHelper.showToast(DashboardActivity.this, "Press Back again to exit.");
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 3 * 1000);
+        }
     }
 }

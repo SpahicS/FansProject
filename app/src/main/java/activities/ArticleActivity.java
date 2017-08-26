@@ -65,8 +65,6 @@ public class ArticleActivity extends AppCompatActivity {
 
         //loadWebView(url);
 
-        Call<ArticleData> call = ArticleAPI.service.getArticleData(article.getLink()
-                .split("url=")[1], "sx2E9aIbmK9NFgaqnAwa1OHWXjTxg6ehBIYBM4xO");
         fetchArticleMainContent(article.getArticleUrl());
 
         bindHeaderView(article);

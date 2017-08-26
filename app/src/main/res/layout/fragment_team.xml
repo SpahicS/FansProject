@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -9,14 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/fragment_bcg">
+
         <com.wang.avi.AVLoadingIndicatorView
             android:id="@+id/progressBarFeed"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerInParent="true"
             app:indicatorColor="@color/colorAccent"
-            app:indicatorName="BallScaleMultipleIndicator"
-            />
+            app:indicatorName="BallScaleMultipleIndicator" />
 
 
         <LinearLayout
@@ -83,14 +83,6 @@
                         android:text="Real Madric CG"
                         android:textSize="18dp" />
 
-                    <ImageView
-                        android:id="@+id/away_team_logo"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="5dp"
-                        android:src="@android:drawable/ic_input_add"
-                        android:visibility="invisible" />
                 </LinearLayout>
 
                 <helpers.view.FansTextView
@@ -514,6 +506,7 @@
                 android:id="@+id/league_table_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
                 android:layout_marginTop="15dp">
 
             </android.support.v7.widget.RecyclerView>
@@ -521,4 +514,4 @@
         </LinearLayout>
 
     </RelativeLayout>
-</android.support.v4.widget.NestedScrollView>
+</ScrollView>

@@ -68,6 +68,8 @@ public class FragmentProfile extends Fragment {
         initializeViews(rootView);
         bindProfileHeader(rootView);
 
+        expandAppBar();
+
         initializeCountryList();
         initializeRecyclerView();
 
@@ -77,6 +79,11 @@ public class FragmentProfile extends Fragment {
             (mCountryCodesRecycler, mCountryList, mLayoutManager));
 
         return rootView;
+    }
+
+    private void expandAppBar() {
+        AppBarLayout appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.appbar);
+        appBarLayout.setExpanded(true, true);
     }
 
     private void getNumberOfPosts(final View rootView) {

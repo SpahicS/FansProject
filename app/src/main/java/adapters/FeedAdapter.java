@@ -153,8 +153,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 break;
         }
 
-        if (shouldAnimateListItems)
-            AppHelper.animateItemAppearance(holder.itemView, position);
+//        if (shouldAnimateListItems)
+//            AppHelper.animateItemAppearance(holder.itemView, position);
 
     }
 
