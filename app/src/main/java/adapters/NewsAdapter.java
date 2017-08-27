@@ -28,20 +28,20 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import helpers.other.GetMetaDataFromUrl;
 import java.util.ArrayList;
 
 import digitalbath.fansproject.R;
 import helpers.main.AppController;
 import helpers.main.AppHelper;
+import helpers.other.GetMetaDataFromUrl;
 import helpers.other.MetaTagsLoad;
+import helpers.other.NewsItemDataService;
 import listeners.OnArticleClickListener;
 import listeners.OnDislikeClickListener;
 import listeners.OnLikeClickListener;
 import listeners.OnPostCommentListener;
-import models.news.MetaTag;
 import models.news.ArticleItem;
-import helpers.other.NewsItemDataService;
+import models.news.MetaTag;
 import viewholders.ArticleViewHolder;
 
 /**
@@ -51,9 +51,8 @@ import viewholders.ArticleViewHolder;
 public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
         implements MetaTagsLoad {
 
-    private boolean shouldAnimateListItems = true;
-
     private final NewsItemDataService newsItemDataService;
+    private boolean shouldAnimateListItems = true;
     private Activity mActivity;
     private ArrayList<ArticleItem> mDataSet;
     private DatabaseReference mNewsRef;
@@ -61,7 +60,7 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
     private RelativeLayout mCommentsCont;
 
     public NewsAdapter(Activity activity, final ArrayList<ArticleItem> mDataSet,
-        RelativeLayout mCommentsCont) {
+                       RelativeLayout mCommentsCont) {
 
         this.mDataSet = mDataSet;
         this.mActivity = activity;
@@ -72,7 +71,8 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
         this.newsItemDataService = new NewsItemDataService(mNewsRef);
 
         new Handler().postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 shouldAnimateListItems = false;
             }
         }, 200);
@@ -136,7 +136,8 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         });
 
         holder.likeCont.setOnClickListener(new OnLikeClickListener(item, newsItemDataService));
@@ -181,7 +182,7 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
     }
 
     private void bindArticleItem(final ArticleViewHolder holder, final int position,
-        final ArticleItem articleItem, final Activity mActivity) {
+                                 final ArticleItem articleItem, final Activity mActivity) {
 
         holder.title.setText(articleItem.getTitle());
 
@@ -192,7 +193,7 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
             holder.image.setVisibility(View.VISIBLE);
 
             GetMetaDataFromUrl worker = new GetMetaDataFromUrl(mActivity,
-                NewsAdapter.this, holder, position);
+                    NewsAdapter.this, holder, position);
 
             worker.execute(url);
 
@@ -217,7 +218,7 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
         String domain = AppHelper.getDomainName(url);
 
         holder.publisherNameAndTime.setText(domain + " · " + AppHelper
-            .getTimeDifference(articleItem.getPubDate()));
+                .getTimeDifference(articleItem.getPubDate()));
 
         SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
 
@@ -237,9 +238,9 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
         };
 
         Glide.with(mActivity)
-            .load("http://www." + domain + "/favicon.ico")
-            .asBitmap()
-            .into(target);
+                .load("http://www." + domain + "/favicon.ico")
+                .asBitmap()
+                .into(target);
 
         holder.itemView.setOnClickListener(new OnArticleClickListener(mActivity, articleItem));
     }

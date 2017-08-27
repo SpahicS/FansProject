@@ -19,6 +19,7 @@ import com.bumptech.glide.load.model.StreamEncoder;
 import com.bumptech.glide.load.resource.file.FileToStreamDecoder;
 import com.caverock.androidsvg.SVG;
 import com.txusballesteros.widgets.FitChart;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import helpers.main.AppConfig;
 
@@ -163,7 +164,7 @@ public class FragmentTeam extends Fragment {
 
     }
 
-    private void getTeamData(int teamId) {
+    private void getTeamData() {
 
         final ImageView awayTeamLogo = (ImageView) rootView.findViewById(R.id.away_team_logo);
 
@@ -255,7 +256,6 @@ public class FragmentTeam extends Fragment {
 
         if (fixtures.get(0).getStatus() == null) {
 
-            String awayTeamId = fixtures.get(0).getLinks().getAwayTeam().getHref().split("teams/")[1];
             matchDate.setText(fixtures.get(0).getDate());
 
             if (!fixtures.get(0).getAwayTeamName()
@@ -269,27 +269,25 @@ public class FragmentTeam extends Fragment {
 
             setSecondPastMatchUnknown();
 
-            getTeamData(Integer.parseInt(awayTeamId));
+            getTeamData();
 
         } else {
 
             for (int i = 0; i < response.body().getFixtures().size(); i++) {
 
-                if (fixtures.get(i).getStatus().equals("TIMED") || fixtures.get(i).getStatus().equals("SCHEDULED")) {
+                if (fixtures.get(i).getStatus().equals("TIMED")
+                        || fixtures.get(i).getStatus().equals("SCHEDULED")) {
 
                     matchDate.setText(fixtures.get(i).getDate());
-                    String awayTeamId;
 
                     if (!fixtures.get(i).getAwayTeamName()
                             .contains(AppConfig.getTeamName(AppConfig.getTeamId(getContext())))) {
-                        awayTeamId = fixtures.get(i).getLinks().getAwayTeam().getHref().split("teams/")[1];
                         awayTeamName.setText(fixtures.get(i).getAwayTeamName());
                     } else {
-                        awayTeamId = fixtures.get(i).getLinks().getHomeTeam().getHref().split("teams/")[1];
                         awayTeamName.setText(fixtures.get(i).getHomeTeamName());
                     }
 
-                    getTeamData(Integer.parseInt(awayTeamId));
+                    getTeamData();
 
                     boolean isFirstMatch = i == 0;
                     boolean isSecondMatch = i == 1;

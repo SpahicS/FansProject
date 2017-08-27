@@ -68,9 +68,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private RelativeLayout mCommentsCont;
     private CommentsAdapter mCommentsAdapter;
     private AppBarLayout appBarLayout;
+    private LinearLayoutManager mLayoutManager;
 
     public FeedAdapter(Activity activity, DatabaseReference database,
-        RelativeLayout commentsCont, AppBarLayout appBarLayout) {
+                       RelativeLayout commentsCont, AppBarLayout appBarLayout, RecyclerView.LayoutManager layoutManager) {
 
         mDataSet = new ArrayList<>();
 
@@ -78,6 +79,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         mFeedDatabase = database;
         mCommentsCont = commentsCont;
         this.appBarLayout = appBarLayout;
+        this.mLayoutManager = (LinearLayoutManager) layoutManager;
 
         this.mFeedDatabase.addValueEventListener(new ValueEventListener() {
 
@@ -391,6 +393,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             public void onClick(View v) {
 
                 discardNewMessage(holder);
+                notifyItemChanged(0);
+                mLayoutManager.scrollToPositionWithOffset(0, 0);
 
             }
         });
