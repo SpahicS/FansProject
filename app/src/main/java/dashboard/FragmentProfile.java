@@ -17,21 +17,18 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import helpers.other.Rank;
 import java.util.ArrayList;
 
 import adapters.CountryCodesAdapter;
 import digitalbath.fansproject.R;
 import helpers.main.AppController;
 import helpers.main.AppHelper;
+import helpers.other.Rank;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import listeners.OnCountrySelectorClickListener;
 import models.news.Country;
-import models.news.FeedItem;
-import models.news.Post;
 
 /**
  * Created by unexpected_err on 29/04/2017.
@@ -76,7 +73,7 @@ public class FragmentProfile extends Fragment {
         getNumberOfPosts(rootView);
 
         mSelector.setOnClickListener(new OnCountrySelectorClickListener
-            (mCountryCodesRecycler, mCountryList, mLayoutManager));
+                (mCountryCodesRecycler, mCountryList, mLayoutManager));
 
         return rootView;
     }
@@ -91,7 +88,7 @@ public class FragmentProfile extends Fragment {
         //final ArrayList<Post> posts = new ArrayList<>();
 
         AppController.getFirebaseDatabase(getContext()).child("posts").child(AppController.getUser()
-            .getUid()).addValueEventListener(new ValueEventListener() {
+                .getUid()).addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -105,19 +102,19 @@ public class FragmentProfile extends Fragment {
                 //numberOfPostsTextView.setText(String.valueOf(posts.size()));
 
                 TextView numberOfPostsTextView = (TextView)
-                    rootView.findViewById(R.id.number_of_posts);
+                        rootView.findViewById(R.id.number_of_posts);
 
                 numberOfPostsTextView.setText(String.valueOf(numberOfPosts));
 
                 Rank rank = Rank.getRank(numberOfPosts);
 
                 TextView rankLabel = (TextView)
-                    rootView.findViewById(R.id.rank_label);
+                        rootView.findViewById(R.id.rank_label);
 
                 rankLabel.setText(String.valueOf(rank.getRankLabel()));
 
                 ImageView rankBadge = (ImageView)
-                    rootView.findViewById(R.id.rank_badge);
+                        rootView.findViewById(R.id.rank_badge);
 
                 rankBadge.setColorFilter(ContextCompat.getColor(getContext(), rank.getRankBadgeColor()));
 

@@ -1,6 +1,7 @@
 package dashboard;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -72,6 +73,8 @@ public class FragmentTeam extends Fragment {
 
         initializeViews(rootView);
 
+        expandAppBar();
+
         initializeLeagueTableRecyclerView(rootView);
 
         getLeagueTable();
@@ -79,6 +82,11 @@ public class FragmentTeam extends Fragment {
         getTeamFixtures();
 
         return rootView;
+    }
+
+    private void expandAppBar() {
+        AppBarLayout appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.appbar);
+        appBarLayout.setExpanded(true, true);
     }
 
     private void initializeViews(View rootView) {
