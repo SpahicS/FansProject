@@ -65,8 +65,6 @@ public class ArticleActivity extends AppCompatActivity {
 
         //loadWebView(url);
 
-        Call<ArticleData> call = ArticleAPI.service.getArticleData(article.getLink()
-                .split("url=")[1], "sx2E9aIbmK9NFgaqnAwa1OHWXjTxg6ehBIYBM4xO");
         fetchArticleMainContent(article.getArticleUrl());
 
         bindHeaderView(article);
@@ -244,7 +242,7 @@ public class ArticleActivity extends AppCompatActivity {
                 if (!(pElements.size() == 2 && (pElements.get(1).tag().getName().equals("img") || pElements.get(1).tag().getName().equals("p")))
                         && !elements.get(i).html().equals("") && !String.valueOf(Html.fromHtml(elements.get(i).html())).equals("")) {
 
-                    FansTextView textView = new FansTextView(this, "light");
+                    FansTextView textView = new FansTextView(this.getApplicationContext(), "light");
 
                     textView.setTextColor(Color.BLACK);
                     textView.setLineSpacing(1.4f, 1.4f);

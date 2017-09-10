@@ -1,36 +1,22 @@
 package dashboard;
 
-import android.graphics.drawable.PictureDrawable;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.GenericRequestBuilder;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.model.StreamEncoder;
-import com.bumptech.glide.load.resource.file.FileToStreamDecoder;
-import com.caverock.androidsvg.SVG;
 import com.txusballesteros.widgets.FitChart;
-import com.wang.avi.AVLoadingIndicatorView;
 
-import helpers.main.AppConfig;
-
-import java.io.InputStream;
 import java.util.ArrayList;
 
-import helpers.svg.SvgDecoder;
-import helpers.svg.SvgDrawableTranscoder;
-import helpers.svg.SvgSoftwareLayerSetter;
 import adapters.LeagueTableAdapter;
 import digitalbath.fansproject.R;
+import helpers.main.AppConfig;
 import models.team_data.Fixture;
 import models.team_data.Fixtures;
 import models.team_data.LeagueTable;
@@ -65,7 +51,6 @@ public class FragmentTeam extends Fragment {
     private TextView awayTeam2PastMatchGoals;
     private TextView matchDate;
     private TextView leagueName;
-    private GenericRequestBuilder<Uri, InputStream, SVG, PictureDrawable> requestBuilder;
     private View rootView;
 
     public FragmentTeam() {
@@ -88,7 +73,7 @@ public class FragmentTeam extends Fragment {
 
         initializeViews(rootView);
 
-        initializeSVGHelper();
+        expandAppBar();
 
         initializeLeagueTableRecyclerView(rootView);
 
@@ -97,6 +82,11 @@ public class FragmentTeam extends Fragment {
         getTeamFixtures();
 
         return rootView;
+    }
+
+    private void expandAppBar() {
+        AppBarLayout appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.appbar);
+        appBarLayout.setExpanded(true, true);
     }
 
     private void initializeViews(View rootView) {
@@ -114,38 +104,25 @@ public class FragmentTeam extends Fragment {
         leagueName = (TextView) rootView.findViewById(R.id.league_name);
     }
 
-    private void initializeSVGHelper() {
-
-        requestBuilder = Glide.with(getContext())
-                .using(Glide.buildStreamModelLoader(Uri.class, getContext()), InputStream.class)
-                .from(Uri.class)
-                .as(SVG.class)
-                .transcode(new SvgDrawableTranscoder(), PictureDrawable.class)
-                .sourceEncoder(new StreamEncoder())
-                .cacheDecoder(new FileToStreamDecoder<>(new SvgDecoder()))
-                .decoder(new SvgDecoder())
-                .placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher)
-                .animate(android.R.anim.fade_in)
-                .listener(new SvgSoftwareLayerSetter<Uri>());
-    }
-
     private void bindOverViewData(View rootView, TeamStanding teamStanding) {
 
         setChartValue((FitChart) rootView.findViewById(R.id.chart_matches),
-                (TextView) rootView.findViewById(R.id.number_of_matches), 0f, 38f, teamStanding.getPlayedGames());
+                (TextView) rootView.findViewById(R.id.number_of_matches), teamStanding.getPlayedGames());
 
         setChartValue((FitChart) rootView.findViewById(R.id.chart_win),
-                (TextView) rootView.findViewById(R.id.number_win), 0f, 38f, teamStanding.getWins());
+                (TextView) rootView.findViewById(R.id.number_win), teamStanding.getWins());
 
         setChartValue((FitChart) rootView.findViewById(R.id.chart_lost),
-                (TextView) rootView.findViewById(R.id.number_lost), 0f, 38f, teamStanding.getLoses());
+                (TextView) rootView.findViewById(R.id.number_lost), teamStanding.getLoses());
 
         setChartValue((FitChart) rootView.findViewById(R.id.chart_draw),
-                (TextView) rootView.findViewById(R.id.number_draw), 0f, 38f, teamStanding.getDraws());
+                (TextView) rootView.findViewById(R.id.number_draw), teamStanding.getDraws());
     }
 
-    private void setChartValue(FitChart chart, TextView number, float min, float max, float value) {
+    private void setChartValue(FitChart chart, TextView number, float value) {
+
+        float min = 0f;
+        float max = 38;
 
         chart.setMinValue(min);
         chart.setMaxValue(max);
@@ -162,30 +139,6 @@ public class FragmentTeam extends Fragment {
         leagueTableRecycler.setFocusable(false);
         leagueTableRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
-    }
-
-    private void getTeamData() {
-
-        final ImageView awayTeamLogo = (ImageView) rootView.findViewById(R.id.away_team_logo);
-
-        teamInfoCall = TeamAPI.service.getTeamData(AppConfig.getTeamId(getContext()), API_KEY);
-
-        teamInfoCall.enqueue(new Callback<TeamInfo>() {
-            @Override
-            public void onResponse(Call<TeamInfo> call, Response<TeamInfo> response) {
-                Uri uri = Uri.parse(response.body().getCrestUrl());
-
-                requestBuilder
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .load(uri)
-                        .into(awayTeamLogo);
-
-            }
-
-            @Override
-            public void onFailure(Call<TeamInfo> call, Throwable t) {
-            }
-        });
     }
 
     private void getLeagueTable() {
@@ -269,8 +222,6 @@ public class FragmentTeam extends Fragment {
 
             setSecondPastMatchUnknown();
 
-            getTeamData();
-
         } else {
 
             for (int i = 0; i < response.body().getFixtures().size(); i++) {
@@ -286,8 +237,6 @@ public class FragmentTeam extends Fragment {
                     } else {
                         awayTeamName.setText(fixtures.get(i).getHomeTeamName());
                     }
-
-                    getTeamData();
 
                     boolean isFirstMatch = i == 0;
                     boolean isSecondMatch = i == 1;

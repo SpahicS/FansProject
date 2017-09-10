@@ -114,7 +114,6 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
                     else
                         holder.setLikeButtonOff(mActivity);
 
-
                     if (item.getDislikes().containsKey(uid))
                         holder.setDislikeButtonOn(mActivity);
                     else

@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+
 import digitalbath.fansproject.R;
+import helpers.other.FontCache;
 
 /**
  * Created by unexpected_err on 06/08/2017.
@@ -50,21 +52,17 @@ public class FansTextView extends android.support.v7.widget.AppCompatTextView {
         switch (fontStyle) {
 
             case "light":
-                Typeface tf = Typeface.createFromAsset(context.getAssets(),
-                    "fonts/opensanslight.ttf");
+                Typeface tf = FontCache.getTypeface(context, "fonts/opensanslight.ttf");
                 setTypeface(tf);
                 break;
             case "regular":
-                Typeface tf2 = Typeface.createFromAsset(context.getAssets(),
-                    "fonts/opensansregular.ttf");
+                Typeface tf2 = FontCache.getTypeface(context, "fonts/opensansregular.ttf");
                 setTypeface(tf2);
                 break;
             case "bold":
-                Typeface tf1 = Typeface.createFromAsset(context.getAssets(),
-                    "fonts/opensansboldd.ttf");
+                Typeface tf1 = FontCache.getTypeface(context, "fonts/opensansboldd.ttf");
                 setTypeface(tf1);
                 break;
         }
-
     }
 }
