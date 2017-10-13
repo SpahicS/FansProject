@@ -72,7 +72,7 @@ public class LeagueTableAdapter extends RecyclerView.Adapter<LeagueTableViewHold
         holder.teamName.setText(standing.get(position).getTeamName());
         holder.wins.setText(String.valueOf(standing.get(position).getWins()));
         holder.draws.setText(String.valueOf(standing.get(position).getDraws()));
-        holder.loses.setText(String.valueOf(standing.get(position).getLoses()));
+        holder.loses.setText(String.valueOf(standing.get(position).getLosses()));
         holder.points.setText(String.valueOf(standing.get(position).getPoints()));
 
         if (standing.get(position).getCrestURI() != null) {

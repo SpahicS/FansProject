@@ -113,7 +113,7 @@ public class FragmentTeam extends Fragment {
                 (TextView) rootView.findViewById(R.id.number_win), teamStanding.getWins());
 
         setChartValue((FitChart) rootView.findViewById(R.id.chart_lost),
-                (TextView) rootView.findViewById(R.id.number_lost), teamStanding.getLoses());
+                (TextView) rootView.findViewById(R.id.number_lost), teamStanding.getLosses());
 
         setChartValue((FitChart) rootView.findViewById(R.id.chart_draw),
                 (TextView) rootView.findViewById(R.id.number_draw), teamStanding.getDraws());

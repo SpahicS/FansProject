@@ -13,7 +13,7 @@ public class TeamStanding {
     private int points;
     private int wins;
     private int draws;
-    private int loses;
+    private int losses;
     private Home home;
     private Away away;
 
@@ -45,8 +45,8 @@ public class TeamStanding {
         return draws;
     }
 
-    public int getLoses() {
-        return loses;
+    public int getLosses() {
+        return losses;
     }
 
     public Home getHome() {

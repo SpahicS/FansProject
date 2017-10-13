@@ -121,8 +121,6 @@ public class ArticleActivity extends AppCompatActivity {
             public void onFailure(Call<ArticleData> call, Throwable t) {
             }
         });
-
-
     }
 
     private void bindHeaderView(ArticleItem article) {

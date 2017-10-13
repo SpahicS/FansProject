@@ -85,8 +85,6 @@ public class FragmentProfile extends Fragment {
 
     private void getNumberOfPosts(final View rootView) {
 
-        //final ArrayList<Post> posts = new ArrayList<>();
-
         AppController.getFirebaseDatabase(getContext()).child("posts").child(AppController.getUser()
                 .getUid()).addValueEventListener(new ValueEventListener() {
 
@@ -96,10 +94,8 @@ public class FragmentProfile extends Fragment {
                 int numberOfPosts = 0;
 
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    //posts.add(data.getValue(Post.class));
                     numberOfPosts++;
                 }
-                //numberOfPostsTextView.setText(String.valueOf(posts.size()));
 
                 TextView numberOfPostsTextView = (TextView)
                         rootView.findViewById(R.id.number_of_posts);
@@ -151,6 +147,17 @@ public class FragmentProfile extends Fragment {
 
         String[] countryCodes = getActivity().getResources().getStringArray(R.array.country_codes);
         String[] countryNames = getActivity().getResources().getStringArray(R.array.country_names);
+
+//        TODO  Na ovaj fazon napraviti abecedni red
+//        List<String> list = Arrays.asList(countryCodes);
+//
+//        PriorityQueue<String> priorityQueue = new PriorityQueue<>();
+//        priorityQueue.addAll(list);
+//
+//        List<String> newList = new ArrayList<>();
+//        while (!priorityQueue.isEmpty()) {
+//            newList.add(priorityQueue.remove());
+//        }
 
         int position = 0;
 
