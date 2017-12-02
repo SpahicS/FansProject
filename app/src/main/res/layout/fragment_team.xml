@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -81,8 +81,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="Real Madric CG"
-                        android:textSize="21dp"
-                        />
+                        android:textColor="@color/bronze"
+                        android:textSize="21dp" />
 
                 </LinearLayout>
 
@@ -458,6 +458,8 @@
                             android:layout_alignParentStart="true"
                             android:layout_marginRight="5dp"
                             android:layout_toLeftOf="@+id/home_team2_past_matches_points"
+                            android:maxLines="1"
+                            android:ellipsize="end"
                             android:text="juventus fc" />
 
                         <helpers.view.FansTextView
@@ -475,6 +477,8 @@
                             android:layout_below="@id/home_team2_past_matches"
                             android:layout_marginRight="5dp"
                             android:layout_toLeftOf="@+id/away_team2_past_matches_points"
+                            android:maxLines="1"
+                            android:ellipsize="end"
                             android:text="bologna FSC" />
 
                         <helpers.view.FansTextView
@@ -524,8 +528,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/league_table_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="15dp">
 
             </android.support.v7.widget.RecyclerView>
@@ -533,4 +536,4 @@
         </LinearLayout>
 
     </RelativeLayout>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>

@@ -66,7 +66,7 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
         this.mActivity = activity;
         this.mCommentsCont = mCommentsCont;
 
-        mNewsRef = AppController.getFirebaseDatabase(mActivity).child("news");
+        mNewsRef = AppController.getFirebaseDatabase().child("news");
 
         this.newsItemDataService = new NewsItemDataService(mNewsRef);
 

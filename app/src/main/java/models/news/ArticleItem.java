@@ -41,7 +41,7 @@ public class ArticleItem implements Serializable {
     }
 
     public String getArticleUrl() {
-        return url != null ? url : getLink().split("url=")[1];
+        return url != null ? url : getLink();
     }
 
     public void setArticleUrl(String url) {

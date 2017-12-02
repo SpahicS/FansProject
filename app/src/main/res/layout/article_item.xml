@@ -15,35 +15,36 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:padding="20dp"
-        >
+        android:padding="15dp">
+
         <helpers.view.FansTextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="12dp"
             android:layout_toRightOf="@+id/avatar"
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:lineSpacingExtra="5dp"
-            android:text="Something something else Something something else Somet else"
-            android:textSize="20dp"
-            app:font_style="light"
-            />
+            android:text="Somethsomething else Something something else Somet else"
+            android:textColor="@color/black"
+            android:textSize="19dp"
+            app:font_style="regular" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignBottom="@+id/article_image"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/publisher_icon"
-                android:layout_width="17dp"
-                android:layout_height="17dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:background="@drawable/circle_bcg"
-                android:scaleType="centerCrop"
-                />
+                android:scaleType="centerCrop" />
+
             <helpers.view.FansTextView
                 android:id="@+id/publisher_name_and_time"
                 android:layout_width="match_parent"
@@ -52,9 +53,8 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="Juventus.com"
-                android:textColor="#e1c747"
-                android:textSize="13sp"
-                />
+                android:textColor="@color/gray"
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -62,9 +62,9 @@
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="230dp"
+        android:layout_marginBottom="15dp"
         android:scaleType="centerCrop"
-        android:visibility="visible"
-        />
+        android:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/comment_likes_details"
@@ -72,12 +72,10 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/message"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginRight="17dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <helpers.view.FansTextView
             android:id="@+id/likes"
@@ -86,8 +84,7 @@
             android:layout_below="@+id/username"
             android:layout_toRightOf="@+id/avatar"
             android:text="4 thumbs up"
-            android:textSize="10sp"
-            />
+            android:textSize="10sp" />
 
         <helpers.view.FansTextView
             android:layout_width="wrap_content"
@@ -98,8 +95,7 @@
             android:layout_toRightOf="@+id/avatar"
             android:text="&#183;"
             android:textSize="12sp"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
         <helpers.view.FansTextView
             android:id="@+id/unlikes"
@@ -109,8 +105,8 @@
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/avatar"
             android:text="2 thumbs down"
-            android:textSize="10sp"
-            />
+            android:textSize="10sp" />
+
         <helpers.view.FansTextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
@@ -121,8 +117,7 @@
             android:layout_toRightOf="@+id/avatar"
             android:text="&#183;"
             android:textSize="12sp"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
         <helpers.view.FansTextView
             android:id="@+id/comments"
@@ -132,20 +127,17 @@
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/avatar"
             android:text="3 comments"
-            android:textSize="10sp"
-            />
+            android:textSize="10sp" />
 
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/actions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/message"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        >
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/like_cont"
@@ -155,8 +147,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingLeft="15dp"
-            >
+            android:paddingLeft="15dp">
 
             <ImageView
                 android:id="@+id/like_icon"
@@ -165,8 +156,7 @@
                 android:layout_marginLeft="3dp"
                 android:layout_marginTop="1dp"
                 android:tint="@color/light_gray_with_tr"
-                app:srcCompat="@drawable/ic_thumb_up"
-                />
+                app:srcCompat="@drawable/ic_thumb_up" />
 
             <helpers.view.FansTextView
                 android:id="@+id/like"
@@ -178,8 +168,7 @@
                 android:gravity="center"
                 android:text="thumb up"
                 android:textColor="@color/main_color_dark"
-                android:textSize="13sp"
-                />
+                android:textSize="13sp" />
 
         </LinearLayout>
 
@@ -191,8 +180,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="horizontal"
-            android:paddingLeft="4dp"
-            >
+            android:paddingLeft="4dp">
 
             <ImageView
                 android:id="@+id/imageView5"
@@ -201,8 +189,7 @@
                 android:layout_marginLeft="3dp"
                 android:layout_marginTop="2dp"
                 android:tint="@color/light_gray_with_tr"
-                app:srcCompat="@drawable/ic_comment"
-                />
+                app:srcCompat="@drawable/ic_comment" />
 
             <helpers.view.FansTextView
                 android:id="@+id/comment"
@@ -214,8 +201,7 @@
                 android:gravity="center"
                 android:text="comment"
                 android:textColor="@color/main_color_dark"
-                android:textSize="13sp"
-                />
+                android:textSize="13sp" />
 
         </LinearLayout>
 
@@ -227,8 +213,8 @@
             android:layout_weight="1"
             android:gravity="right|center_vertical"
             android:orientation="horizontal"
-            android:paddingRight="17dp"
-            >
+            android:paddingRight="17dp">
+
             <ImageView
                 android:id="@+id/unlike_icon"
                 android:layout_width="13dp"
@@ -237,8 +223,8 @@
                 android:layout_marginTop="1dp"
                 android:rotation="180"
                 android:tint="@color/light_gray_with_tr"
-                app:srcCompat="@drawable/ic_thumb_up"
-                />
+                app:srcCompat="@drawable/ic_thumb_up" />
+
             <helpers.view.FansTextView
                 android:id="@+id/unlike"
                 android:layout_width="wrap_content"
@@ -249,8 +235,7 @@
                 android:gravity="center"
                 android:text="thumb down"
                 android:textColor="@color/main_color_dark"
-                android:textSize="13sp"
-                />
+                android:textSize="13sp" />
         </LinearLayout>
 
     </LinearLayout>

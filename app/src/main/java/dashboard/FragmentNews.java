@@ -72,7 +72,7 @@ public class FragmentNews extends Fragment {
 
         expandAppBar();
 
-        getNewsList(AppConfig.getNewsQuery(getContext()));
+        getNewsList(AppConfig.getNewsQuery());
 
         initializeNewsRecycler();
 
@@ -102,7 +102,7 @@ public class FragmentNews extends Fragment {
 
         String edition = getNewsEditionCode();
 
-        NewsAPI.service.getNewsData(query, 20, "rss", edition).enqueue(new Callback<ResponseData>() {
+        NewsAPI.service.getNewsData(query, query, 20, edition, edition, edition).enqueue(new Callback<ResponseData>() {
             @Override
             public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
 

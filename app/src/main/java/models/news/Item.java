@@ -12,14 +12,14 @@ public class Item {
     @Element(required = false)
     private String title;
 
-    @Attribute(required = false)
-    private String isPermaLink;
-
     @Element(required = false)
     private String link;
 
     @Element(required = false)
     private String guid;
+
+    @Element(required = false)
+    private String category;
 
     @Element(required = false)
     private String pubDate;
@@ -37,10 +37,6 @@ public class Item {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
-    }
-
-    public String getIsPermaLink() {
-        return isPermaLink;
     }
 
     public String getLink() {
@@ -72,7 +68,7 @@ public class Item {
     }
 
     public String getHashCode() {
-        return String.valueOf(getGuid().hashCode());
+        return String.valueOf(getTitle().hashCode());
     }
 
 

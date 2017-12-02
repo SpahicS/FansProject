@@ -143,7 +143,7 @@ public class FragmentTeam extends Fragment {
 
     private void getLeagueTable() {
 
-        leagueTableCall = TeamAPI.service.getLeagueTable(AppConfig.getTeamLeagueId(getContext()), API_KEY);
+        leagueTableCall = TeamAPI.service.getLeagueTable(AppConfig.getTeamLeagueId(), API_KEY);
 
         leagueTableCall.enqueue(new Callback<LeagueTable>() {
             @Override
@@ -155,7 +155,7 @@ public class FragmentTeam extends Fragment {
 
                 for (int i = 0; i < response.body().getStanding().size(); i++) {
                     if (response.body().getStanding().get(i).getTeamName()
-                            .contains(AppConfig.getTeamName(AppConfig.getTeamId(getContext())))) {
+                            .contains(AppConfig.getTeamName(AppConfig.getTeamId()))) {
                         bindOverViewData(rootView, response.body().getStanding().get(i));
                         break;
                     }
@@ -183,7 +183,7 @@ public class FragmentTeam extends Fragment {
 
     private void getTeamFixtures() {
 
-        teamFixturesCall = TeamAPI.service.getTeamFixtures(AppConfig.getTeamId(getContext()), API_KEY);
+        teamFixturesCall = TeamAPI.service.getTeamFixtures(AppConfig.getTeamId(), API_KEY);
 
         teamFixturesCall.enqueue(new Callback<Fixtures>() {
             @Override
@@ -212,7 +212,7 @@ public class FragmentTeam extends Fragment {
             matchDate.setText(fixtures.get(0).getDate());
 
             if (!fixtures.get(0).getAwayTeamName()
-                    .contains(AppConfig.getTeamName(AppConfig.getTeamId(getContext())))) {
+                    .contains(AppConfig.getTeamName(AppConfig.getTeamId()))) {
                 awayTeamName.setText(fixtures.get(0).getAwayTeamName());
             } else {
                 awayTeamName.setText(fixtures.get(0).getHomeTeamName());
@@ -232,7 +232,7 @@ public class FragmentTeam extends Fragment {
                     matchDate.setText(fixtures.get(i).getDate());
 
                     if (!fixtures.get(i).getAwayTeamName()
-                            .contains(AppConfig.getTeamName(AppConfig.getTeamId(getContext())))) {
+                            .contains(AppConfig.getTeamName(AppConfig.getTeamId()))) {
                         awayTeamName.setText(fixtures.get(i).getAwayTeamName());
                     } else {
                         awayTeamName.setText(fixtures.get(i).getHomeTeamName());

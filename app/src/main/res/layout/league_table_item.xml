@@ -38,34 +38,30 @@
 
         <helpers.view.FansTextView
             android:id="@+id/wins"
-            android:layout_width="wrap_content"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:text="55"
-            />
+            android:layout_marginRight="15dp"
+            android:text="55" />
 
         <helpers.view.FansTextView
             android:id="@+id/draws"
-            android:layout_width="wrap_content"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
-            android:text="33"
-            />
+            android:text="33" />
 
         <helpers.view.FansTextView
             android:id="@+id/loses"
-            android:layout_width="wrap_content"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="25dp"
-            android:text="33"
-            />
+            android:text="00" />
 
         <helpers.view.FansTextView
             android:id="@+id/points"
-            android:layout_width="wrap_content"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
-            android:text="22"
-            />
+            android:text="22" />
 
     </LinearLayout>
 

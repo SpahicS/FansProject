@@ -58,7 +58,7 @@ public class FragmentFeed extends Fragment {
         AppBarLayout appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.appbar);
 
         mAdapter = new FeedAdapter(getActivity(), AppController.getFirebaseDatabase
-            (getContext()).child("feed"), mCommentsCont, appBarLayout, mRecyclerView.getLayoutManager());
+            ().child("feed"), mCommentsCont, appBarLayout, mRecyclerView.getLayoutManager());
 
         mRecyclerView.setAdapter(mAdapter);
 

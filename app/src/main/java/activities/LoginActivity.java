@@ -3,6 +3,7 @@ package activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -67,6 +68,51 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initializeFirebaseAuthentication() {
 
+        mAuth = FirebaseAuth.getInstance();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+
+                FirebaseUser mUser = firebaseAuth.getCurrentUser();
+
+                if (mUser != null) {
+
+                    AppController.setUser(mUser);
+                    AppController.initializeFirebaseDatabase();
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(intent);
+                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        }
+                    }, 700);
+
+
+                } else {
+
+                    LinearLayout loginCont = (LinearLayout) findViewById(R.id.login_cont);
+                    loginCont.setVisibility(View.VISIBLE);
+                    loginCont.startAnimation(AppHelper.getAnimationUp(LoginActivity.this));
+
+                    AVLoadingIndicatorView progressBar = (AVLoadingIndicatorView) findViewById(R.id.progress_bar);
+                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.startAnimation(AppHelper.getAnimationDown(LoginActivity.this));
+
+                    initializeGoogleSignIn();
+
+                }
+            }
+        };
+    }
+
+    private void initializeGoogleSignIn() {
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -99,39 +145,6 @@ public class LoginActivity extends AppCompatActivity {
                 progressBar.startAnimation(AppHelper.getAnimationUp(LoginActivity.this));
             }
         });
-
-        mAuth = FirebaseAuth.getInstance();
-
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-
-                FirebaseUser mUser = firebaseAuth.getCurrentUser();
-
-                if (mUser != null) {
-
-                    AppController.setUser(mUser);
-                    AppController.initializeFirebaseDatabase(LoginActivity.this);
-
-                    Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(intent);
-
-                } else {
-
-                    LinearLayout loginCont = (LinearLayout) findViewById(R.id.login_cont);
-                    loginCont.setVisibility(View.VISIBLE);
-                    loginCont.startAnimation(AppHelper.getAnimationUp(LoginActivity.this));
-
-                    AVLoadingIndicatorView progressBar = (AVLoadingIndicatorView) findViewById(R.id.progress_bar);
-                    progressBar.setVisibility(View.INVISIBLE);
-                    progressBar.startAnimation(AppHelper.getAnimationDown(LoginActivity.this));
-
-                }
-            }
-        };
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {

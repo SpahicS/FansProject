@@ -1,8 +1,6 @@
 package helpers.main;
 
-import android.content.Context;
-
-import digitalbath.fansproject.R;
+import digitalbath.fansproject.BuildConfig;
 
 /**
  * Created by unexpected_err on 27/07/2017.
@@ -34,51 +32,51 @@ public enum AppConfig {
         mTeamLeagueId = teamLeagueId;
     }
 
-    private static AppConfig getTeamConfig(Context context) {
+    private static AppConfig getTeamConfig() {
 
-        switch (context.getResources().getString(R.string.app_name)) {
+        switch (BuildConfig.APP_CONFIG) {
 
-            case "Juve Fans":
+            case "Juventus":
                 return JUVENTUS;
-            case "Barca Fans":
+            case "Barcelona":
                 return BARCELONA;
-            case "Inter Milan Fans":
+            case "InterMilan":
                 return INTERMILAN;
-            case "Milan Fans":
+            case "Milan":
                 return MILAN;
-            case "Arsenal Fans":
+            case "Arsenal":
                 return ARSENAL;
-            case "Liverpool Fans":
+            case "Liverpool":
                 return LIVERPOOL;
-            case "ManUtd Fans":
+            case "ManUtd":
                 return MANUTD;
-            case "Real Madrid Fans":
+            case "RealMadrid":
                 return REALMADRID;
         }
 
         return JUVENTUS;
     }
 
-    public static String getNewsQuery(Context context) {
+    public static String getNewsQuery() {
 
-        return getTeamConfig(context).mNewsQuery;
+        return getTeamConfig().mNewsQuery;
     }
 
-    public static String getDatabaseQuery(Context context) {
+    public static String getDatabaseQuery() {
 
-        return getTeamConfig(context).mDatabaseQuery;
-
-    }
-
-    public static int getTeamId(Context context) {
-
-        return getTeamConfig(context).mTeamId;
+        return getTeamConfig().mDatabaseQuery;
 
     }
 
-    public static int getTeamLeagueId(Context context) {
+    public static int getTeamId() {
 
-        return getTeamConfig(context).mTeamLeagueId;
+        return getTeamConfig().mTeamId;
+
+    }
+
+    public static int getTeamLeagueId() {
+
+        return getTeamConfig().mTeamLeagueId;
 
     }
 

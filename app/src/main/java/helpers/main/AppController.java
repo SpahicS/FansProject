@@ -16,18 +16,18 @@ public class AppController extends Application {
     public static DatabaseReference mDatabase;
     public static FirebaseUser mUser;
 
-    public static void initializeFirebaseDatabase(Context context) {
+    public static void initializeFirebaseDatabase() {
 
         mDatabase = FirebaseDatabase.getInstance()
-                .getReference().child(AppConfig.getDatabaseQuery(context));
+                .getReference().child(AppConfig.getDatabaseQuery());
 
     }
 
-    public static DatabaseReference getFirebaseDatabase(Context context) {
+    public static DatabaseReference getFirebaseDatabase() {
 
         if (mDatabase == null)
             mDatabase = FirebaseDatabase.getInstance()
-                    .getReference().child(AppConfig.getDatabaseQuery(context));
+                    .getReference().child(AppConfig.getDatabaseQuery());
 
         return mDatabase;
 

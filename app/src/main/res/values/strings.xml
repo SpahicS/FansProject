@@ -1,21 +1,5 @@
 <resources>
 
-  <!--<string name="app_name">Juve Fans</string>-->
-
-  <!--<string name="app_name">Barca Fans</string>-->
-
-  <!--<string name="app_name">Inter Milan Fans</string>-->
-
-  <!--<string name="app_name">Milan Fans</string>-->
-
-  <string name="app_name">Arsenal Fans</string>
-
-  <!--<string name="app_name">Liverpool Fans</string>-->
-
-  <!--<string name="app_name">ManUtd Fans</string>-->
-
-  <!--<string name="app_name">Real Madrid Fans</string>-->
-
   <string name="action_settings">Settings</string>
   <string name="section_format">Hello World from section: %1$d</string>
 

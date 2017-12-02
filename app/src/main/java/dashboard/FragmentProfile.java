@@ -85,7 +85,7 @@ public class FragmentProfile extends Fragment {
 
     private void getNumberOfPosts(final View rootView) {
 
-        AppController.getFirebaseDatabase(getContext()).child("posts").child(AppController.getUser()
+        AppController.getFirebaseDatabase().child("posts").child(AppController.getUser()
                 .getUid()).addValueEventListener(new ValueEventListener() {
 
             @Override
