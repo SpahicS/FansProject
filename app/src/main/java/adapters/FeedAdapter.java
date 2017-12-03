@@ -42,9 +42,9 @@ import listeners.OnArticleClickListener;
 import listeners.OnDislikeClickListener;
 import listeners.OnLikeClickListener;
 import listeners.OnPostCommentListener;
+import models.news.ArticleItem;
 import models.news.FeedItem;
 import models.news.MetaTag;
-import models.news.ArticleItem;
 import models.news.Post;
 import viewholders.FeedItemViewHolder;
 import viewholders.NewMessageViewHolder;
@@ -69,6 +69,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private CommentsAdapter mCommentsAdapter;
     private AppBarLayout appBarLayout;
     private LinearLayoutManager mLayoutManager;
+    private String lastKey;
 
     public FeedAdapter(Activity activity, DatabaseReference database,
                        RelativeLayout commentsCont, AppBarLayout appBarLayout, RecyclerView.LayoutManager layoutManager) {
@@ -81,38 +82,73 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.appBarLayout = appBarLayout;
         this.mLayoutManager = (LinearLayoutManager) layoutManager;
 
-        this.mFeedDatabase.addValueEventListener(new ValueEventListener() {
-
+        mFeedDatabase.limitToLast(10).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
-
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 mDataSet.clear();
-
-                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     FeedItem feedItem = postSnapshot.getValue(FeedItem.class);
                     feedItem.setId(postSnapshot.getKey());
                     mDataSet.add(0, feedItem);
                 }
 
-                mDataSet.add(0, new FeedItem());
+                lastKey = mDataSet.get(mDataSet.size() - 1).getId();
 
+                mDataSet.add(0, new FeedItem());
                 notifyDataSetChanged();
 
                 if (mActivity.findViewById(R.id.progressBarFeed) != null)
                     mActivity.findViewById(R.id.progressBarFeed).setVisibility(View.GONE);
 
                 new Handler().postDelayed(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         shouldAnimateListItems = false;
                     }
                 }, 200);
             }
 
             @Override
-            public void onCancelled(DatabaseError firebaseError) {
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });
+        //        this.mFeedDatabase.addValueEventListener(new ValueEventListener() {
+//
+//            @Override
+//            public void onDataChange(DataSnapshot snapshot) {
+//
+//                mDataSet.clear();
+//
+//                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+//                    FeedItem feedItem = postSnapshot.getValue(FeedItem.class);
+//                    feedItem.setId(postSnapshot.getKey());
+//                    mDataSet.add(0, feedItem);
+//                }
+//
+//                mDataSet.add(0, new FeedItem());
+//
+//                notifyDataSetChanged();
+//
+//                if (mActivity.findViewById(R.id.progressBarFeed) != null)
+//                    mActivity.findViewById(R.id.progressBarFeed).setVisibility(View.GONE);
+//
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override public void run() {
+//                        shouldAnimateListItems = false;
+//                    }
+//                }, 200);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError firebaseError) {
+//
+//            }
+//        });
+    }
+
+    public String getLastKey() {
+        return lastKey;
     }
 
     @Override
@@ -321,8 +357,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (item.getArticle().getImageUrl() != null) {
 
             Glide.with(mActivity)
-                .load(item.getArticle().getImageUrl())
-                .into(holder.articleImage);
+                    .load(item.getArticle().getImageUrl())
+                    .into(holder.articleImage);
 
         }
 
@@ -350,9 +386,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             };
 
             Glide.with(mActivity)
-                .load("http://www." + domain + "/favicon.ico")
-                .asBitmap()
-                .into(target);
+                    .load("http://www." + domain + "/favicon.ico")
+                    .asBitmap()
+                    .into(target);
 
         }
     }
@@ -454,7 +490,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         post.setPostId(postId);
 
         DatabaseReference mPostsRef = AppController
-            .getFirebaseDatabase().child("posts");
+                .getFirebaseDatabase().child("posts");
 
         mPostsRef.child(AppController.getUser().getUid()).child(postId).setValue(post);
 
@@ -483,6 +519,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         holder.avatar.animate().scaleX(0.8f).start();
 
         holder.message.setTypeface(AppHelper.getRobotoLight(mActivity));
+
+        holder.post.setVisibility(View.VISIBLE);
 
         holder.actions.setVisibility(View.VISIBLE);
         holder.message.setVisibility(View.VISIBLE);
@@ -585,6 +623,14 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         mCommentsCont.findViewById(R.id.post_comment).setOnClickListener
                 (new OnPostCommentListener(mItemCommentsDatabase, mCommentsCont));
 
+    }
+
+    public void addFeedItems(ArrayList<FeedItem> feedItems) {
+        mDataSet.clear();
+        mDataSet.addAll(feedItems);
+//        notifyItemRangeInserted(mDataSet.size(), 10);
+        notifyDataSetChanged();
+        lastKey = mDataSet.get(mDataSet.size() - 1).getId();
     }
 }
 
