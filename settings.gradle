@@ -1,1 +1,1 @@
-include ':app', ':boilerpipe'
+include ':app'
