@@ -85,28 +85,7 @@ public class FragmentFeed extends Fragment {
                     final int pastVisibleItems = mLayoutManager.findFirstVisibleItemPosition();
 
                     if (!loading) {
-                        if ((visibleItemCount + pastVisibleItems) >= (totalItemCount - 3)) {
-                            loading = true;
-                            mFeedRef.limitToLast(mAdapter.getItemCount() + 10).addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    ArrayList<FeedItem> feedItems = new ArrayList<>();
-                                    for (DataSnapshot data : dataSnapshot.getChildren()) {
-                                        FeedItem item = data.getValue(FeedItem.class);
-                                        item.setId(data.getKey());
-                                        feedItems.add(0, item);
-                                    }
-                                    mAdapter.addFeedItems(feedItems);
-                                    loading = false;
-                                    Toast.makeText(getActivity(), "Loaded more", Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
-                        }
+                        loadMorePosts(visibleItemCount, totalItemCount, pastVisibleItems);
                     }
                 }
             }
@@ -115,6 +94,30 @@ public class FragmentFeed extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
 
         return rootView;
+    }
+
+    private void loadMorePosts(int visibleItemCount, int totalItemCount, int pastVisibleItems) {
+        if ((visibleItemCount + pastVisibleItems) >= (totalItemCount - 3)) {
+            loading = true;
+            mFeedRef.limitToLast(mAdapter.getItemCount() + 10).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    ArrayList<FeedItem> feedItems = new ArrayList<>();
+                    for (DataSnapshot data : dataSnapshot.getChildren()) {
+                        FeedItem item = data.getValue(FeedItem.class);
+                        item.setId(data.getKey());
+                        feedItems.add(0, item);
+                    }
+                    mAdapter.addFeedItems(feedItems);
+                    loading = false;
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(getActivity(), "Failed to load more posts", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
 

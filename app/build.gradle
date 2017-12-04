@@ -89,7 +89,6 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
 
     testCompile 'junit:junit:4.12'
-    compile project(':boilerpipe')
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }

@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -69,7 +70,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private CommentsAdapter mCommentsAdapter;
     private AppBarLayout appBarLayout;
     private LinearLayoutManager mLayoutManager;
-    private String lastKey;
 
     public FeedAdapter(Activity activity, DatabaseReference database,
                        RelativeLayout commentsCont, AppBarLayout appBarLayout, RecyclerView.LayoutManager layoutManager) {
@@ -91,8 +91,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     feedItem.setId(postSnapshot.getKey());
                     mDataSet.add(0, feedItem);
                 }
-
-                lastKey = mDataSet.get(mDataSet.size() - 1).getId();
 
                 mDataSet.add(0, new FeedItem());
                 notifyDataSetChanged();
@@ -145,10 +143,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 //
 //            }
 //        });
-    }
-
-    public String getLastKey() {
-        return lastKey;
     }
 
     @Override
@@ -626,11 +620,17 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public void addFeedItems(ArrayList<FeedItem> feedItems) {
+
+        if (feedItems.size() != mDataSet.size() - 1) {
+            Toast.makeText(mActivity, "Loaded More", Toast.LENGTH_SHORT).show();
+        }
         mDataSet.clear();
         mDataSet.addAll(feedItems);
-//        notifyItemRangeInserted(mDataSet.size(), 10);
+        mDataSet.add(0, new FeedItem());
         notifyDataSetChanged();
-        lastKey = mDataSet.get(mDataSet.size() - 1).getId();
+
+        if (mActivity.findViewById(R.id.progressBarFeed) != null)
+            mActivity.findViewById(R.id.progressBarFeed).setVisibility(View.GONE);
     }
 }
 

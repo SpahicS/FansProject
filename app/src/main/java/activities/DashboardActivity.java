@@ -8,12 +8,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import adapters.DashboardPagerAdapter;
 import digitalbath.fansproject.R;
 import helpers.main.AppHelper;
 
-public class DashboardActivity extends AppCompatActivity {
+public class DashboardActivity extends AppCompatActivity{
 
     private DashboardPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;

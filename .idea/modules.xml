@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FansProjectNew.iml" filepath="$PROJECT_DIR$/FansProjectNew.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/boilerpipe/boilerpipe.iml" filepath="$PROJECT_DIR$/boilerpipe/boilerpipe.iml" />
     </modules>
   </component>
 </project>
