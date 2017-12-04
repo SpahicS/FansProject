@@ -621,13 +621,13 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public void addFeedItems(ArrayList<FeedItem> feedItems) {
 
-        if (feedItems.size() != mDataSet.size() - 1) {
+        if (feedItems.size() > mDataSet.size() - 1) {
             Toast.makeText(mActivity, "Loaded More", Toast.LENGTH_SHORT).show();
+            mDataSet.clear();
+            mDataSet.addAll(feedItems);
+            mDataSet.add(0, new FeedItem());
+            notifyDataSetChanged();
         }
-        mDataSet.clear();
-        mDataSet.addAll(feedItems);
-        mDataSet.add(0, new FeedItem());
-        notifyDataSetChanged();
 
         if (mActivity.findViewById(R.id.progressBarFeed) != null)
             mActivity.findViewById(R.id.progressBarFeed).setVisibility(View.GONE);
