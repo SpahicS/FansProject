@@ -16,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 
@@ -37,6 +38,7 @@ public class FragmentFeed extends Fragment {
     private LinearLayoutManager mLayoutManager;
     private RelativeLayout mCommentsCont;
     private boolean loading;
+    private AVLoadingIndicatorView bottomProgressBar;
 
     public static FragmentFeed newInstance(int sectionNumber) {
 
@@ -63,10 +65,12 @@ public class FragmentFeed extends Fragment {
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.feed_recycler);
         mCommentsCont = (RelativeLayout) rootView.findViewById(R.id.comments_cont);
+        bottomProgressBar = (AVLoadingIndicatorView) rootView.findViewById(R.id.bottom_progress_bar);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         AppBarLayout appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.appbar);
         mAdapter = new FeedAdapter(getActivity(), mFeedRef, mCommentsCont, appBarLayout, mRecyclerView.getLayoutManager());
+        mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -86,20 +90,20 @@ public class FragmentFeed extends Fragment {
 
                     if (!loading) {
                         loadMorePosts(visibleItemCount, totalItemCount, pastVisibleItems);
+                        bottomProgressBar.setVisibility(View.VISIBLE);
                     }
                 }
             }
         });
 
-        mRecyclerView.setAdapter(mAdapter);
-
         return rootView;
     }
 
     private void loadMorePosts(int visibleItemCount, int totalItemCount, int pastVisibleItems) {
+        int itemsPerPage = 10;
         if ((visibleItemCount + pastVisibleItems) >= (totalItemCount - 3)) {
             loading = true;
-            mFeedRef.limitToLast(mAdapter.getItemCount() + 10).addListenerForSingleValueEvent(new ValueEventListener() {
+            mFeedRef.limitToLast(mAdapter.getItemCount() + itemsPerPage).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     ArrayList<FeedItem> feedItems = new ArrayList<>();
@@ -109,6 +113,7 @@ public class FragmentFeed extends Fragment {
                         feedItems.add(0, item);
                     }
                     mAdapter.addFeedItems(feedItems);
+                    bottomProgressBar.setVisibility(View.GONE);
                     loading = false;
                 }
 
