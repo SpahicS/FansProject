@@ -33,12 +33,6 @@ public class FragmentFeed extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private DatabaseReference mFeedRef;
-    private RecyclerView mRecyclerView;
-    private FeedAdapter mAdapter;
-    private LinearLayoutManager mLayoutManager;
-    private RelativeLayout mCommentsCont;
-    private boolean loading;
-    private AVLoadingIndicatorView bottomProgressBar;
 
     public static FragmentFeed newInstance(int sectionNumber) {
 
@@ -63,67 +57,15 @@ public class FragmentFeed extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.feed_recycler);
-        mCommentsCont = (RelativeLayout) rootView.findViewById(R.id.comments_cont);
-        bottomProgressBar = (AVLoadingIndicatorView) rootView.findViewById(R.id.bottom_progress_bar);
-        mLayoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView mRecyclerView = (RecyclerView) rootView.findViewById(R.id.feed_recycler);
+        RelativeLayout mCommentsCont = (RelativeLayout) rootView.findViewById(R.id.comments_cont);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         AppBarLayout appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.appbar);
-        mAdapter = new FeedAdapter(getActivity(), mFeedRef, mCommentsCont, appBarLayout, mRecyclerView.getLayoutManager());
+        AVLoadingIndicatorView bottomProgressBar = (AVLoadingIndicatorView) rootView.findViewById(R.id.bottom_progress_bar);
+        FeedAdapter mAdapter = new FeedAdapter(getActivity(), mFeedRef, mCommentsCont, appBarLayout, mRecyclerView, bottomProgressBar);
         mRecyclerView.setAdapter(mAdapter);
-
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                if (dy > 0) {
-
-                    final int visibleItemCount = mLayoutManager.getChildCount();
-                    final int totalItemCount = mLayoutManager.getItemCount();
-                    final int pastVisibleItems = mLayoutManager.findFirstVisibleItemPosition();
-
-                    if (!loading) {
-                        loadMorePosts(visibleItemCount, totalItemCount, pastVisibleItems);
-                        bottomProgressBar.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-        });
 
         return rootView;
     }
-
-    private void loadMorePosts(int visibleItemCount, int totalItemCount, int pastVisibleItems) {
-        int itemsPerPage = 10;
-        if ((visibleItemCount + pastVisibleItems) >= (totalItemCount - 3)) {
-            loading = true;
-            mFeedRef.limitToLast(mAdapter.getItemCount() + itemsPerPage).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    ArrayList<FeedItem> feedItems = new ArrayList<>();
-                    for (DataSnapshot data : dataSnapshot.getChildren()) {
-                        FeedItem item = data.getValue(FeedItem.class);
-                        item.setId(data.getKey());
-                        feedItems.add(0, item);
-                    }
-                    mAdapter.addFeedItems(feedItems);
-                    bottomProgressBar.setVisibility(View.GONE);
-                    loading = false;
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(getActivity(), "Failed to load more posts", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
-
-
 }

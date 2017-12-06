@@ -2,5 +2,6 @@
 
   <string name="action_settings">Settings</string>
   <string name="section_format">Hello World from section: %1$d</string>
+  <string name="number_of_likes">%1$s thumbs up</string>
 
 </resources>
