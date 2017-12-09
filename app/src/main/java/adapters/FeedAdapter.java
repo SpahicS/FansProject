@@ -30,6 +30,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -70,9 +71,13 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private CommentsAdapter mCommentsAdapter;
     private AppBarLayout appBarLayout;
     private LinearLayoutManager mLayoutManager;
+    private RecyclerView recyclerView;
+    private boolean loading;
+    private AVLoadingIndicatorView bottomProgressBar;
+
 
     public FeedAdapter(Activity activity, DatabaseReference database,
-                       RelativeLayout commentsCont, AppBarLayout appBarLayout, RecyclerView.LayoutManager layoutManager) {
+                       RelativeLayout commentsCont, AppBarLayout appBarLayout, RecyclerView recyclerView, AVLoadingIndicatorView bottomProgressBar) {
 
         mDataSet = new ArrayList<>();
 
@@ -80,7 +85,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         mFeedDatabase = database;
         mCommentsCont = commentsCont;
         this.appBarLayout = appBarLayout;
-        this.mLayoutManager = (LinearLayoutManager) layoutManager;
+        this.mLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        this.recyclerView = recyclerView;
+        this.bottomProgressBar = bottomProgressBar;
 
         mFeedDatabase.limitToLast(10).addValueEventListener(new ValueEventListener() {
             @Override
@@ -111,6 +118,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             }
         });
+
+        setupRecyclerViewScroll();
         //        this.mFeedDatabase.addValueEventListener(new ValueEventListener() {
 //
 //            @Override
@@ -580,7 +589,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
     //endregion
 
-    public void getComments(String itemId) {
+    private void getComments(String itemId) {
 
         DatabaseReference mItemCommentsDatabase = mFeedDatabase.child(itemId).child("comments");
 
@@ -619,18 +628,71 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     }
 
-    public void addFeedItems(ArrayList<FeedItem> feedItems) {
+    private void addFeedItems(ArrayList<FeedItem> feedItems) {
 
         if (feedItems.size() > mDataSet.size() - 1) {
-            Toast.makeText(mActivity, "Loaded More", Toast.LENGTH_SHORT).show();
             mDataSet.clear();
             mDataSet.addAll(feedItems);
             mDataSet.add(0, new FeedItem());
             notifyDataSetChanged();
+            Toast.makeText(mActivity, "Loaded More", Toast.LENGTH_SHORT).show();
         }
 
         if (mActivity.findViewById(R.id.progressBarFeed) != null)
             mActivity.findViewById(R.id.progressBarFeed).setVisibility(View.GONE);
+    }
+
+    private void setupRecyclerViewScroll() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (dy > 0) {
+
+                    final int visibleItemCount = mLayoutManager.getChildCount();
+                    final int totalItemCount = mLayoutManager.getItemCount();
+                    final int pastVisibleItems = mLayoutManager.findFirstVisibleItemPosition();
+
+                    if (!loading) {
+                        loadMorePosts(visibleItemCount, totalItemCount, pastVisibleItems);
+                    }
+                }
+            }
+        });
+    }
+
+    private void loadMorePosts(int visibleItemCount, int totalItemCount, int pastVisibleItems) {
+
+        int itemsPerPage = 10;
+        if ((visibleItemCount + pastVisibleItems) >= (totalItemCount - 3)) {
+            bottomProgressBar.setVisibility(View.VISIBLE);
+            loading = true;
+            mFeedDatabase.limitToLast(getItemCount() + itemsPerPage).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    ArrayList<FeedItem> feedItems = new ArrayList<>();
+                    for (DataSnapshot data : dataSnapshot.getChildren()) {
+                        FeedItem item = data.getValue(FeedItem.class);
+                        item.setId(data.getKey());
+                        feedItems.add(0, item);
+                    }
+                    addFeedItems(feedItems);
+                    bottomProgressBar.setVisibility(View.GONE);
+                    loading = false;
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(mActivity, "Failed to load more posts", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 }
 

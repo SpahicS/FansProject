@@ -105,7 +105,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }, 700);
 
-
                 } else {
 
                     LinearLayout loginCont = (LinearLayout) findViewById(R.id.login_cont);

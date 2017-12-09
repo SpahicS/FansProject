@@ -42,7 +42,11 @@ android {
             manifestPlaceholders = [ app_name : app_name, icon : "ic_launcher_arsenal"]
             resValue "string", "app_name", app_name
             resValue "string", "app_icon", "ic_launcher_arsenal"
-            buildConfigField "String", "APP_CONFIG", "\"Arsenal\""
+            buildConfigField "String", "NEWS_QUERY", "\"Arsenal\""
+            buildConfigField "String", "DB_QUERY", "\"Arsenal\""
+            buildConfigField "int", "TEAM_ID", '57'
+            buildConfigField "int", "LEAGUE_ID", '445'
+
         }
         juventus {
             def app_name = "Juventus Fans"
@@ -50,7 +54,10 @@ android {
             manifestPlaceholders = [ app_name : app_name, icon : "ic_launcher_juventus"]
             resValue "string", "app_name", app_name
             resValue "string", "app_icon", "ic_launcher_juventus"
-            buildConfigField "String", "APP_CONFIG", "\"Juventus\""
+            buildConfigField "String", "NEWS_QUERY", "\"Juventus\""
+            buildConfigField "String", "DB_QUERY", "\"Juventus\""
+            buildConfigField "int", "TEAM_ID", '109'
+            buildConfigField "int", "LEAGUE_ID", '456'
         }
     }
 }
