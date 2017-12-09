@@ -48,8 +48,12 @@ public class LeagueTableAdapter extends RecyclerView.Adapter<LeagueTableViewHold
                 .sourceEncoder(new StreamEncoder())
                 .cacheDecoder(new FileToStreamDecoder<>(new SvgDecoder()))
                 .decoder(new SvgDecoder())
-                .placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher)
+                .placeholder(context.getResources()
+                        .getIdentifier(mContext.getResources().getString(R.string.app_icon),
+                                "mipmap", mContext.getPackageName()))
+                .error(context.getResources()
+                        .getIdentifier(mContext.getResources().getString(R.string.app_icon),
+                                "mipmap", mContext.getPackageName()))
                 .animate(android.R.anim.fade_in)
                 .listener(new SvgSoftwareLayerSetter<Uri>());
     }

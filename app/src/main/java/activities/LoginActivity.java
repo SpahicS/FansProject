@@ -2,18 +2,23 @@ package activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -64,6 +69,13 @@ public class LoginActivity extends AppCompatActivity {
 
         ((TextView) findViewById(R.id.app_name))
                 .setText(getResources().getString(R.string.app_name));
+
+        Drawable logo = ResourcesCompat.getDrawableForDensity(getResources(),
+                getResources().getIdentifier(getResources().getString(R.string.app_icon),
+                "mipmap", getPackageName()),
+                DisplayMetrics.DENSITY_XXXHIGH, getTheme());
+
+        ((ImageView) findViewById(R.id.logo)).setImageDrawable(logo);
     }
 
     private void initializeFirebaseAuthentication() {

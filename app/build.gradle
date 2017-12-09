@@ -39,15 +39,17 @@ android {
         arsenal {
             def app_name = "Arsenal Fans"
             applicationIdSuffix ".arsenal"
-            manifestPlaceholders = [ app_name : app_name]
+            manifestPlaceholders = [ app_name : app_name, icon : "ic_launcher_arsenal"]
             resValue "string", "app_name", app_name
+            resValue "string", "app_icon", "ic_launcher_arsenal"
             buildConfigField "String", "APP_CONFIG", "\"Arsenal\""
         }
         juventus {
             def app_name = "Juventus Fans"
             applicationIdSuffix ".juventus"
-            manifestPlaceholders = [ app_name : app_name]
+            manifestPlaceholders = [ app_name : app_name, icon : "ic_launcher_juventus"]
             resValue "string", "app_name", app_name
+            resValue "string", "app_icon", "ic_launcher_juventus"
             buildConfigField "String", "APP_CONFIG", "\"Juventus\""
         }
     }
