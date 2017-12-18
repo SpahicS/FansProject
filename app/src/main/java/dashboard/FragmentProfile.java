@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import activities.DashboardActivity;
 import adapters.CountryCodesAdapter;
 import digitalbath.fansproject.R;
 import helpers.main.AppController;
@@ -42,7 +43,6 @@ public class FragmentProfile extends Fragment {
     private TextView mCountryName;
     private RelativeLayout mSelector;
     private ArrayList<Country> mCountryList;
-    private LinearLayoutManager mLayoutManager;
 
     public FragmentProfile() {
     }
@@ -73,7 +73,7 @@ public class FragmentProfile extends Fragment {
         getNumberOfPosts(rootView);
 
         mSelector.setOnClickListener(new OnCountrySelectorClickListener
-                (mCountryCodesRecycler, mCountryList, mLayoutManager));
+                (mCountryCodesRecycler, mCountryList));
 
         return rootView;
     }
@@ -93,7 +93,7 @@ public class FragmentProfile extends Fragment {
 
                 int numberOfPosts = 0;
 
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                for (DataSnapshot ignored : dataSnapshot.getChildren()) {
                     numberOfPosts++;
                 }
 
@@ -189,9 +189,9 @@ public class FragmentProfile extends Fragment {
 
     private void initializeRecyclerView() {
 
-        mLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mCountryCodesRecycler.setLayoutManager(mLayoutManager);
-        mCountryCodesRecycler.setAdapter(new CountryCodesAdapter(getContext(), mCountryList,
+        mCountryCodesRecycler.setAdapter(new CountryCodesAdapter(getActivity(), mCountryList,
                 mCountryCodesRecycler, mCountryName, mAppBarLayout));
     }
 
@@ -204,4 +204,9 @@ public class FragmentProfile extends Fragment {
 
     }
 
+    public void hideCountriesRecycler() {
+        if (mCountryCodesRecycler != null) {
+            mCountryCodesRecycler.setVisibility(View.GONE);
+        }
+    }
 }

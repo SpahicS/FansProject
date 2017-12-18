@@ -18,6 +18,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import adapters.NewsAdapter;
 import digitalbath.fansproject.R;
@@ -84,21 +85,21 @@ public class FragmentNews extends Fragment {
         appBarLayout.setExpanded(true, true);
     }
 
-    private void initializeViews(View rootView) {
+    public void initializeViews(View rootView) {
 
         newsRecycler = (RecyclerView) rootView.findViewById(R.id.news_list_recycler);
         progressBar = (AVLoadingIndicatorView) rootView.findViewById(R.id.progressBarNews);
 
     }
 
-    private void initializeNewsRecycler() {
+    public void initializeNewsRecycler() {
 
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         newsRecycler.setLayoutManager(manager);
 
     }
 
-    private void getNewsList(String query) {
+    public void getNewsList(String query) {
 
         String edition = getNewsEditionCode();
 

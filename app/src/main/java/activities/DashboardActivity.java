@@ -8,13 +8,15 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import adapters.DashboardPagerAdapter;
+import dashboard.FragmentNews;
+import dashboard.FragmentProfile;
 import digitalbath.fansproject.R;
+import helpers.main.AppConfig;
 import helpers.main.AppHelper;
 
-public class DashboardActivity extends AppCompatActivity{
+public class DashboardActivity extends AppCompatActivity {
 
     private DashboardPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
@@ -134,6 +136,8 @@ public class DashboardActivity extends AppCompatActivity{
         if (exit) {
             finish();
         } else {
+            FragmentProfile fragment = (FragmentProfile) getSupportFragmentManager().getFragments().get(3);
+            fragment.hideCountriesRecycler();
             AppHelper.showToast(DashboardActivity.this, "Press Back again to exit.");
             exit = true;
             new Handler().postDelayed(new Runnable() {
