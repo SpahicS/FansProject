@@ -17,11 +17,11 @@ public class Fixture {
     private String homeTeamName;
     private String awayTeamName;
     private Result result;
-    private String odds;
+    //private String odds;
 
-    public String getOdds() {
-        return odds;
-    }
+//    public String getOdds() {
+//        return odds;
+//    }
 
     public Links getLinks() {
         return links;
