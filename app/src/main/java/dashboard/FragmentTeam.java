@@ -194,6 +194,7 @@ public class FragmentTeam extends Fragment {
 
             @Override
             public void onFailure(Call<Fixtures> call, Throwable t) {
+                int i = 9;
             }
         });
     }

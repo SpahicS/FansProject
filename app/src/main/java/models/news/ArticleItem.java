@@ -14,7 +14,7 @@ import java.util.Map;
 @IgnoreExtraProperties
 public class ArticleItem implements Serializable {
 
-    private String id;
+    public static String id;
     private HashMap<String, Boolean> likes = new HashMap<>();
     private HashMap<String, Boolean> dislikes = new HashMap<>();
     private HashMap<String, Comment> comments = new HashMap<>();

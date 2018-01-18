@@ -1,5 +1,6 @@
 package adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.RecyclerView;
@@ -21,23 +22,23 @@ import viewholders.CountryCodesViewHolder;
 
 public class CountryCodesAdapter extends RecyclerView.Adapter<CountryCodesViewHolder> {
 
-    private Context mContext;
+    private Activity mActivity;
     private RecyclerView mCountriesRecycler;
     private TextView mCountryName;
     private ArrayList<Country> mDataSet;
     private AppBarLayout appBarLayout;
 
-    public CountryCodesAdapter(Context context, ArrayList<Country> countries,
+    public CountryCodesAdapter(Activity activity, ArrayList<Country> countries,
                                RecyclerView countriesRecycler, TextView countryName,
                                AppBarLayout appBarLayout) {
 
-        this.mContext = context;
+        this.mActivity = activity;
         this.mCountriesRecycler = countriesRecycler;
         this.mCountryName = countryName;
         this.mDataSet = countries;
         this.appBarLayout = appBarLayout;
 
-        String code = mContext
+        String code = mActivity
                 .getSharedPreferences("COUNTRY_CODES", Context.MODE_PRIVATE)
                 .getString("COUNTRY_CODE", null);
 
@@ -58,7 +59,7 @@ public class CountryCodesAdapter extends RecyclerView.Adapter<CountryCodesViewHo
     @Override
     public void onBindViewHolder(CountryCodesViewHolder holder, int position) {
 
-        holder.initializeViews(holder.itemView, mContext);
+        holder.initializeViews(holder.itemView, mActivity);
 
         Country country = mDataSet.get(position);
 
@@ -71,7 +72,7 @@ public class CountryCodesAdapter extends RecyclerView.Adapter<CountryCodesViewHo
         holder.countryCode.setText(country.getCountryName());
 
         holder.country.setOnClickListener(
-                new OnCountryCodeClickListener(mContext, mDataSet, mCountriesRecycler,
+                new OnCountryCodeClickListener(mActivity, mDataSet, mCountriesRecycler,
                         position, mCountryName));
 
     }

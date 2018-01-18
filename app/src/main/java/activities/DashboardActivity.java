@@ -9,16 +9,15 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.google.firebase.database.FirebaseDatabase;
-
 import adapters.DashboardPagerAdapter;
 import dashboard.FragmentFeed;
 import dashboard.FragmentNews;
+import dashboard.FragmentProfile;
 import digitalbath.fansproject.R;
 import helpers.main.AppHelper;
 
-public class DashboardActivity extends AppCompatActivity{
+public class DashboardActivity extends AppCompatActivity {
 
     private DashboardPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
@@ -149,6 +148,8 @@ public class DashboardActivity extends AppCompatActivity{
         if (exit) {
             moveTaskToBack(true);
         } else {
+            FragmentProfile frag = (FragmentProfile) getSupportFragmentManager().getFragments().get(3);
+            frag.hideCountriesRecycler();
             AppHelper.showToast(DashboardActivity.this, "Press Back again to exit.");
             exit = true;
             new Handler().postDelayed(new Runnable() {
