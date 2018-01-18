@@ -43,12 +43,12 @@ public class OnCountryCodeClickListener implements View.OnClickListener {
     public void onClick(View v) {
 
         FragmentNews fragment = (FragmentNews) ((DashboardActivity) mActivity).getSupportFragmentManager().getFragments().get(1);
-        fragment.getNewsList(AppConfig.getNewsQuery());
 
         saveCountryCode();
 
         mCountriesRecycler.setVisibility(View.GONE);
 
+        fragment.getNewsList(AppConfig.getNewsQuery());
         mCountryName.setText(mDataSet.get(position).getCountryName());
 
         deselectCountry();
