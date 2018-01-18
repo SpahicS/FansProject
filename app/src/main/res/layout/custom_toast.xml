@@ -1,33 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/custom_toast_layout"
-              android:orientation="horizontal"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:paddingLeft="5dp"
-              android:paddingRight="5dp"
-              android:paddingTop="5dp"
-              android:paddingBottom="3dp"
-              android:gravity="center">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/custom_toast_layout"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="3dp"
+    android:gravity="center">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:gravity="center_vertical"
         android:background="@drawable/toast_background"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
 
-        <helpers.view.FansTextView android:id="@+id/textToShow"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:textColor="@android:color/white"
-                  android:text="Toast"
-                  android:paddingLeft="5dp"
-                  android:paddingRight="5dp"
-                  android:gravity="center"
-                  android:textStyle="bold"/>
+        <helpers.view.FansTextView
+            android:id="@+id/textToShow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="Toast toast toast"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            app:font_style="bold" />
     </LinearLayout>
 
 </LinearLayout>

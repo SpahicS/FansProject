@@ -38,6 +38,7 @@ public class FeedItemViewHolder extends RecyclerView.ViewHolder {
     public TextView articlePublisher;
     public CircleImageView articlePublisherIcon;
     public ImageView articleImage;
+    public LinearLayout imageOverlay;
 
     public FeedItemViewHolder(View itemView) {
         super(itemView);
@@ -47,6 +48,7 @@ public class FeedItemViewHolder extends RecyclerView.ViewHolder {
         time = (TextView) itemView.findViewById(R.id.time_published);
         avatar = (CircleImageView) itemView.findViewById(R.id.avatar);
         image = (ImageView) itemView.findViewById(R.id.image);
+        imageOverlay = (LinearLayout) itemView.findViewById(R.id.image_overlay);
 
         numberOfLikes = (TextView) itemView.findViewById(R.id.likes);
         numberOfComments = (TextView) itemView.findViewById(R.id.comments);

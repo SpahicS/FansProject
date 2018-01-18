@@ -61,7 +61,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         implements MetaTagsLoad {
 
     private final int FEED_ITEM_TYPE = 0;
-    private final int NEW_MESSAGE_TYPE = 1;
+    private final int NEW_MESSAGE_TYPE = -1;
 
     private boolean isPreviewCreated;
     private boolean shouldAnimateListItems = true;
@@ -76,6 +76,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private RecyclerView recyclerView;
     private boolean loading;
     private AVLoadingIndicatorView bottomProgressBar;
+    private ArrayList<String> animatedImages = new ArrayList<>();
 
 
     public FeedAdapter(Activity activity, DatabaseReference database,
@@ -123,38 +124,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         setupRecyclerViewScroll();
 
-        //        this.mFeedDatabase.addValueEventListener(new ValueEventListener() {
-//
-//            @Override
-//            public void onDataChange(DataSnapshot snapshot) {
-//
-//                mDataSet.clear();
-//
-//                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-//                    FeedItem feedItem = postSnapshot.getValue(FeedItem.class);
-//                    feedItem.setId(postSnapshot.getKey());
-//                    mDataSet.add(0, feedItem);
-//                }
-//
-//                mDataSet.add(0, new FeedItem());
-//
-//                notifyDataSetChanged();
-//
-//                if (mActivity.findViewById(R.id.progressBarFeed) != null)
-//                    mActivity.findViewById(R.id.progressBarFeed).setVisibility(View.GONE);
-//
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override public void run() {
-//                        shouldAnimateListItems = false;
-//                    }
-//                }, 200);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError firebaseError) {
-//
-//            }
-//        });
     }
 
     @Override
@@ -189,7 +158,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 NewMessageViewHolder newMessageViewHolder = (NewMessageViewHolder) holder;
                 bindNewMessageItem(newMessageViewHolder);
                 break;
-            case FEED_ITEM_TYPE:
+            default:
                 FeedItemViewHolder googleViewHolder = (FeedItemViewHolder) holder;
                 bindFeedItem(googleViewHolder, position);
                 break;
@@ -210,7 +179,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (position == 0)
             return NEW_MESSAGE_TYPE;
         else
-            return FEED_ITEM_TYPE;
+            return position;
     }
 
     @Override
@@ -268,6 +237,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         articleItem.setTitle(metaTag.getTitle());
         articleItem.setImageUrl(metaTag.getImageUrl());
         articleItem.setArticleUrl(metaTag.getArticleUrl());
+        articleItem.setPubDate(metaTag.getPubDate());
 
         mDataSet.get(position).setArticle(articleItem);
 
@@ -316,6 +286,13 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         holder.numberOfLikes.setText(Integer.toString(item.getLikes().size()) + " thumbs up");
         holder.numberOfComments.setText(Integer.toString(item.getCommentsCount()) + " comments");
+        holder.numberOfComments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                getComments(item.getId());
+            }
+        });
         holder.numberOfDislikes.setText(Integer.toString(item.getDislikes().size()) + " thumbs down");
 
         if (item.getLikes().get(AppController.getUser().getUid()) != null
@@ -344,15 +321,12 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             @Override
             public void onClick(View v) {
 
-                AppBarLayout appBarLayout = (AppBarLayout) mActivity.findViewById(R.id.appbar);
-                appBarLayout.setExpanded(false, true);
-
                 getComments(item.getId());
             }
         });
     }
 
-    private void bindArticleCont(final FeedItemViewHolder holder, FeedItem item) {
+    private void bindArticleCont(final FeedItemViewHolder holder, final FeedItem item) {
 
         holder.articleCont.setVisibility(View.VISIBLE);
 
@@ -362,9 +336,40 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         if (item.getArticle().getImageUrl() != null) {
 
+            SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
+
+                @Override
+                public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
+
+                    if (!animatedImages.contains(item.getArticle().getImageUrl())) {
+
+                        TransitionDrawable td = new TransitionDrawable(new Drawable[]{
+                                new ColorDrawable(Color.TRANSPARENT),
+                                new BitmapDrawable(mActivity.getResources(), bitmap)
+                        });
+
+                        holder.articleImage.setImageDrawable(td);
+
+                        td.startTransition(300);
+
+                        animatedImages.add(item.getArticle().getImageUrl());
+
+                    } else {
+
+                        holder.articleImage.setImageBitmap(bitmap);
+                    }
+                }
+
+                @Override
+                public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                    super.onLoadFailed(e, errorDrawable);
+                }
+            };
+
             Glide.with(mActivity)
                     .load(item.getArticle().getImageUrl())
-                    .into(holder.articleImage);
+                    .asBitmap()
+                    .into(target);
 
         }
 
@@ -426,6 +431,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             public void onClick(View v) {
 
                 postNewFeedItem(holder, item);
+                hideKeyboard();
 
             }
         });
@@ -437,6 +443,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 discardNewMessage(holder);
                 notifyItemChanged(0);
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
+                hideKeyboard();
 
             }
         });
@@ -594,6 +601,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private void getComments(String itemId) {
 
+        AppBarLayout appBarLayout = (AppBarLayout) mActivity.findViewById(R.id.appbar);
+        appBarLayout.setExpanded(false, true);
+
         DatabaseReference mItemCommentsDatabase = mFeedDatabase.child(itemId).child("comments");
 
         final LinearLayout mEmptyListCont = (LinearLayout)
@@ -622,19 +632,26 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             @Override
             public void onClick(View v) {
 
-                mCommentsCont.setVisibility(View.GONE);
-
-                View view = mActivity.getCurrentFocus();
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                }
+                closeCommentsCont();
             }
         });
 
         mCommentsCont.findViewById(R.id.post_comment).setOnClickListener
                 (new OnPostCommentListener(mItemCommentsDatabase, mCommentsCont));
 
+    }
+
+    public boolean closeCommentsCont() {
+
+        if (mCommentsCont.getVisibility() == View.GONE)
+            return false;
+
+        mCommentsCont.setVisibility(View.GONE);
+        mCommentsCont.startAnimation(AppHelper.getAnimationDown(mActivity));
+
+        hideKeyboard();
+
+        return true;
     }
 
     private void addFeedItems(ArrayList<FeedItem> feedItems) {
@@ -651,6 +668,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     private void setupRecyclerViewScroll() {
+
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -700,6 +718,14 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     Toast.makeText(mActivity, "Failed to load more posts", Toast.LENGTH_SHORT).show();
                 }
             });
+        }
+    }
+
+    private void hideKeyboard() {
+        View view = mActivity.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 }

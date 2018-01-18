@@ -9,6 +9,7 @@ public class MetaTag {
     private String title;
     private String imageUrl;
     private String articleUrl;
+    private String pubDate;
 
     public String getTitle() {
         return title;
@@ -32,5 +33,13 @@ public class MetaTag {
 
     public void setArticleUrl(String articleUrl) {
         this.articleUrl = articleUrl;
+    }
+
+    public String getPubDate() {
+        return pubDate;
+    }
+
+    public void setPubDate(String pubDate) {
+        this.pubDate = pubDate;
     }
 }

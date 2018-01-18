@@ -4,13 +4,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+
+import com.google.firebase.database.FirebaseDatabase;
 
 import adapters.DashboardPagerAdapter;
+import dashboard.FragmentFeed;
+import dashboard.FragmentNews;
 import digitalbath.fansproject.R;
 import helpers.main.AppHelper;
 
@@ -131,8 +135,19 @@ public class DashboardActivity extends AppCompatActivity{
 
     @Override
     public void onBackPressed() {
+
+        Fragment fragment = mPagerAdapter.getRegisteredFragment(mViewPager.getCurrentItem());
+
+        if (fragment instanceof FragmentFeed) {
+            if (((FragmentFeed) fragment).closeCommentsCont())
+                return;
+        } else if (fragment instanceof FragmentNews) {
+            if (((FragmentNews) fragment).closeCommentsCont())
+                return;
+        }
+
         if (exit) {
-            finish();
+            moveTaskToBack(true);
         } else {
             AppHelper.showToast(DashboardActivity.this, "Press Back again to exit.");
             exit = true;
@@ -142,6 +157,26 @@ public class DashboardActivity extends AppCompatActivity{
                     exit = false;
                 }
             }, 3 * 1000);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (FirebaseDatabase.getInstance() != null)
+        {
+            FirebaseDatabase.getInstance().goOnline();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if(FirebaseDatabase.getInstance()!=null)
+        {
+            FirebaseDatabase.getInstance().goOffline();
         }
     }
 }

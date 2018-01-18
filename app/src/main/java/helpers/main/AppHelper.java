@@ -43,9 +43,25 @@ public class AppHelper {
         if (timePublished.contains("CET"))
             timePublished = timePublished.replace("CET", "GMT+01:00");
 
+        if (timePublished.contains("CEST"))
+            timePublished = timePublished.replace("CET", "GMT+02:00");
+
         SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss");
         dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+
         SimpleDateFormat dateFormatLocal = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss");
+
+        if (!timePublished.contains("GMT")) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date d = null;
+            try {
+                d = sdf.parse(timePublished);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if (d != null)
+                timePublished = new Date(d.toString()).toString();
+        }
 
         Date now;
 
@@ -137,7 +153,7 @@ public class AppHelper {
         textView.setText(text);
 
         Toast toast = new Toast(context.getApplicationContext());
-        toast.setGravity(Gravity.FILL_HORIZONTAL | Gravity.BOTTOM, 0, 150);
+        toast.setGravity(Gravity.FILL_HORIZONTAL | Gravity.BOTTOM, 0, 100);
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout);
         toast.show();

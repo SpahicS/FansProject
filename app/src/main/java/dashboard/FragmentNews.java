@@ -24,6 +24,7 @@ import digitalbath.fansproject.R;
 import helpers.main.AppConfig;
 import helpers.main.AppHelper;
 import models.news.ArticleItem;
+import models.news.Channel;
 import models.news.Item;
 import models.news.ResponseData;
 import networking.NewsAPI;
@@ -145,5 +146,9 @@ public class FragmentNews extends Fragment {
             edition = AppHelper.getNewsEditionCode(getContext());
         }
         return edition;
+    }
+
+    public boolean closeCommentsCont() {
+        return newsAdapter.closeCommentsCont();
     }
 }

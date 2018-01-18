@@ -1,6 +1,8 @@
 package adapters;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -152,6 +154,18 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
                 appBarLayout.setExpanded(false, true);
 
                 getComments(item.getId());
+            }
+        });
+
+        holder.copyIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ClipboardManager clipboard = (ClipboardManager) mActivity.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("url", item.getArticleUrl());
+                clipboard.setPrimaryClip(clip);
+                AppHelper.showToast(mActivity, "Url copied to clipboard");
+
             }
         });
 
@@ -311,22 +325,34 @@ public class NewsAdapter extends RecyclerView.Adapter<ArticleViewHolder>
 
         mCommentsRecycler.setAdapter(mCommentsAdapter);
 
-        ImageView closeComments = (ImageView) mCommentsCont.findViewById(R.id.close_comments);
+        final ImageView closeComments = (ImageView) mCommentsCont.findViewById(R.id.close_comments);
         closeComments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                mCommentsCont.setVisibility(View.GONE);
-                View view = mActivity.getCurrentFocus();
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                }
+               closeCommentsCont();
             }
         });
 
         mCommentsCont.findViewById(R.id.post_comment).setOnClickListener
                 (new OnPostCommentListener(mItemCommentsDatabase, mCommentsCont));
 
+    }
+
+    public boolean closeCommentsCont() {
+
+        if (mCommentsCont.getVisibility() == View.GONE)
+            return false;
+
+        mCommentsCont.setVisibility(View.GONE);
+        mCommentsCont.startAnimation(AppHelper.getAnimationDown(mActivity));
+
+        View view = mActivity.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
+        return true;
     }
 }

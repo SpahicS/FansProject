@@ -33,6 +33,7 @@ public class FragmentFeed extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private DatabaseReference mFeedRef;
+    FeedAdapter mAdapter;
 
     public static FragmentFeed newInstance(int sectionNumber) {
 
@@ -63,9 +64,13 @@ public class FragmentFeed extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         AppBarLayout appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.appbar);
         AVLoadingIndicatorView bottomProgressBar = (AVLoadingIndicatorView) rootView.findViewById(R.id.bottom_progress_bar);
-        FeedAdapter mAdapter = new FeedAdapter(getActivity(), mFeedRef, mCommentsCont, appBarLayout, mRecyclerView, bottomProgressBar);
+        mAdapter = new FeedAdapter(getActivity(), mFeedRef, mCommentsCont, appBarLayout, mRecyclerView, bottomProgressBar);
         mRecyclerView.setAdapter(mAdapter);
 
         return rootView;
+    }
+
+    public boolean closeCommentsCont() {
+        return mAdapter.closeCommentsCont();
     }
 }
