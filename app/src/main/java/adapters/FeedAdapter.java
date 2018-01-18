@@ -1,6 +1,7 @@
 package adapters;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -18,6 +19,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -586,6 +588,12 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             public void onClick(View v) {
 
                 mCommentsCont.setVisibility(View.GONE);
+
+                View view = mActivity.getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
             }
         });
 
@@ -601,7 +609,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             mDataSet.addAll(feedItems);
             mDataSet.add(0, new FeedItem());
             notifyDataSetChanged();
-            Toast.makeText(mActivity, "Loaded More", Toast.LENGTH_SHORT).show();
         }
 
         if (mActivity.findViewById(R.id.progressBarFeed) != null)

@@ -1,12 +1,15 @@
 package dashboard;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -114,6 +117,12 @@ public class FragmentProfile extends Fragment {
 
                 rankBadge.setColorFilter(ContextCompat.getColor(getContext(), rank.getRankBadgeColor()));
 
+                Drawable logo = ResourcesCompat.getDrawableForDensity(getResources(),
+                        getResources().getIdentifier(getResources().getString(R.string.app_icon),
+                                "mipmap", getActivity().getPackageName()),
+                        DisplayMetrics.DENSITY_XXXHIGH, getActivity().getTheme());
+
+                ((ImageView) rootView.findViewById(R.id.posts_badge)).setImageDrawable(logo);
             }
 
             @Override

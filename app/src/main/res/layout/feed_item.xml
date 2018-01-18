@@ -71,7 +71,7 @@
       android:layout_marginTop="15dp"
       android:lineSpacingExtra="4dp"
       android:text="Juventus Stadium is a home of Serie A club Juventus Football Club."
-      android:textColor="@color/black"
+      android:textColor="@color/gray"
       android:textSize="16dp"
       app:font_style="regular" />
 
@@ -90,15 +90,15 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="15dp"
       android:orientation="horizontal"
-      android:visibility="gone"
-      >
+      android:visibility="visible">
+
     <ImageView
         android:id="@+id/article_image"
         android:layout_width="match_parent"
         android:layout_height="230dp"
         android:layout_weight="1"
-        android:scaleType="centerCrop"
-        />
+        android:scaleType="centerCrop" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -107,17 +107,15 @@
         android:layout_alignTop="@+id/article_image"
         android:alpha="0.8"
         android:background="@drawable/image_overlay"
-        android:orientation="vertical"
-        >
-    </LinearLayout>
+        android:orientation="vertical"></LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/article_image"
         android:orientation="vertical"
-        android:padding="15dp"
-        >
+        android:padding="15dp">
+
       <helpers.view.FansTextView
           android:id="@+id/article_title"
           android:layout_width="match_parent"
@@ -127,21 +125,21 @@
           android:maxLines="2"
           android:text="Juve made history! Juve won 35th Seria A trophy nad made new record!"
           android:textColor="@color/white"
-          android:textSize="19dp"
-          />
+          android:textSize="19dp" />
+
       <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:gravity="center_vertical"
           android:orientation="horizontal"
-          android:padding="5dp"
-          >
+          android:padding="5dp">
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/article_publisher_icon"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:scaleType="centerCrop"
-            />
+            android:scaleType="centerCrop" />
+
         <helpers.view.FansTextView
             android:id="@+id/article_publisher_name"
             android:layout_width="wrap_content"
@@ -151,8 +149,7 @@
             android:maxLines="1"
             android:text="Juventus.com"
             android:textColor="@color/light_gray_ultra"
-            android:textSize="12sp"
-            />
+            android:textSize="12sp" />
       </LinearLayout>
     </LinearLayout>
   </RelativeLayout>

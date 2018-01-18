@@ -155,7 +155,7 @@ public class FragmentTeam extends Fragment {
 
                 for (int i = 0; i < response.body().getStanding().size(); i++) {
                     if (response.body().getStanding().get(i).getTeamName()
-                            .contains(AppConfig.getTeamName(AppConfig.getTeamId()))) {
+                            .contains(AppConfig.getTeamName())) {
                         bindOverViewData(rootView, response.body().getStanding().get(i));
                         break;
                     }
@@ -173,7 +173,6 @@ public class FragmentTeam extends Fragment {
 
     private void initializeLeagueTableAdapter(Response<LeagueTable> response) {
 
-        //crash
         if (response.body() == null)
             return;
 
@@ -202,7 +201,6 @@ public class FragmentTeam extends Fragment {
 
     private void findNextMatch(Response<Fixtures> response) {
 
-        //crash
         if (response.body() == null)
             return;
 
@@ -213,7 +211,7 @@ public class FragmentTeam extends Fragment {
             matchDate.setText(fixtures.get(0).getDate());
 
             if (!fixtures.get(0).getAwayTeamName()
-                    .contains(AppConfig.getTeamName(AppConfig.getTeamId()))) {
+                    .contains(AppConfig.getTeamName())) {
                 awayTeamName.setText(fixtures.get(0).getAwayTeamName());
             } else {
                 awayTeamName.setText(fixtures.get(0).getHomeTeamName());
@@ -233,7 +231,7 @@ public class FragmentTeam extends Fragment {
                     matchDate.setText(fixtures.get(i).getDate());
 
                     if (!fixtures.get(i).getAwayTeamName()
-                            .contains(AppConfig.getTeamName(AppConfig.getTeamId()))) {
+                            .contains(AppConfig.getTeamName())) {
                         awayTeamName.setText(fixtures.get(i).getAwayTeamName());
                     } else {
                         awayTeamName.setText(fixtures.get(i).getHomeTeamName());

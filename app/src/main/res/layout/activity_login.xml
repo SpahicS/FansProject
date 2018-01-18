@@ -17,12 +17,10 @@
         >
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/logo"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/logo"
-            />
+            android:layout_weight="1" />
 
         <helpers.view.FansTextView
             android:id="@+id/app_name"
