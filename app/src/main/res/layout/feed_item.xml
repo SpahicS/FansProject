@@ -100,13 +100,14 @@
         android:scaleType="centerCrop" />
 
     <LinearLayout
+        android:id="@+id/image_overlay"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_alignBaseline="@+id/article_image"
         android:layout_alignBottom="@+id/article_image"
         android:layout_alignTop="@+id/article_image"
         android:alpha="0.8"
-        android:background="@drawable/image_overlay"
+        android:background="@drawable/image_overlay_shape"
         android:orientation="vertical"></LinearLayout>
 
     <LinearLayout

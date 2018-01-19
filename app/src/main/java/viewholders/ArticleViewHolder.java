@@ -29,6 +29,7 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
     public ImageView dislikeIcon;
     public LinearLayout commentsCont;
     public TextView numberOfComments;
+    public ImageView copyIcon;
 
     public ArticleViewHolder(View itemView) {
         super(itemView);
@@ -50,6 +51,9 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 
         likeIcon = (ImageView) itemView.findViewById(R.id.like_icon);
         dislikeIcon = (ImageView) itemView.findViewById(R.id.unlike_icon);
+
+        copyIcon = (ImageView) itemView.findViewById(R.id.copy_icon);
+
     }
 
     public void setLikeButtonOn(Activity mActivity) {

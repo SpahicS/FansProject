@@ -2,6 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
+=======
+      <module fileurl="file://$PROJECT_DIR$/FansProject.iml" filepath="$PROJECT_DIR$/FansProject.iml" />
+      <module fileurl="file://C:\Users\Spaja\AndroidStudioProjects\FansProjectNew\FansProject.iml" filepath="C:\Users\Spaja\AndroidStudioProjects\FansProjectNew\FansProject.iml" />
+>>>>>>> 6c242576e8005aa3f672fd57dacc23cea868e905
       <module fileurl="file://$PROJECT_DIR$/FansProjectNew.iml" filepath="$PROJECT_DIR$/FansProjectNew.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

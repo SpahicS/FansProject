@@ -11,6 +11,7 @@
   <color name="transparent">#00ffffff</color>
   <color name="semi_transparent">#80ffffff</color>
   <color name="semi_transparent_one">#80000000</color>
+  <color name="semi_transparent_two">#33000000</color>
   <color name="semi_transparent_blue">#8071bad4</color>
   <color name="semi_transparent_blue_one">#8045b0ca</color>
 

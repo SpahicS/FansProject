@@ -147,8 +147,9 @@ public class ArticleActivity extends AppCompatActivity {
 
         String domain = AppHelper.getDomainName(url);
 
-        publisherNameAndTime.setText(domain + " · " + AppHelper
-                .getTimeDifference(article.getPubDate()));
+        publisherNameAndTime.setText(domain + ((article.getPubDate() == null ||
+                article.getPubDate().equals("")) ? "" : (" · " + AppHelper
+                .getTimeDifference(article.getPubDate()))));
 
         SimpleTarget<Bitmap> target = new SimpleTarget<Bitmap>() {
 

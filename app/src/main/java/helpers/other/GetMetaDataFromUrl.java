@@ -48,6 +48,8 @@ public class GetMetaDataFromUrl extends AsyncTask<String, Void, Void> {
             metaTag.setTitle(document.select("meta[property=og:title]").attr("content"));
             metaTag.setImageUrl(document.select("meta[property=og:image]").attr("content"));
             metaTag.setArticleUrl(document.select("meta[property=og:url]").attr("content"));
+            if (!document.select("meta[property=article:published_time]").attr("content").equals(""))
+                metaTag.setPubDate(document.select("meta[property=article:published_time]").attr("content"));
 
         } catch (IOException e) {
             //TODO provjeriti sa Harom kako ovo handlati

@@ -31,6 +31,7 @@ public class AppController extends Application {
 
         return mDatabase;
 
+
     }
 
     public static FirebaseUser getUser() {

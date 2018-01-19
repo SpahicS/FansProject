@@ -132,4 +132,5 @@ public class FeedItem {
     public int getCommentsCount() {
         return comments.size();
     }
+
 }
