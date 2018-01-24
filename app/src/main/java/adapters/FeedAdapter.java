@@ -88,7 +88,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.mLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         this.bottomProgressBar = bottomProgressBar;
 
-        mFeedDatabase.limitToLast(10).addValueEventListener(new ValueEventListener() {
+        mFeedDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mDataSet.clear();
@@ -657,7 +657,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             mDataSet.clear();
             mDataSet.addAll(feedItems);
             mDataSet.add(0, new FeedItem());
-            notifyDataSetChanged();
+            notifyItemRangeInserted(mDataSet.size() - 1, 10);
         }
 
         if (mActivity.findViewById(R.id.progressBarFeed) != null)
@@ -669,6 +669,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         int itemsPerPage = 10;
         bottomProgressBar.setVisibility(View.VISIBLE);
+
         mFeedDatabase.limitToLast(getItemCount() + itemsPerPage).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
