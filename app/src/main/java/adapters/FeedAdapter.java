@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -64,7 +65,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private final int NEW_MESSAGE_TYPE = -1;
 
     private boolean isPreviewCreated;
-    private boolean shouldAnimateListItems = true;
+    private boolean shouldAnimateListItems = true, shouldListenForNewItems = false,
+    noMoreFeedItems;
 
     private ArrayList<FeedItem> mDataSet;
     private Activity mActivity;
@@ -88,10 +90,12 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.mLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         this.bottomProgressBar = bottomProgressBar;
 
-        mFeedDatabase.addValueEventListener(new ValueEventListener() {
+        mFeedDatabase.orderByKey().limitToLast(10).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 mDataSet.clear();
+
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     FeedItem feedItem = postSnapshot.getValue(FeedItem.class);
                     feedItem.setId(postSnapshot.getKey());
@@ -108,6 +112,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     @Override
                     public void run() {
                         shouldAnimateListItems = false;
+                        shouldListenForNewItems = true;
                     }
                 }, 200);
             }
@@ -117,6 +122,53 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             }
         });
+
+
+        mFeedDatabase.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                if (!shouldListenForNewItems)
+                    return;
+
+                FeedItem feedItem = dataSnapshot.getValue(FeedItem.class);
+                feedItem.setId(dataSnapshot.getKey());
+                mDataSet.add(1, feedItem);
+
+                notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                FeedItem changedItem = dataSnapshot.getValue(FeedItem.class);
+                changedItem.setId(dataSnapshot.getKey());
+
+                for (int i = 0; i < mDataSet.size(); i++) {
+
+                    FeedItem currentItem = mDataSet.get(i);
+
+                    if (currentItem.getId() != null &&
+                            currentItem.getId().equals(changedItem.getId())) {
+
+                        mDataSet.set(i, changedItem);
+                        notifyDataSetChanged();
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+
     }
 
     @Override
@@ -145,10 +197,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        if (position == mDataSet.size() - 1) {
-            loadMorePosts();
-        }
-
         switch (holder.getItemViewType()) {
 
             case NEW_MESSAGE_TYPE:
@@ -164,6 +212,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (shouldAnimateListItems)
             AppHelper.animateItemAppearance(holder.itemView, position);
 
+        if (position == mDataSet.size() - 2 && !noMoreFeedItems) {
+            loadMorePosts();
+        }
     }
 
     @Override
@@ -185,7 +236,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         final NewMessageViewHolder feedHolder = ((NewMessageViewHolder) holder);
         feedHolder.progressBar.setVisibility(View.GONE);
 
-        if (metaTag == null)
+        if (metaTag == null || (metaTag.getArticleUrl().isEmpty() && metaTag.getTitle().isEmpty()))
             return;
 
         feedHolder.articlePreview.setVisibility(View.VISIBLE);
@@ -321,6 +372,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 getComments(item.getId());
             }
         });
+
+
     }
 
     private void bindArticleCont(final FeedItemViewHolder holder, final FeedItem item) {
@@ -651,40 +704,42 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return true;
     }
 
-    private void addFeedItems(ArrayList<FeedItem> feedItems) {
-
-        if (feedItems.size() > mDataSet.size() - 1) {
-            mDataSet.clear();
-            mDataSet.addAll(feedItems);
-            mDataSet.add(0, new FeedItem());
-            notifyItemRangeInserted(mDataSet.size() - 1, 10);
-        }
-
-        if (mActivity.findViewById(R.id.progressBarFeed) != null)
-            mActivity.findViewById(R.id.progressBarFeed).setVisibility(View.GONE);
-    }
-
     private void loadMorePosts() {
 
-        int itemsPerPage = 10;
         bottomProgressBar.setVisibility(View.VISIBLE);
 
-        mFeedDatabase.limitToLast(getItemCount() + itemsPerPage).addListenerForSingleValueEvent(new ValueEventListener() {
+        mFeedDatabase.orderByKey().endAt(mDataSet.get(mDataSet.size()-1).getId()).limitToLast(10)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 ArrayList<FeedItem> feedItems = new ArrayList<>();
+
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     FeedItem item = data.getValue(FeedItem.class);
                     item.setId(data.getKey());
                     feedItems.add(0, item);
                 }
-                addFeedItems(feedItems);
+
+                if (feedItems.size() <= 1) {
+
+                    noMoreFeedItems = true;
+                    bottomProgressBar.setVisibility(View.GONE);
+                    return;
+                }
+
+                feedItems.remove(0);
+
+                mDataSet.addAll(feedItems);
+                notifyDataSetChanged();
+
                 bottomProgressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(mActivity, "Failed to load more posts", Toast.LENGTH_SHORT).show();
+                bottomProgressBar.setVisibility(View.GONE);
             }
         });
     }

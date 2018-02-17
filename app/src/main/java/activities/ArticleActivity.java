@@ -63,8 +63,6 @@ public class ArticleActivity extends AppCompatActivity {
 
         ArticleItem article = (ArticleItem) getIntent().getSerializableExtra("article");
 
-        //loadWebView(url);
-
         fetchArticleMainContent(article.getArticleUrl());
 
         bindHeaderView(article);
@@ -138,6 +136,8 @@ public class ArticleActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(article.getImageUrl())) {
 
             image.setVisibility(View.GONE);
+            title.setPadding(title.getPaddingLeft(), (int) getResources().getDimension(R.dimen.title_top_margin_no_image),
+                    title.getPaddingRight() ,0);
 
         } else {
 
@@ -335,29 +335,9 @@ public class ArticleActivity extends AppCompatActivity {
         });
     }
 
-    private void loadWebView(String url) {
-
-        /*WebView webView = (WebView) findViewById(R.id.article_web_view);
-        webView.setWebViewClient(new WebViewClient());
-        webView.setWebChromeClient(new CustomWebChromeClient());
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl(url);*/
-    }
-
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return super.onSupportNavigateUp();
-    }
-
-    private class CustomWebChromeClient extends WebChromeClient {
-
-        @Override
-        public void onProgressChanged(WebView view, int newProgress) {
-            super.onProgressChanged(view, newProgress);
-            if (newProgress > 70)
-                findViewById(R.id.progress_bar).setVisibility(View.GONE);
-
-        }
     }
 }

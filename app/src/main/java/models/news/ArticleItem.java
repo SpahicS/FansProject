@@ -14,7 +14,7 @@ import java.util.Map;
 @IgnoreExtraProperties
 public class ArticleItem implements Serializable {
 
-    public static String id;
+    private String id;
     private HashMap<String, Boolean> likes = new HashMap<>();
     private HashMap<String, Boolean> dislikes = new HashMap<>();
     private HashMap<String, Comment> comments = new HashMap<>();
@@ -28,7 +28,7 @@ public class ArticleItem implements Serializable {
 
     public ArticleItem(Item item) {
 
-        id = item.getHashCode();
+        id = String.valueOf(item.getTitle().hashCode());
         link = item.getLink();
         imageUrl = item.getImageUrl();
         pubDate = item.getPubDate();

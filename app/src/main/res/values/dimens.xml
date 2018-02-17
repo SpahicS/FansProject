@@ -15,5 +15,6 @@
   <!-- Article text dimens -->
   <dimen name="simplified_paragraph_top_margin">10dp</dimen>
   <dimen name="simplified_paragraph_other_margin">20dp</dimen>
+  <dimen name="title_top_margin_no_image">45dp</dimen>
 
 </resources>
