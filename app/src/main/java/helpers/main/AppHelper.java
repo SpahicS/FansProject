@@ -124,6 +124,22 @@ public class AppHelper {
         return newsTimeStamp;
     }
 
+    public static String getTime(String time) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        Date d = null;
+        try {
+            d = sdf.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (d != null)
+            time = new Date(d.toString()).toString();
+
+        return time;
+
+    }
+
     public static String getDomainName(String url) {
 
         String domain = "";

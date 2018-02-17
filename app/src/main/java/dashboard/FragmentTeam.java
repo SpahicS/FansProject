@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import adapters.LeagueTableAdapter;
 import digitalbath.fansproject.R;
 import helpers.main.AppConfig;
+import helpers.main.AppHelper;
 import models.team_data.Fixture;
 import models.team_data.Fixtures;
 import models.team_data.LeagueTable;
@@ -208,7 +209,7 @@ public class FragmentTeam extends Fragment {
 
         if (fixtures.get(0).getStatus() == null) {
 
-            matchDate.setText(fixtures.get(0).getDate());
+            matchDate.setText(AppHelper.getTime(fixtures.get(0).getDate()));
 
             if (!fixtures.get(0).getAwayTeamName()
                     .contains(AppConfig.getTeamName())) {
@@ -228,7 +229,7 @@ public class FragmentTeam extends Fragment {
                 if (fixtures.get(i).getStatus().equals("TIMED")
                         || fixtures.get(i).getStatus().equals("SCHEDULED")) {
 
-                    matchDate.setText(fixtures.get(i).getDate());
+                    matchDate.setText(AppHelper.getTime(fixtures.get(0).getDate()));
 
                     if (!fixtures.get(i).getAwayTeamName()
                             .contains(AppConfig.getTeamName())) {

@@ -41,6 +41,7 @@ android {
             applicationIdSuffix ".arsenal"
             manifestPlaceholders = [ app_name : app_name, icon : "ic_launcher_arsenal"]
             resValue "string", "app_name", app_name
+            resValue "string", "team_name", "Arsenal"
             resValue "string", "app_icon", "ic_launcher_arsenal"
             buildConfigField "String", "NEWS_QUERY", "\"Arsenal\""
             buildConfigField "String", "DB_QUERY", "\"Arsenal\""
@@ -53,6 +54,7 @@ android {
             applicationIdSuffix ".juventus"
             manifestPlaceholders = [ app_name : app_name, icon : "ic_launcher_juventus"]
             resValue "string", "app_name", app_name
+            resValue "string", "team_name", "Juventus"
             resValue "string", "app_icon", "ic_launcher_juventus"
             buildConfigField "String", "NEWS_QUERY", "\"Juventus\""
             buildConfigField "String", "DB_QUERY", "\"Juventus\""

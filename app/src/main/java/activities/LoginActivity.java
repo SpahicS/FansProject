@@ -67,15 +67,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initializeMainView() {
 
-        ((TextView) findViewById(R.id.app_name))
-                .setText(getResources().getString(R.string.app_name));
-
-        Drawable logo = ResourcesCompat.getDrawableForDensity(getResources(),
-                getResources().getIdentifier(getResources().getString(R.string.app_icon),
-                "mipmap", getPackageName()),
-                DisplayMetrics.DENSITY_XXXHIGH, getTheme());
-
-        ((ImageView) findViewById(R.id.logo)).setImageDrawable(logo);
+//        Drawable logo = ResourcesCompat.getDrawableForDensity(getResources(),
+//                getResources().getIdentifier(getResources().getString(R.string.app_icon),
+//                "mipmap", getPackageName()),
+//                DisplayMetrics.DENSITY_XXXHIGH, getTheme());
+//
+//        ((ImageView) findViewById(R.id.logo)).setImageDrawable(logo);
     }
 
     private void initializeFirebaseAuthentication() {

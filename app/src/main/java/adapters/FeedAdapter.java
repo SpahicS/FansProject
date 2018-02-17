@@ -155,7 +155,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 NewMessageViewHolder newMessageViewHolder = (NewMessageViewHolder) holder;
                 bindNewMessageItem(newMessageViewHolder);
                 break;
-            default:
+            case FEED_ITEM_TYPE:
                 FeedItemViewHolder googleViewHolder = (FeedItemViewHolder) holder;
                 bindFeedItem(googleViewHolder, position);
                 break;
@@ -176,7 +176,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (position == 0)
             return NEW_MESSAGE_TYPE;
         else
-            return position;
+            return FEED_ITEM_TYPE;
     }
 
     @Override
@@ -278,7 +278,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         } else {
 
             holder.articleCont.setVisibility(View.GONE);
-
+            holder.itemView.setOnClickListener(null);
         }
 
         holder.numberOfLikes.setText(Integer.toString(item.getLikes().size()) + " thumbs up");
@@ -663,7 +663,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (mActivity.findViewById(R.id.progressBarFeed) != null)
             mActivity.findViewById(R.id.progressBarFeed).setVisibility(View.GONE);
     }
-
 
     private void loadMorePosts() {
 

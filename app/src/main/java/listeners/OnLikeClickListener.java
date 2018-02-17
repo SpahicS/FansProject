@@ -54,6 +54,7 @@ public class OnLikeClickListener implements View.OnClickListener {
                 mDatabaseReference.child(mFeedItem.getId())
                         .child("likes").child(uid).removeValue();
             }
+
         } else {
 
             if (mArticleItem.getLikes().containsKey(uid)) {
