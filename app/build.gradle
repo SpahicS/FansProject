@@ -36,6 +36,19 @@ android {
     }
     flavorDimensions "default"
     productFlavors {
+        dev {
+            def app_name = "Dev Fans"
+            applicationIdSuffix ""
+            manifestPlaceholders = [ app_name : app_name, icon : "ic_launcher_juventus"]
+            resValue "string", "app_name", app_name
+            resValue "string", "team_name", "Development"
+            resValue "string", "app_icon", "ic_launcher_juventus"
+            buildConfigField "String", "NEWS_QUERY", "\"Football\""
+            buildConfigField "String", "DB_QUERY", "\"Dev\""
+            buildConfigField "int", "TEAM_ID", '109'
+            buildConfigField "int", "LEAGUE_ID", '456'
+
+        }
         arsenal {
             def app_name = "Arsenal Fans"
             applicationIdSuffix ".arsenal"
@@ -60,6 +73,18 @@ android {
             buildConfigField "String", "DB_QUERY", "\"Juventus\""
             buildConfigField "int", "TEAM_ID", '109'
             buildConfigField "int", "LEAGUE_ID", '456'
+        }
+        liverpool {
+            def app_name = "Liverpool Fans"
+            applicationIdSuffix ".liverpool"
+            manifestPlaceholders = [ app_name : app_name, icon : "ic_launcher_liverpool"]
+            resValue "string", "app_name", app_name
+            resValue "string", "team_name", "Liverpool"
+            resValue "string", "app_icon", "ic_launcher_liverpool"
+            buildConfigField "String", "NEWS_QUERY", "\"Liverpool\""
+            buildConfigField "String", "DB_QUERY", "\"Liverpool\""
+            buildConfigField "int", "TEAM_ID", '64'
+            buildConfigField "int", "LEAGUE_ID", '445'
         }
     }
 }

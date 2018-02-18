@@ -8,11 +8,9 @@ import digitalbath.fansproject.BuildConfig;
 
 public enum AppConfig {
 
-    JUVENTUS("Juventus", "Juventus", 109, 456),
     INTERMILAN("Inter Milan", "InterMilan", 108, 456),
     MILAN("Ac Milan", "AcMilan", 98, 456),
 
-    LIVERPOOL("Liverpool", "Liverpool", 64, 445),
     MANUTD("Manchester United", "ManchesterUnited", 66, 445),
 
     BARCELONA("Barcelona", "Barcelona", 81, 457),
