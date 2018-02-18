@@ -15,7 +15,6 @@ public class NewsItemDataService {
 
     private final DatabaseReference mNewsRef;
 
-
     public NewsItemDataService(DatabaseReference newsRef) {
 
         this.mNewsRef = newsRef;

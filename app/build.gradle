@@ -36,6 +36,84 @@ android {
     }
     flavorDimensions "default"
     productFlavors {
+        real {
+            def app_name = "Real Fans"
+            applicationIdSuffix ".real"
+            manifestPlaceholders = [ app_name : app_name, icon : "ic_launcher"]
+            resValue "string", "app_name", app_name
+            resValue "string", "team_name", "Real Madrid CF"
+            resValue "string", "app_icon", "ic_launcher"
+            buildConfigField "String", "NEWS_QUERY", "\"Real Madrid CF\""
+            buildConfigField "String", "DB_QUERY", "\"Real Madrid CF\""
+            buildConfigField "int", "TEAM_ID", '98'
+            buildConfigField "int", "LEAGUE_ID", '456'
+
+        }
+        milan {
+            def app_name = "Milan Fans"
+            applicationIdSuffix ".milan"
+            manifestPlaceholders = [ app_name : app_name, icon : "ic_launcher"]
+            resValue "string", "app_name", app_name
+            resValue "string", "team_name", "AC Milan"
+            resValue "string", "app_icon", "ic_launcher"
+            buildConfigField "String", "NEWS_QUERY", "\"AC Milan\""
+            buildConfigField "String", "DB_QUERY", "\"AC Milan\""
+            buildConfigField "int", "TEAM_ID", '98'
+            buildConfigField "int", "LEAGUE_ID", '456'
+
+        }
+        barcelona {
+            def app_name = "Barcelona Fans"
+            applicationIdSuffix ".barcelona"
+            manifestPlaceholders = [ app_name : app_name, icon : "ic_launcher"]
+            resValue "string", "app_name", app_name
+            resValue "string", "team_name", "FC Barcelona"
+            resValue "string", "app_icon", "ic_launcher"
+            buildConfigField "String", "NEWS_QUERY", "\"FC Barcelona\""
+            buildConfigField "String", "DB_QUERY", "\"FC Barcelona\""
+            buildConfigField "int", "TEAM_ID", '81'
+            buildConfigField "int", "LEAGUE_ID", '455'
+
+        }
+        mutd {
+            def app_name = "MUTD Fans"
+            applicationIdSuffix ".mutd"
+            manifestPlaceholders = [ app_name : app_name, icon : "ic_launcher"]
+            resValue "string", "app_name", app_name
+            resValue "string", "team_name", "Manchester United"
+            resValue "string", "app_icon", "ic_launcher"
+            buildConfigField "String", "NEWS_QUERY", "\"Manchester United\""
+            buildConfigField "String", "DB_QUERY", "\"Manchester United\""
+            buildConfigField "int", "TEAM_ID", '66'
+            buildConfigField "int", "LEAGUE_ID", '445'
+
+        }
+        atletico {
+            def app_name = "Atletico Fans"
+            applicationIdSuffix ".atletico"
+            manifestPlaceholders = [ app_name : app_name, icon : "ic_launcher"]
+            resValue "string", "app_name", app_name
+            resValue "string", "team_name", "Atletico de Madrid"
+            resValue "string", "app_icon", "ic_launcher"
+            buildConfigField "String", "NEWS_QUERY", "\"Club Atlético de Madrid\""
+            buildConfigField "String", "DB_QUERY", "\"Atletico de Madrid\""
+            buildConfigField "int", "TEAM_ID", '78'
+            buildConfigField "int", "LEAGUE_ID", '455'
+
+        }
+        borussia {
+            def app_name = "BVB Fans"
+            applicationIdSuffix ".bvb"
+            manifestPlaceholders = [ app_name : app_name, icon : "ic_launcher"]
+            resValue "string", "app_name", app_name
+            resValue "string", "team_name", "Borussia Dortmund"
+            resValue "string", "app_icon", "ic_launcher"
+            buildConfigField "String", "NEWS_QUERY", "\"Borussia Dortmund\""
+            buildConfigField "String", "DB_QUERY", "\"Borussia Dortmund\""
+            buildConfigField "int", "TEAM_ID", '4'
+            buildConfigField "int", "LEAGUE_ID", '452'
+
+        }
         dev {
             def app_name = "Dev Fans"
             applicationIdSuffix ""

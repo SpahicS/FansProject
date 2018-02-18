@@ -38,7 +38,6 @@ public class FragmentTeam extends Fragment {
     private static final String API_KEY = "1968a7f095be48269a20d2bd89f6e930";
 
     private Call<LeagueTable> leagueTableCall;
-    private Call<TeamInfo> teamInfoCall;
     private Call<Fixtures> teamFixturesCall;
     private RecyclerView leagueTableRecycler;
     private TextView awayTeamName;
@@ -168,6 +167,7 @@ public class FragmentTeam extends Fragment {
 
             @Override
             public void onFailure(Call<LeagueTable> call, Throwable t) {
+                int i = 0;
             }
         });
     }
@@ -242,29 +242,20 @@ public class FragmentTeam extends Fragment {
                     boolean isSecondMatch = i == 1;
 
                     if (isFirstMatch) {
-
                         setFirstPastMatchUnknown();
-
                         setSecondPastMatchUnknown();
-
                         break;
                     }
 
                     if (isSecondMatch) {
-
                         getFirstPastMatch(fixtures, i);
-
                         setSecondPastMatchUnknown();
-
                         break;
                     }
 
                     if (i > 1) {
-
                         getFirstPastMatch(fixtures, i);
-
                         getSecondPastMatch(fixtures, i);
-
                         break;
                     }
                 }
@@ -305,9 +296,6 @@ public class FragmentTeam extends Fragment {
         super.onDestroy();
         if (leagueTableCall != null) {
             leagueTableCall.cancel();
-        }
-        if (teamInfoCall != null) {
-            teamInfoCall.cancel();
         }
         if (teamFixturesCall != null) {
             teamFixturesCall.cancel();

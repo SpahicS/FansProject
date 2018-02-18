@@ -221,6 +221,318 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152225620210:android:c2a5c4211a4ff3f0",
+        "android_client_info": {
+          "package_name": "digitalbath.fansproject.bvb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "152225620210-bgqjl84o2shbotnjfp7417lad9psh7c3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "digitalbath.fansproject.bvb",
+            "certificate_hash": "d53169a822f2f3ddca4740af7fc616ece162dc74"
+          }
+        },
+        {
+          "client_id": "152225620210-40qn7ehafsfv4s7iiqk3klfig97sluj7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "digitalbath.fansproject.bvb",
+            "certificate_hash": "f340f197017b90f50b87b7c485bb7b2a3655e30f"
+          }
+        },
+        {
+          "client_id": "152225620210-0ij6amlrfn8r2vc26aqqlqia5tlcghl2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJSBY6wYCN73ldVfUquR-j1n7u0dcPeTM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "152225620210-0ij6amlrfn8r2vc26aqqlqia5tlcghl2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152225620210:android:302f439f3548baf9",
+        "android_client_info": {
+          "package_name": "digitalbath.fansproject.atletico"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "152225620210-bchnfhbnmt908e063arj9bvq051uue2k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "digitalbath.fansproject.atletico",
+            "certificate_hash": "d53169a822f2f3ddca4740af7fc616ece162dc74"
+          }
+        },
+        {
+          "client_id": "152225620210-ec49hagl6hn8jcuub3vlnncbm30sdp38.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "digitalbath.fansproject.atletico",
+            "certificate_hash": "f340f197017b90f50b87b7c485bb7b2a3655e30f"
+          }
+        },
+        {
+          "client_id": "152225620210-0ij6amlrfn8r2vc26aqqlqia5tlcghl2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJSBY6wYCN73ldVfUquR-j1n7u0dcPeTM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "152225620210-0ij6amlrfn8r2vc26aqqlqia5tlcghl2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152225620210:android:b360be994cc4595c",
+        "android_client_info": {
+          "package_name": "digitalbath.fansproject.mutd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "152225620210-hqc40ghsuo6q1evt2q1s87rsu4avhlcg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "digitalbath.fansproject.mutd",
+            "certificate_hash": "f340f197017b90f50b87b7c485bb7b2a3655e30f"
+          }
+        },
+        {
+          "client_id": "152225620210-4leekhvopv3htq2se9gqfoct03qo8sbv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "digitalbath.fansproject.mutd",
+            "certificate_hash": "d53169a822f2f3ddca4740af7fc616ece162dc74"
+          }
+        },
+        {
+          "client_id": "152225620210-0ij6amlrfn8r2vc26aqqlqia5tlcghl2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJSBY6wYCN73ldVfUquR-j1n7u0dcPeTM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "152225620210-0ij6amlrfn8r2vc26aqqlqia5tlcghl2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152225620210:android:c2cb9996f255a946",
+        "android_client_info": {
+          "package_name": "digitalbath.fansproject.barcelona"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "152225620210-kp6d98moh52asdjvoa7bkom4cf5rnq9d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "digitalbath.fansproject.barcelona",
+            "certificate_hash": "d53169a822f2f3ddca4740af7fc616ece162dc74"
+          }
+        },
+        {
+          "client_id": "152225620210-ucff0015ckb3shusg2tgki18p4bubl6c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "digitalbath.fansproject.barcelona",
+            "certificate_hash": "f340f197017b90f50b87b7c485bb7b2a3655e30f"
+          }
+        },
+        {
+          "client_id": "152225620210-0ij6amlrfn8r2vc26aqqlqia5tlcghl2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJSBY6wYCN73ldVfUquR-j1n7u0dcPeTM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "152225620210-0ij6amlrfn8r2vc26aqqlqia5tlcghl2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152225620210:android:0e00711f893edb77",
+        "android_client_info": {
+          "package_name": "digitalbath.fansproject.milan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "152225620210-m2ejn25usbf2o4mblua1nqse4tf808d2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "digitalbath.fansproject.milan",
+            "certificate_hash": "d53169a822f2f3ddca4740af7fc616ece162dc74"
+          }
+        },
+        {
+          "client_id": "152225620210-e25ksp75vek0d4h0bqu4rf9fqef4vi40.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "digitalbath.fansproject.milan",
+            "certificate_hash": "f340f197017b90f50b87b7c485bb7b2a3655e30f"
+          }
+        },
+        {
+          "client_id": "152225620210-0ij6amlrfn8r2vc26aqqlqia5tlcghl2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJSBY6wYCN73ldVfUquR-j1n7u0dcPeTM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "152225620210-0ij6amlrfn8r2vc26aqqlqia5tlcghl2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152225620210:android:c3b0311952045389",
+        "android_client_info": {
+          "package_name": "digitalbath.fansproject.real"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "152225620210-am43qvgva5u34lfetn6dbt7jqfqi28up.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "digitalbath.fansproject.real",
+            "certificate_hash": "d53169a822f2f3ddca4740af7fc616ece162dc74"
+          }
+        },
+        {
+          "client_id": "152225620210-j7dla9je1shtaba3ies9e3vl9m0p4l6a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "digitalbath.fansproject.real",
+            "certificate_hash": "f340f197017b90f50b87b7c485bb7b2a3655e30f"
+          }
+        },
+        {
+          "client_id": "152225620210-0ij6amlrfn8r2vc26aqqlqia5tlcghl2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJSBY6wYCN73ldVfUquR-j1n7u0dcPeTM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "152225620210-0ij6amlrfn8r2vc26aqqlqia5tlcghl2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"

@@ -6,27 +6,9 @@ import digitalbath.fansproject.BuildConfig;
  * Created by unexpected_err on 27/07/2017.
  */
 
-public enum AppConfig {
+public class AppConfig {
 
-    INTERMILAN("Inter Milan", "InterMilan", 108, 456),
-    MILAN("Ac Milan", "AcMilan", 98, 456),
-
-    MANUTD("Manchester United", "ManchesterUnited", 66, 445),
-
-    BARCELONA("Barcelona", "Barcelona", 81, 457),
-    REALMADRID("Real Madrid", "RealMadrid", 86, 457);
-
-    private String mNewsQuery;
-    private String mDatabaseQuery;
-    private int mTeamId;
-    private int mTeamLeagueId;
-
-    AppConfig(String newsQuery, String databaseQuery, int teamId, int teamLeagueId) {
-
-        mNewsQuery = newsQuery;
-        mDatabaseQuery = databaseQuery;
-        mTeamId = teamId;
-        mTeamLeagueId = teamLeagueId;
+    private AppConfig() {
     }
 
     public static String getNewsQuery() {

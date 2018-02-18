@@ -23,8 +23,6 @@ public class GooseArticleDataParser extends AsyncTask<String, Void, Article> {
     public GooseArticleDataParser(Activity activity) {
 
         this.mActivity = activity;
-
-
     }
 
     @Override

@@ -20,7 +20,6 @@ public class AppController extends Application {
 
         mDatabase = FirebaseDatabase.getInstance()
                 .getReference().child(AppConfig.getDatabaseQuery());
-
     }
 
     public static DatabaseReference getFirebaseDatabase() {
@@ -30,8 +29,6 @@ public class AppController extends Application {
                     .getReference().child(AppConfig.getDatabaseQuery());
 
         return mDatabase;
-
-
     }
 
     public static FirebaseUser getUser() {
@@ -45,6 +42,5 @@ public class AppController extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
     }
 }
