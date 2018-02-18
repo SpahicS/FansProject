@@ -45,8 +45,8 @@ android {
             resValue "string", "app_icon", "ic_launcher"
             buildConfigField "String", "NEWS_QUERY", "\"Real Madrid CF\""
             buildConfigField "String", "DB_QUERY", "\"Real Madrid CF\""
-            buildConfigField "int", "TEAM_ID", '98'
-            buildConfigField "int", "LEAGUE_ID", '456'
+            buildConfigField "int", "TEAM_ID", '86'
+            buildConfigField "int", "LEAGUE_ID", '455'
 
         }
         milan {
